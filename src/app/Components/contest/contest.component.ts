@@ -29,7 +29,12 @@ export class ContestComponent implements OnInit {
     this.titleService.setTitle('Contest');
     this.getAllContests();
   }
+  calculateHoursFromDuration(duration: string): number {
+    // Extract the hours from the duration string
+    const hours = parseInt(duration.substring(2, duration.indexOf('H')));
 
+    return hours;
+  }
   getAllContests() {
     this.loading = true;
     this._ContestService.getAllContests(this.pageSize).subscribe({
