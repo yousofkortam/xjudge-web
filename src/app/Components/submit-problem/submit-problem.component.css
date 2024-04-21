@@ -1,0 +1,10 @@
+
+label:hover,
+label:active,
+label:focus,
+label
+{
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}

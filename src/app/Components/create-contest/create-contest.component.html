@@ -1,0 +1,81 @@
+<div class="modal fade modal-lg mt-5 center " id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " id="exampleModal2Label">Create Contest </h5>
+          <button type="button" class="btn-close ps-0 pe-0 w-25 border-none " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body ">      
+            <form (ngSubmit)="handleSubmitProblem(createContestForm)" [formGroup]="createContestForm">
+                <div class="row" id="open-row" class="">
+                    <div class="mt-3  d-flex">
+                    <label class="col-md-2 form-label mt-2 "for="submit-open"  >Type</label>
+                        <div class="btn-group ms-3 " role="group" >
+                            <button type="radio" class="border btn btn-secondary active" value="0"> Classical Contest</button>
+                            <button type="radio" class="border btn btn-secondary " value="1"> Group Contest</button>
+                            <button type="radio " class="border btn btn-secondary" value="2">Replay</button>
+                        </div>
+                    </div> 
+                </div>
+       
+                <div class="mt-3 mb-3 d-flex">
+                    <label for="title" class="col-md-2 mt-2 me-3">Title</label>
+                     <input type="text" required id="title" class="form-control" formControlName="title" />
+                     <div *ngIf="createContestForm.get('title')?.errors && createContestForm.get('title')?.touched ">
+                       <span *ngIf="createContestForm.get('title')?.getError('required')" class="m-0" style="color:red">Contest title can't be empty.</span>
+                     </div>
+                     <i></i>
+                  </div>
+                  
+                  <div class="mb-3 mt-3 d-flex">
+                    <label for="durationSeconds" class="col-md-2 mt-2 me-3">Length</label>
+                     <input id="durationSeconds" class="form-control" formControlName="durationSeconds" type="text" placeholder="hh:mm:ss"/>
+                     <div *ngIf="createContestForm.get('durationSeconds')?.errors && createContestForm.get('durationSeconds')?.touched ">
+                         <span *ngIf="createContestForm.get('durationSeconds')?.getError('required')" class="m-0" style="color:red">The contest length must be less than 1 year.</span>
+                     </div>
+                     <i></i>
+                  </div> 
+  
+                  <div class="mt-3 mb-3 d-flex">
+                    <label for="beginTime" class="col-md-2 me-3">Begin Time(UTC+2)</label>
+                     <input id="beginTime" class="form-control" formControlName="beginTime" type="text" placeholder="2024-04-17 23:00:00"/>
+                     <div *ngIf="createContestForm.get('beginTime')?.errors && createContestForm.get('beginTime')?.touched ">
+                         <span *ngIf="createContestForm.get('beginTime')?.getError('required')" class="m-0" style="color:red">The contest begin time is required to create a contest.</span>
+                     </div>
+                     <i></i>
+                  </div>
+              
+                <div class="mt-3 mb-3 d-flex">
+                <label for="visibility" class="col-md-2 me-3 mt-4">Openness</label>
+                <select id="form3" class="form-select mt-3" formControlName="visibility" >
+                    <option value="">data from database</option>
+                    <option value="">data from database</option>
+                    <option value="">data from database</option>
+                    <option value="">data from database</option>
+                </select>
+                <div *ngIf="createContestForm.get('visibility')?.errors && createContestForm.get('visibility')?.touched ">
+                    <span *ngIf="createContestForm.get('visibility')?.getError('required')" class="m-0" style="color:red">You must select the visibility of the contest.</span>
+                </div>
+              <i></i>
+              </div>
+
+              <div class="mt-3 mb-3 d-flex">
+                 <label for="description" class="col-md-2 mt-3 me-3">Description</label>
+                  <textarea id="description" class="form-control" formControlName="description" placeholder="description goes here"></textarea>
+                  <div *ngIf="createContestForm.get('description')?.errors && createContestForm.get('description')?.touched ">
+                      <span *ngIf="createContestForm.get('description')?.getError('required')" class="m-0" style="color:red">description is mandatory</span>
+                  </div>
+                  <i></i>
+               </div>
+           
+            </form>
+        </div>
+
+        <div class="modal-footer d-flex">
+           <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">Close</button>
+           <button type="submit" class="btn btn-primary w-25 "[disabled]="createContestForm.invalid" ><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i> <span *ngIf="!isLoading">Confirm</span></button>
+        </div>
+        </div>
+    </div>
+</div>

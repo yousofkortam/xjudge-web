@@ -1,0 +1,9 @@
+.my-pagination ::ng-deep .ngx-pagination .current {
+    background: red;
+  }
+
+
+  .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+
+    background-color: #ebebeb !important;
+  }

@@ -1,0 +1,9 @@
+footer{
+    z-index: 10;
+    font-weight: 300;
+    color: grey;
+    padding-bottom: 20px;
+    margin-top: 47vh;
+    /* padding-top: 4vh; */
+    /* margin-top: 1000px; */
+}

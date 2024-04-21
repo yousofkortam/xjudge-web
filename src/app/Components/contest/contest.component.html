@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <!-- pagination -->
+        <div class="mt-5 d-lg-flex justify-content-between" >
+           <div class="d-flex col-lg-6 col-12">
+                <div>
+                    <input type="submit" class="btn btn-light" value="Statistic" />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary ms-2" data-bs-toggle="modal"  data-bs-target="#exampleModal2" value="Create Contest">Create Contest</button>
+                     <app-create-contest></app-create-contest>
+                </div>
+            </div> 
+             <app-pagination [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)" style="width:fit-content !important; margin:0" class="col-lg-6 col-12 flex-lg-row-reverse"></app-pagination>
+           
+        </div>
+
+
+
+        <section>
+            <div class="contestTable text-center col-12 w-100">
+                <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
+                    width="100%">
+                    <thead>
+                        <tr class="p-4">
+                            <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
+                            <th class="id ">ID</th>
+                            <th class="title">
+                                Title
+                                <input #title (input)="searchByTitle(title.value)" type="text" id="title" name="title"
+                                    class="search_text" style="width:50%" />
+                            </th>
+                            <th id="beginTime">Begin Time</th>
+                            <th id="Length ">Length</th>
+                            <th class="title">
+                                Owner
+                                <input #owner (input)="searchByOwner(owner.value)" type="text" id="owner" name="owner"
+                                    class="search_text" style="width:50%" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contest of Contests; let i = index">
+                            <td><i class="fas fa-star"></i></td>
+                            <td> {{ contest.id }} </td>
+                            <td><a [href]="contest.title" target="_blank">{{contest.title}}</a></td>
+                            <td> {{ contest.beginTime }} </td>
+                            <td> {{ contest.Length }} </td>
+                            <td><a [href]="contest.owner" target="_blank">{{contest.owner}}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
+                <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter"
+                    style="display: none" />
+
+            </div>
+        </section>
+    </div>
+</div>

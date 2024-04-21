@@ -1,0 +1,13 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.home{
+    font-family: "Roboto", "Helvetica Neue", sans-serif; 
+    /* height: 72px;  */
+}
+
+
+   

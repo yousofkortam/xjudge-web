@@ -1,0 +1,7 @@
+<!-- <mat-paginator style="background-color: transparent !important; color:#ebebeb"  [length]="totalPages * pageSize"  -->
+<mat-paginator style="background-color: transparent !important; width:fit-content !important;" [length]="totalPages * pageSize" 
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="onPageChange($event)"
+                aria-label="Select page">
+</mat-paginator>

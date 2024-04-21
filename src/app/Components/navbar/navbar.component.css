@@ -1,0 +1,111 @@
+.nav{
+    display: flex;
+    justify-content: space-between;
+    background-color: #373737 ; 
+    /* background: linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) !important;  */
+}
+.nav .logo img{
+    width: 30%;
+    margin-top: 0px;
+    margin-left: 20px;
+   
+}
+.nav_menu {
+    font-weight: 300;
+    font-size: 15px;
+    margin: 8px;
+    /* width: 25%; */
+}
+.nav_menu a {
+    color: #fff;
+    padding: 8px 15px 10px 15px;
+    cursor: pointer;
+    border-radius: 1020px;
+    margin-right: 25px;
+    text-align: center;
+    justify-content: center;
+    font-family: Mr Eaves Sans Thin;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.navbar-expand-lg .navbar-collapse .nav-link:active,
+.navbar-expand-lg .navbar-collapse .nav-link:hover,
+.navbar-expand-lg .navbar-collapse .nav-link:focus,
+.navbar-expand-lg .navbar-collapse .nav-link:focus-visible,
+.navbar-expand-lg .navbar-collapse .nav-link:focus-within,
+.navbar-expand-lg .navbar-collapse .nav-link:target  {
+    color: black !important;
+    background: white !important;
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.15);
+    /* width: 100%; */
+}
+
+.nav_menu a:active,
+.nav_menu a:focus {
+    background: transparent;
+}
+
+@media only screen and(max-width: 992px) {
+.nav_menu{
+    width: 25%;
+}
+ .nav_menu a {
+    /* margin-left: 100px;
+        
+        width: 18% !important; */
+        /* margin-left: 22px; */
+        margin-right: 570px;
+        /* width: 25% !important; */
+    } 
+
+    .nav_menu a:hover {
+        width: 100%;
+    
+    }
+    .nav .logo img{
+        width: 35% !important;
+        margin-top: 1px;
+        /* margin-left: 10px; */
+     }
+    }
+
+    @media only screen and (max-width: 990px){
+
+        .nav_menu a {
+             margin-right: 80vw;
+             /* margin-right: 811px; */
+
+            } 
+            
+       }
+       @media only screen and (max-width: 750px){
+
+        .nav_menu a {
+             margin-right: 75vw;
+             /* margin-right: 570px; */
+
+            } 
+       }
+ @media only screen and (max-width: 600px){
+        .nav{
+            justify-content: space-around;
+        }
+        .logo{
+            width: 79%;
+        }
+        .logo img{
+            margin-left: 0px;
+        }
+          .nav_menu a {
+                margin-left: 8vw !important;
+                /* margin-right: 570px; */
+   
+               } 
+            /* margin-right: 331px; */
+            /* margin-right: 378px; */
+            /* margin-left: 22px; */
+            /* width: 100%; */
+            } 
+    

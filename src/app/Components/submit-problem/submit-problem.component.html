@@ -1,0 +1,50 @@
+<div class="modal fade modal-md mt-5 center" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " id="exampleModal2Label">Submit </h5>
+          <button type="button" class="btn-close ps-0 pe-0 w-25 border-none " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="handleSubmitProblem(submitProblemForm)" [formGroup]="submitProblemForm">
+                <div class="row" id="open-row" style="    margin-right: 13vw;">
+                    <div class=" d-flex">
+                    <label for="submit-open" class="col-md-2 form-label  mt-2 me-5" >Open:</label>
+                        <div class="btn-group col-md-6 " role="group" >
+                            <button type="radio" class="border btn btn-secondary active" value="1">Yes</button>
+                            <button type="radio " class="border btn btn-secondary" value="0">No</button>
+                        </div>
+                    </div>
+                </div>
+              <div class="mb-3">
+                <label for="language" style="margin-right: 25vw;">Language:</label>
+                <select id="form3" class="form-select mt-3" formControlName="language" >
+                    <option value="CodeForces">CodeForces</option>
+                    <option value="CodeForces">CodeForces</option>
+                    <option value="CodeForces">CodeForces</option>
+                    <option value="CodeForces">CodeForces</option>
+                </select>
+                <div *ngIf="submitProblemForm.get('language')?.errors && submitProblemForm.get('language')?.touched ">
+                    <span *ngIf="submitProblemForm.get('language')?.getError('required')" class="m-0" style="color:red">Language is mandatory</span>
+                </div>
+              <i></i>
+              </div>
+
+              <div class="mb-3">
+                 <label for="solution" style="margin-right: 25vw;">Solution:</label>
+                  <textarea id="solution" class="form-control" formControlName="solution" placeholder="Solution goes here"></textarea>
+                  <div *ngIf="submitProblemForm.get('solution')?.errors && submitProblemForm.get('solution')?.touched ">
+                      <span *ngIf="submitProblemForm.get('solution')?.getError('required')" class="m-0" style="color:red">Solution is mandatory</span>
+                  </div>
+                  <i></i>
+               </div>
+            </form>
+        </div>
+
+        <div class="modal-footer d-flex">
+           <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">Close</button>
+           <button type="submit" class="btn btn-primary w-25 "[disabled]="submitProblemForm.invalid" ><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i> <span *ngIf="!isLoading">Submit</span></button>
+        </div>
+        </div>
+    </div>
+</div>
