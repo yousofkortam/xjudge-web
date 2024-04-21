@@ -9,6 +9,8 @@ import { filter } from 'rxjs';
 })
 export class AppComponent {
 
+  title: string = 'xjudge';
+
   @HostBinding('style.background') background?: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {

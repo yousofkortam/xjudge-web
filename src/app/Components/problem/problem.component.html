@@ -53,7 +53,7 @@
                         <td> {{ problem.oj }} </td>
                         <td><a [href]="problem.problemLink"
                                 target="_blank">{{ problem.problemCode }}</a></td>
-                        <td> <a routerLink="{{problem.oj}}/{{problem.problemCode}}">{{ problem.problemTitle }}</a> </td>
+                        <td> <a href="problem/{{problem.oj}}/{{problem.problemCode}}">{{ problem.problemTitle }}</a> </td>
                         <td><a [href]="problem.contestLink" target="_blank">{{ problem.contestName }}</a></td>
                         <td>{{ problem.solvedCount }}</td>
                     </tr>

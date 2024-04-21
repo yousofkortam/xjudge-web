@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 
@@ -8,7 +9,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
 })
-export class ChangePasswordComponent {
+export class ChangePasswordComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
@@ -22,12 +23,17 @@ export class ChangePasswordComponent {
 
   constructor (
     private _AuthService:AuthService,
-    private _ActivatedRoute:ActivatedRoute) {
+    private _ActivatedRoute:ActivatedRoute,
+    private titleService: Title) {
     this._ActivatedRoute.queryParams.subscribe(
       value=>{
         this.token = value[('token')];
         console.log(this.token)
       });
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Change Password');
   }
 
   rePasswordMatch(resetPasswordForm:any) {

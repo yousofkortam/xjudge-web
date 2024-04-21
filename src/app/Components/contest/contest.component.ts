@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 
@@ -21,9 +22,11 @@ export class ContestComponent implements OnInit {
   constructor(private _ContestService: ContestService,
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
+    private titleService: Title,
     @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Contest');
     this.getAllContests();
   }
 

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ProblemDetailsComponent implements OnInit {
   samples: any = [];
   isLoading: boolean = false;
   apiError: string = '';
+  title: string = '';
 
   submitProblemForm: FormGroup = new FormGroup({
     language: new FormControl(null, [Validators.required]),
@@ -28,6 +30,7 @@ export class ProblemDetailsComponent implements OnInit {
     private _ProblemService: ProblemService,
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
+    private titleService: Title,
     @Inject(DOCUMENT) private document: Document) { }
 
   fetchEndPointToGetSpecificProblem() {
@@ -37,6 +40,7 @@ export class ProblemDetailsComponent implements OnInit {
         console.log(response);
         if (response.success === true) {
           this.problemInfo = response.data
+          this.titleService.setTitle(this.problemInfo.title);
           this.samples = response.data.samples       
     }      
       },

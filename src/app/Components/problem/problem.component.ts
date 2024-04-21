@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Title } from '@angular/platform-browser';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 
 @Component({
@@ -16,9 +17,12 @@ export class ProblemComponent implements OnInit {
   pageNo: number = 0;
   searchPageNumber: number = 0;
 
-  constructor(private _problemService: ProblemService) { }
+  constructor(
+    private _problemService: ProblemService,
+    private titleService: Title) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Problem');
     this.getAllProblems();
   }
 

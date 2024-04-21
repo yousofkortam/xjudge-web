@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
@@ -12,7 +13,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 })
 
 
-export class ResetPasswordComponent {
+export class ResetPasswordComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
@@ -22,14 +23,17 @@ export class ResetPasswordComponent {
     private _AuthService:AuthService,
     private _Router:Router ,
     private _ActivatedRoute:ActivatedRoute,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private titleService: Title) {
     this._ActivatedRoute.queryParams.subscribe((value) => {
       this.token = value['token'];
       console.log(this.token);
   })
   }
 
-
+  ngOnInit(): void {
+    this.titleService.setTitle('Reset Password');
+  }
 
   resetPasswordForm: FormGroup = new FormGroup({
     password:new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),

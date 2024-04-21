@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 
@@ -9,7 +10,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
@@ -22,12 +23,17 @@ export class LoginComponent {
   constructor (
     private _AuthService:AuthService,
     private _Router:Router,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private titleService: Title) {
     if (this._AuthService.isLogin())
     {
       this._AuthService.decodeUserData();
       this._Router.navigate(['/home']).then(r => r);
     }
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Login');
   }
 
   handleLogin(loginForm:FormGroup) {
