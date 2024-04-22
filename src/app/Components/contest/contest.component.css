@@ -1,0 +1,33 @@
+.list-group-item img{
+    width: 14px;
+    height: 14px;
+}
+
+.contest-category a,
+ .contest-running a {
+    font-size: 14px;
+    padding-bottom: 9px;
+    padding-top: 9px;
+}
+
+.contest-running a:hover{
+    text-decoration:underline;
+}
+
+.contest-running a:active{
+    background-color:#0275d8;
+}
+
+.list-group-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    margin-bottom: -1px;
+    padding: .75rem 1.25rem;
+    position: relative;
+}
+
+a {
+    color: #0275d8;
+    text-decoration: none;
+}
