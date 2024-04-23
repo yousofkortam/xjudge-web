@@ -1,7 +1,7 @@
 <div  class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
     <div class="row d-flex">
         <div class="col-md-2 mt-5 pt-2 " id="left-panel">
-            <div class="list-group contest-running col-sm-4  col-lg-12 " >
+            <div class="list-group contest-running col-sm-4 col-lg-12 " >
                 <a href="" class="list-group-item" data-category="allContests"> All Contests</a>
                 <a href="" class="list-group-item" data-category="publicContests">Public Contests</a>
                 <a href="" class="list-group-item" data-category="myContests">My Contests</a>
@@ -13,7 +13,7 @@
                 <input type="hidden" name="category" value="" />
             </div>
 
-            <div class="list-group contest-category col-sm-4  col-lg-12 mt-3 " style="padding-right:0; margin: 0 0 10px 0">
+            <div class="list-group contest-category col-sm-4 col-lg-12 mt-3 " style="padding-right:0; margin: 0 0 10px 0">
                 <a href="" class="list-group-item " data-category="classical">
                     <img src="/assets/images/classical.gif"> Classical
                 </a>
@@ -36,14 +36,14 @@
                      <input type="submit" class="btn btn-light" value="Statistic" />
                  </div> -->
                         <div>
-                            <button type="submit" class="btn ms-2 mb-0" data-bs-toggle="modal"
+                            <button type="submit" class="btn ms-2 mb-0 border-none shadow-none" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal2" value="Create Contest" style="background-color:#0275d8; color:#fff">Create Contest</button>
                             <app-create-contest></app-create-contest>
                         </div>
                     </div>
                     <app-pagination [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
-                        style="width:fit-content !important; margin:0"
-                        class="col-lg-6 col-12 d-flex"></app-pagination>
+                        style="width:fit-content !important; "
+                        class="col-lg-6 col-12 d-flex mb-2"></app-pagination>
 
                 </div>
                 <div class="contestTable text-center col-12 w-100">
@@ -73,7 +73,7 @@
                                 <td> {{ contest.id }} </td>
                                 <td><a [href]="contest.title" target="_blank">{{contest.title}}</a></td>
                                 <td> {{ contest.beginTime| date:'medium' }} </td>
-                                <td> {{ calculateHoursFromDuration(contest.duration) }} </td>
+                                <td> {{contest.duration}} </td>
                                 <td><a [href]="contest.owner" target="_blank">{{contest.handle}}</a></td>
                             </tr>
                         </tbody>

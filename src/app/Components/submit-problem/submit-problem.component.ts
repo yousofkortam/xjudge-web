@@ -10,6 +10,7 @@ import { ProblemService } from 'src/app/ApiServices/problem.service';
 })
 export class SubmitProblemComponent {
 
+  compilers:any=[]
   isLoading:boolean = false;
   apiError:string = '';
   submitProblemForm: FormGroup = new FormGroup({
@@ -26,7 +27,7 @@ export class SubmitProblemComponent {
     if(submitProblemForm.valid){
       this._ProblemService.submitProblem(submitProblemForm.value).subscribe({
         next: (response)=> {
-          if (response.success === true) {
+          if (response.success === true) {          
             localStorage.setItem('userToken', response.token);
             this._Router.navigate(['/home']).then(r => r);
             this.isLoading= false;
@@ -40,4 +41,5 @@ export class SubmitProblemComponent {
     }
   }
 
+ 
 }

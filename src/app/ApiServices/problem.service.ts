@@ -42,4 +42,8 @@ export class ProblemService {
      return this._HttpClient.post( 'http://localhost:7070/problem/submit',  userData);
   }
 
+  getCompilersForSubmitProblem(onlineJudge:string){
+    return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`);
+  }
+
 }

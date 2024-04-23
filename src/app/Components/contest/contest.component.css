@@ -10,11 +10,13 @@
     padding-top: 9px;
 }
 
-.contest-running a:hover{
+.contest-running a:hover,
+.contest-category a:hover{
     text-decoration:underline;
 }
 
-.contest-running a:active{
+.contest-running a:active,
+.contest-category a:active{
     background-color:#0275d8;
 }
 
@@ -30,4 +32,17 @@
 a {
     color: #0275d8;
     text-decoration: none;
+}
+
+/* 995 */
+@media only screen and(max-width: 991px) {
+    #left-panel{
+        display: flex !important;
+        width: 100%;
+    }
+
+
+    .contest-category {
+        padding-left: 2vw;
+    }
 }

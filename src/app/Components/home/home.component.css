@@ -1,14 +1,17 @@
-/*  section 1 */
 .sec1{
   display: flex;
   margin-top: 0;
   padding-top: 10vh;
   background-color: #373737 ; 
   position: absolute;
-  left: 20vw;
-  right: 0;
+  width: max-content;
+
 }
 
+
+.hero{
+margin-left: 15vw;
+}
 .image{
   z-index:1;
 }
@@ -46,17 +49,12 @@
 /* ................................ */
 .separator {
   position: relative;
- z-index: 0;
-  height: 0;
   border-right: 100vw solid transparent;
   border-bottom: 14.9vw solid #fff;
-  margin-top: 15vw;
+  margin-top: 34vh;
   right:4vw ;
+  width: 100%;
 
-}
-.mt-md-27{
-  margin-top :27vw;
-  right: 6vw;
 }
 
 .sec2 {
@@ -73,14 +71,6 @@
 .intro-title{
   width: max-content;
 }
-/* .sec2 .row {
-  display: flex;
-  margin-top: 30px;
-}
-
-.sec2 .column {
-  flex: 1;
-} */
 
 .Explor h2 {
   line-height: 1.2em;
@@ -90,6 +80,7 @@
   margin-bottom: 0;
   text-align: right;
 }
+
 
 .text p{
   width: max-content;
@@ -184,8 +175,7 @@
   animation-delay: 800ms;
   left: -5px;
   transform: translateX(-20px) translateY(-20px);
-  /* Adjust position */
-  z-index: 2;
+ z-index: 2;
 }
 
 .explore-card-base .explore-card:nth-child(3) .card {
@@ -195,10 +185,7 @@
 }
 
 .card {
-  /* transform: rotate(12deg);
-  transform-origin:  146% 38%;; */
-  /* display: inline-flex;
-  transform: skewY(13deg);*/
+
   width: 60%;
   border: none;
   background-color: transparent;
@@ -280,22 +267,14 @@
   margin-top: 36px;
   margin-right: 114px;
 }
-@media (max-width: 768px) {
-  .sec1{
-  left: 10vw
-  
-  }
-
-}
 
 
 .feature-icon-base{
   transform: scale(0.7);
 }
-.feature-icon-base .icon.red {
-background: -webkit-gradient(linear, left top, right bottom, from(#f4511e), to(#b71c1c));
-}
-.feature-icon-base .icon::before, .feature-icon-base .icon::after {
+
+.feature-icon-base .icon::before, 
+.feature-icon-base .icon::after {
 position: absolute;
 width: inherit;
 height: inherit;
@@ -308,12 +287,12 @@ right: 0;
 bottom: 0;
 margin: auto;
 }
+
 .feature-icon-base .icon::before {
--webkit-transform: rotate(60deg);
 transform: rotate(60deg);
 }
+
 .feature-icon-base .icon::after {
--webkit-transform: rotate(-60deg);
 transform: rotate(-60deg);
 }
 .feature-icon-base .icon .circle {
@@ -330,6 +309,7 @@ bottom: 0;
 margin: auto;
 text-align: center;
 }
+
 .feature-icon-base .icon .circle .custom-icon {
 font-size: 20px;
 margin-top: 12px;
@@ -337,105 +317,36 @@ margin-top: 12px;
 
 
 
-
-
-
-
-
-
-/* @media (max-width: 600px) {
+@media only screen and (max-width: 768px ) {
   .sec1{
-  left: 10vw
+  left: 0vw !important;
+  
   
   }
-
-} */
-
-/*@media (max-width: 1512px) {
-  .all_page{
-    margin-top: -120px;
-  }
-  .sec1 .row{
-    margin-top: 90px;
-  }
-  .row{
-    flex-wrap: nowrap;
-   
-  }
-  .intro-title {
-  text-align: center;
-    justify-content: center;
-}
-.intro-title p br{
-display: none;
-}
+.mt-md-27{
+  margin-top :40vh !important;
 }
 
- @media (max-width: 992px) {
-  .col-md-6.intro-title.text {
-   width: 100%;
+.separator{
+  right: 8vw;
+}
+.hero{
+  margin-left: 10vw;
+}
+}
+@media only screen and (max-width: 622px ) {
+  .sec1{
+  left: 0vw !important;
+  
   }
-
-  .explore-card-base {
-    margin-left: 115px ;
-  }
-  .intro-title .Explor h2{
-    margin-left: 146px;
-  }
-} 
-
-
-
-@media (max-width: 600px) {
-  .sec1 .row {
-    flex-direction: column;
-    margin-top: 90px;
-  }
-
-  .Explor h2 {
-    margin-left: 85px;
-  }
-
-  .col-md-6.intro-title.text {
+  .hero{
     margin-left: 0;
-  
   }
-.sec1 .intro-title{
-  margin-top: 50px
+.mt-md-27{
+  margin-top :50vh !important;
 }
-  .explore-card-base {
-    margin-left: 90px;
-    margin-top: 100px;
-  }
-
-  .intro-title .Explor h2 {
-    padding-bottom: 17px;
-  }
-
-  p.Explore-text {
-    color: black !important;
-    text-align: center !important;
-   margin-left: 15px !important;
-    
-  }
-
-  br {
-    display: none;
-  }
-
-  .sec2 {
-    height: 250vh;
-  }
-
-  .intro-title a {
-    margin-left: 20px;
-
-  }
-  .row{
-      flex-wrap: wrap;
-  }
 }
-*/
+
 
 @keyframes SlowFloat {
   0% {
@@ -448,11 +359,9 @@ display: none;
 }
 
 .slowfloat2s {
-  -webkit-animation: SlowFloat 2s infinite alternate;
   animation: SlowFloat 2s infinite alternate;
 }
 
 .slowfloat3s {
-  -webkit-animation: SlowFloat 3s infinite alternate;
   animation: SlowFloat 3s infinite alternate;
 }
