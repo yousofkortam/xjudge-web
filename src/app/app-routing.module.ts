@@ -17,13 +17,16 @@ import { SubmitProblemComponent } from './Components/submit-problem/submit-probl
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  // {path: 'home',
+  // // lazy loading for the component;
+  // loadComponent: () =>import('./Components/home/home.component').then((c) => c.HomeComponent),},
   { path: 'home', component:HomeComponent },
   { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },
-  { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
+  { path: 'changePassword', component:ChangePasswordComponent },
   { path: 'register', component:RegisterComponent },
   { path: 'pagination', component:PaginationComponent },
   { path: 'login', component:LoginComponent },

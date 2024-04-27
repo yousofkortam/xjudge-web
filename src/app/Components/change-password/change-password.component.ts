@@ -15,7 +15,7 @@ export class ChangePasswordComponent implements OnInit {
   apiError:string = '';
   token: string = '';
 
-  changePasswordForm: FormGroup = new FormGroup({
+  changePasswordForm = new FormGroup({
     oldPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
     password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
     confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
@@ -50,9 +50,9 @@ export class ChangePasswordComponent implements OnInit {
       }
   }
 
-  handleChangePassword(changePasswordForm: FormGroup) {
+  handleChangePassword() {
     this.isLoading = true;
-    this._AuthService.changePassword(changePasswordForm.value).subscribe({
+    this._AuthService.changePassword(this.changePasswordForm.value).subscribe({
       next: (response) => {
         if(response.statusCode === 200)
         {

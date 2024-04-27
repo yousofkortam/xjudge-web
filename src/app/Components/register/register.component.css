@@ -1,14 +1,14 @@
 body {
 	background: #23242a;
 	min-height: 100vh;
+	
 }
 
 .box {
 	position: relative;
 	width: 485px;
-	/* height: 877px; */
-	/* height: 744px; */
-	height: 690px;
+height: fit-content;
+	/* height: 690px; */
 	
 	background: #1c1c1c;
 	border-radius: 50px 5px;

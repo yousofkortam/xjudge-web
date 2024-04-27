@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './Components/home/home.component';
@@ -23,12 +23,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
-import {NgOptimizedImage} from "@angular/common";
+import { NgOptimizedImage } from '@angular/common';
 import { StatusComponent } from './Components/status/status.component';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
-
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -50,13 +50,14 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
     SubmitProblemComponent,
     StatusComponent,
     CreateContestComponent,
-   ],
+  ],
   imports: [
     RouterModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    SharedModule,
     DataTablesModule,
     NgxPaginationModule,
     BrowserAnimationsModule,
@@ -65,6 +66,6 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
     NgOptimizedImage,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

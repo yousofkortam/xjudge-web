@@ -35,7 +35,7 @@ export class ResetPasswordComponent implements OnInit {
     this.titleService.setTitle('Reset Password');
   }
 
-  resetPasswordForm: FormGroup = new FormGroup({
+  resetPasswordForm = new FormGroup({
     password:new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
     confirmPassword:new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
   },{validators: this.rePasswordMatch});
@@ -55,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
       }
   }
 
-  handleResetPassword(resetPasswordForm: FormGroup) {
+  handleResetPassword() {
       this.isLoading = true;
       const requestBody = {
         token: this.token,

@@ -37,6 +37,10 @@ export class AppComponent {
     }
     else if(currentRoute == 'forgetPassword'){
       body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
+    }  else if(currentRoute == 'resetPassword'){
+      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
+    }  else if(currentRoute == 'changePassword'){
+      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
     } 
     else {
       body.style.backgroundColor = '#ebebeb';
