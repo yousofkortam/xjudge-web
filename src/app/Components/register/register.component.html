@@ -7,9 +7,9 @@
 		  <app-form-input [controller]="registerForm.controls.userLastName" [span]="'Last Name'"></app-form-input>
 		  <app-form-input [controller]="registerForm.controls.userHandle" [span]="'User Handle'"></app-form-input>
 		  <app-form-input [controller]="registerForm.controls.userEmail" [span]="'Email'"></app-form-input>
-		  <app-form-input [controller]="registerForm.controls.userPassword" [span]="'Password'" type="password"></app-form-input>      
+		  <app-form-input [controller]="registerForm.controls.userPassword" [span]="'Password'" [inputType]="'password'"></app-form-input>      
 		  <button type="submit" [disabled]="registerForm.invalid"><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
-			Sign up
+			<span *ngIf="!isLoading">Sign up</span>
 		  </button>
 		</form>
 	  </div>

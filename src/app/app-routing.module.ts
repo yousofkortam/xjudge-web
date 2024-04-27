@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },
-  { path: 'changePassword', component:ChangePasswordComponent },
+  { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
   { path: 'register', component:RegisterComponent },
   { path: 'pagination', component:PaginationComponent },
   { path: 'login', component:LoginComponent },

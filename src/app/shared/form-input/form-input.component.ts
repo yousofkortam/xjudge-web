@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 export class FormInputComponent {
   @Input() controller!: FormControl;
   @Input() span!: string;
+  @Input() inputType: string = 'text'; // default to text
   
   ngOnInit() {
     console.log(this.controller);
