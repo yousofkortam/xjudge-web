@@ -72,8 +72,8 @@
                                 <td><i class="fas fa-star"></i></td>
                                 <td> {{ contest.id }} </td>
                                 <td><a [href]="contest.title" target="_blank">{{contest.title}}</a></td>
-                                <td> {{ contest.beginTime| date:'medium' }} </td>
-                                <td> {{contest.duration}} </td>
+                                <td> {{ contest.beginTime * 1000 | date:'medium' }} </td>
+                                <td> {{ contest.duration / 60 / 60 | hoursMinutes }} </td>
                                 <td><a [href]="contest.owner" target="_blank">{{contest.handle}}</a></td>
                             </tr>
                         </tbody>

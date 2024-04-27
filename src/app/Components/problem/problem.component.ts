@@ -30,10 +30,12 @@ export class ProblemComponent implements OnInit {
     this.loading = true;
     this._problemService.getAllProblems(this.pageSize, this.pageNo).subscribe({
       next: (response) => {
+        console.log(response);
         if (response.success === true) {
           this.loading = false;
-          this.Problems = response.data.paginatedData;
+          this.Problems = response.data.content;
           this.totalPages = response.data.totalPages;
+          this.pageNo = response.data.pageable.pageNumber;
         }
       },
       error: (error) => {
@@ -54,7 +56,7 @@ export class ProblemComponent implements OnInit {
     this._problemService.searchByCode(code, this.pageSize, this.searchPageNumber).subscribe({
       next: (response: any) => {
         if (response.success === true) {
-          this.Problems = response.data.paginatedData;
+          this.Problems = response.data.content;
           this.totalPages = response.data.totalPages;
         }
       },
@@ -69,7 +71,7 @@ export class ProblemComponent implements OnInit {
     this._problemService.searchByTitle(title, this.pageSize, this.searchPageNumber).subscribe({
       next: (response: any) => {
         if (response.success === true) {
-          this.Problems = response.data.paginatedData;
+          this.Problems = response.data.content;
           this.totalPages = response.data.totalPages;
         }
       },

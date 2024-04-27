@@ -40,10 +40,10 @@ duration:any
         console.log(response)
         if (response.success === true) {
           this.loading = false;
-          this.Contests = response.data.paginatedData;
+          this.Contests = response.data.content;
           this.totalPages = response.data.totalPages;
         }
-      },
+      },  
       error: (error) => {
         this.loading = false;
         console.log(error);
