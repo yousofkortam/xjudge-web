@@ -29,6 +29,8 @@ import { NgOptimizedImage } from '@angular/common';
 import { StatusComponent } from './Components/status/status.component';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
+import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
+
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import { SharedModule } from './shared/shared.module';
     SubmitProblemComponent,
     StatusComponent,
     CreateContestComponent,
-  ],
+    HoursMinutesPipe,
+   ],
   imports: [
     RouterModule,
     BrowserModule,
