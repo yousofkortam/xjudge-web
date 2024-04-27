@@ -15,7 +15,7 @@ export class ForgetPasswordComponent implements OnInit {
   apiError:string = "";
   isLoading:boolean = false;
 
-  forgetPasswordForm:FormGroup = new FormGroup({
+  forgetPasswordForm= new FormGroup({
     email: new FormControl(null , [Validators.required , Validators.email])
   });
 
@@ -29,10 +29,9 @@ export class ForgetPasswordComponent implements OnInit {
   }
 
 
-  handleForgetPassword(ForgetPassword:FormGroup) {
+  handleForgetPassword() {
     this.isLoading = true;
-    console.log(ForgetPassword.value);
-    let email = this.forgetPasswordForm.value
+    let email :any = this.forgetPasswordForm.value.email
     this._AuthService.forgetPassword(email).subscribe({
       next: (response) => {
         console.log(response);

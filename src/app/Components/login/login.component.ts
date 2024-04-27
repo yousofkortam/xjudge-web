@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   isLoading:boolean = false;
   apiError:string = '';
 
-  loginForm: FormGroup = new FormGroup({
+  loginForm = new FormGroup({
     userHandle:new FormControl(null, [Validators.required]),
     userPassword:new FormControl(null, [Validators.required ]),
   });
@@ -36,10 +36,10 @@ export class LoginComponent implements OnInit {
     this.titleService.setTitle('Login');
   }
 
-  handleLogin(loginForm:FormGroup) {
+  handleLogin() {
     this.isLoading = true;
-    if(loginForm.valid){
-      this._AuthService.login(loginForm.value).subscribe({
+    if(this.loginForm.valid){
+      this._AuthService.login(this.loginForm.value).subscribe({
         next: (response )=> {
           if(response.success === true){
             localStorage.setItem('userToken', response.data.token);
@@ -55,8 +55,12 @@ export class LoginComponent implements OnInit {
             duration: 2000,
             verticalPosition: 'top',
           });
+         
         }
       });
+    }
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
     }
   }
 
