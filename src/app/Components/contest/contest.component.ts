@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 
@@ -11,7 +10,7 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
   styleUrls: ['./contest.component.css']
 })
 export class ContestComponent implements OnInit {
-
+duration:any
   loading: boolean = false;
   Contests: any = [];
   totalPages: number = 0;
@@ -22,18 +21,23 @@ export class ContestComponent implements OnInit {
   constructor(private _ContestService: ContestService,
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
-    private titleService: Title,
     @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Contest');
     this.getAllContests();
   }
+  // calculateHoursFromDuration(duration: string): number {
+  //   // Extract the hours from the duration string
+  //   const hours = parseInt(duration.substring(2, duration.indexOf('H')));
+
+  //   return hours;
+  // }
 
   getAllContests() {
     this.loading = true;
     this._ContestService.getAllContests(this.pageSize).subscribe({
       next: (response) => {
+        console.log(response)
         if (response.success === true) {
           this.loading = false;
           this.Contests = response.data.paginatedData;

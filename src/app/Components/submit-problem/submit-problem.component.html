@@ -3,7 +3,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title " id="exampleModal2Label">Submit </h5>
-          <button type="button" class="btn-close ps-0 pe-0 w-25 border-none " data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close ps-0 pe-3  border-none shadow-none " data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form (ngSubmit)="handleSubmitProblem(submitProblemForm)" [formGroup]="submitProblemForm">
@@ -31,7 +31,7 @@
               </div>
 
               <div class="mb-3">
-                 <label for="solution" style="margin-right: 25vw;">Solution:</label>
+                 <label for="solution"  style="margin-right: 25vw;">Solution:</label>
                   <textarea id="solution" class="form-control" formControlName="solution" placeholder="Solution goes here"></textarea>
                   <div *ngIf="submitProblemForm.get('solution')?.errors && submitProblemForm.get('solution')?.touched ">
                       <span *ngIf="submitProblemForm.get('solution')?.getError('required')" class="m-0" style="color:red">Solution is mandatory</span>
@@ -42,8 +42,8 @@
         </div>
 
         <div class="modal-footer d-flex">
-           <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">Close</button>
-           <button type="submit" class="btn btn-primary w-25 "[disabled]="submitProblemForm.invalid" ><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i> <span *ngIf="!isLoading">Submit</span></button>
+           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+           <button type="submit" class="btn btn-primary "[disabled]="submitProblemForm.invalid" ><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i> <span *ngIf="!isLoading">Submit</span></button>
         </div>
         </div>
     </div>
