@@ -28,6 +28,7 @@ import { SubmitProblemComponent } from './Components/submit-problem/submit-probl
 import {NgOptimizedImage} from "@angular/common";
 import { StatusComponent } from './Components/status/status.component';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
+import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
     SubmitProblemComponent,
     StatusComponent,
     CreateContestComponent,
+    HoursMinutesPipe,
    ],
   imports: [
     RouterModule,
