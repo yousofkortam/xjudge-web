@@ -10,6 +10,7 @@ export class FormInputComponent {
   @Input() controller!: FormControl;
   @Input() span!: string;
   @Input() inputType: string = 'text'; // default to text
+  @Input()  button!:any
   
   ngOnInit() {
     console.log(this.controller);

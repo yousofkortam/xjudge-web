@@ -9,26 +9,26 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li *ngIf="isLogin" class="nav_menu nav-item active ">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="home">Home </a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="home">Home </a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="problem">Problem</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="problem">Problem</a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="group">Group</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="group">Group</a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="contest">Contest</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="contest">Contest</a>
             </li>
 
             <li *ngIf="!isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="login">Login</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="login">Login</a>
             </li>
             <li *ngIf="!isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="register">register</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="register">register</a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a (click)="logOut()" class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="logout">Logout</a>
+                <a (click)="logOut()" class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" href="logout">Logout</a>
             </li>
         </ul>
       </div>
