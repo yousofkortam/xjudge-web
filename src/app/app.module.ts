@@ -17,7 +17,7 @@ import { ChangePasswordComponent } from './Components/change-password/change-pas
 import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
 import { PaginationComponent } from './Components/pagination/pagination.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
@@ -26,7 +26,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { NgOptimizedImage } from '@angular/common';
-import { StatusComponent } from './Components/status/status.component';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
@@ -50,7 +49,6 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
     PaginationComponent,
     ProblemDetailsComponent,
     SubmitProblemComponent,
-    StatusComponent,
     CreateContestComponent,
     HoursMinutesPipe,
    ],
@@ -67,6 +65,7 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
     MatPaginatorModule,
     MatSnackBarModule,
     NgOptimizedImage,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

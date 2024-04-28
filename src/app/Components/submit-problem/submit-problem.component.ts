@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
@@ -8,29 +8,56 @@ import { ProblemService } from 'src/app/ApiServices/problem.service';
   templateUrl: './submit-problem.component.html',
   styleUrls: ['./submit-problem.component.css']
 })
-export class SubmitProblemComponent {
+export class SubmitProblemComponent implements OnInit {
 
   compilers:any=[]
   isLoading:boolean = false;
   apiError:string = '';
+  @Input() problemCode:string = '';
+  @Input() onlineJudge:string = '';
+  languages:any = [];
   submitProblemForm: FormGroup = new FormGroup({
-     language:new FormControl(null, [Validators.required]),
-     solution:new FormControl(null, [Validators.required ]),
+    problemCode: new FormControl(this.problemCode),
+    ojType: new FormControl(this.onlineJudge),
+    solutionCode: new FormControl("", [Validators.required]),
+    isOpen: new FormControl(true, [Validators.required]),
+    idValue: new FormControl("", [Validators.required]),
   });
 
   constructor(
     private _ProblemService: ProblemService, private _Router:Router) {}
 
+  ngOnInit(): void {
+    this._ProblemService.getCompilersForSubmitProblem(this.onlineJudge).subscribe({
+      next: (response) => {
+        this.languages = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 
-  handleSubmitProblem(submitProblemForm:FormGroup){
+
+  handleSubmitProblem(){
     this.isLoading = true;
-    if(submitProblemForm.valid){
-      this._ProblemService.submitProblem(submitProblemForm.value).subscribe({
+    if(this.submitProblemForm.valid){
+      let submitionRequest = {
+        problemCode: this.problemCode,
+        ojType: this.onlineJudge,
+        solutionCode: this.submitProblemForm.value.solutionCode,
+        isOpen: this.submitProblemForm.value.isOpen,
+        compiler: {
+          idValue: this.submitProblemForm.value.idValue,
+          name: ""
+        }
+      }
+      console.log(submitionRequest);
+      this._ProblemService.submitProblem(submitionRequest).subscribe({
         next: (response)=> {
-          if (response.success === true) {          
-            localStorage.setItem('userToken', response.token);
-            this._Router.navigate(['/home']).then(r => r);
-            this.isLoading= false;
+          if (response.success === true) {
+            console.log(response);
+            this.isLoading = false;
           }
         },
         error: (err)=> {

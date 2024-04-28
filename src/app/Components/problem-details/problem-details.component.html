@@ -7,7 +7,7 @@
                     <div class="col-xs-8">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" class="btn btn-success" >
                             <i class="fa fa-check"></i> Submit </button>
-                       <app-submit-problem></app-submit-problem>
+                       <app-submit-problem [onlineJudge]="problemInfo.source" [problemCode]="problemInfo.problemCode"></app-submit-problem>
                     </div>
                 </div>
 

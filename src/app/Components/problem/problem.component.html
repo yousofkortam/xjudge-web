@@ -25,26 +25,27 @@
                 <thead>
                     <tr>
                     <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
-                        <th class="oj">
-                            OJ
-                            <select id="OJId" name="OJId" class="search_text" style="width:100%">
-                                <option value="CodeForces">CodeForces</option>
-                                <option value="AtCoder">AtCoder</option>
-                            </select>
-                        </th>
-                        <th class="prob_num">
-                            Prob
-                            <input #prob (input)="searchByCode(prob.value)" type="text" id="probNum" name="probNum" class="search_text" style="width:95%" />
-                        </th>
-                        <th class="title">
-                            Title
-                            <input #title (input)="searchByTitle(title.value)" type="text" id="title" name="title" class="search_text" style="width:95%" />
-                        </th>
-                        <th class="source hidden-md-down">
-                            Source
-                            <input type="text" id="source" name="source" class="search_text" style="width:95%" />
-                        </th>
-                        <th class="solved_users pb-4" data-toggle='tooltip' title="Sort by solved users">Solved</th>
+                    <th class="oj">
+                        OJ
+                        <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%" (change)="onEnterPress()">
+                            <option value="All">All</option>
+                            <option value="CodeForces">CodeForces</option>
+                            <option value="AtCoder">AtCoder</option>
+                        </select>
+                    </th>
+                    <th class="prob_num">
+                        Prob
+                        <input [(ngModel)]="problemCode" type="text" id="probNum" name="probNum" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
+                    </th>
+                    <th class="title">
+                        Title
+                        <input [(ngModel)]="title" type="text" id="title" name="title" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
+                    </th>
+                    <th class="source hidden-md-down">
+                        Source
+                        <input [(ngModel)]="contestName" type="text" id="source" name="source" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
+                    </th>
+                    <th class="solved_users pb-4" data-toggle='tooltip' title="Sort by solved users">Solved</th>
                     </tr>
                 </thead>
                 <tbody>

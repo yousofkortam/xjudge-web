@@ -17,6 +17,11 @@ export class ProblemComponent implements OnInit {
   pageNo: number = 0;
   searchPageNumber: number = 0;
 
+  oj: string = 'All';
+  problemCode: string = '';
+  title: string = '';
+  contestName: string = '';
+
   constructor(
     private _problemService: ProblemService,
     private titleService: Title) { }
@@ -51,31 +56,28 @@ export class ProblemComponent implements OnInit {
     this.getAllProblems();
   }
 
-  searchByCode(code: String) {
-    if (code === '' || code === null || code === undefined) return this.getAllProblems();
-    this._problemService.searchByCode(code, this.pageSize, this.searchPageNumber).subscribe({
-      next: (response: any) => {
-        if (response.success === true) {
-          this.Problems = response.data.content;
-          this.totalPages = response.data.totalPages;
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+  onEnterPress() {
+    if (this.oj === 'All') {
+      this.oj = '';
+    }
+    this.searchProblem(this.oj, this.problemCode, this.title, this.contestName);
+    this.oj = 'All';
   }
 
-  searchByTitle(title: String) {
-    if (title === '' || title === null || title === undefined) return this.getAllProblems();
-    this._problemService.searchByTitle(title, this.pageSize, this.searchPageNumber).subscribe({
-      next: (response: any) => {
+  searchProblem(source: string, problemCode: string, title: string, contestName: string) {
+    this.loading = true;
+    this._problemService.filterProblem(source, problemCode, title, contestName, this.pageSize, this.searchPageNumber).subscribe({
+      next: (response) => {
+        console.log(response);
         if (response.success === true) {
+          this.loading = false;
           this.Problems = response.data.content;
           this.totalPages = response.data.totalPages;
+          this.pageNo = response.data.pageable.pageNumber;
         }
       },
       error: (error) => {
+        this.loading = false;
         console.log(error);
       }
     });
