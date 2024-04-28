@@ -42,7 +42,8 @@
 
         <div class="modal-footer d-flex">
            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-           <button type="submit" class="btn btn-primary "[disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()"> <span >Submit</span></button>
+           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitResultModal" (click)="handleSubmitProblem()"> <span >Submit</span></button>
+           <app-submit-result></app-submit-result>
         </div>
         </div>
     </div>

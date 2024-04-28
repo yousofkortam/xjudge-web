@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
@@ -13,6 +13,7 @@ export class SubmitProblemComponent implements OnInit {
   compilers:any=[]
   isLoading:boolean = false;
   apiError:string = '';
+  apiResponse:any;
   @Input() problemCode:string = '';
   @Input() onlineJudge:string = '';
   languages:any = [];
@@ -49,7 +50,7 @@ export class SubmitProblemComponent implements OnInit {
         isOpen: this.submitProblemForm.value.isOpen,
         compiler: {
           idValue: this.submitProblemForm.value.idValue,
-          name: ""
+          name: this.languages.find((lang:any)=> lang.idValue === this.submitProblemForm.value.idValue).name
         }
       }
       console.log(submitionRequest);
