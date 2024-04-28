@@ -9,20 +9,20 @@ import { ProblemService } from 'src/app/ApiServices/problem.service';
   styleUrls: ['./submit-problem.component.css']
 })
 export class SubmitProblemComponent implements OnInit {
-
+ @Input() problemCode:string = '';
+  @Input() onlineJudge:string = '';
+ 
   compilers:any=[]
   isLoading:boolean = false;
   apiError:string = '';
-  @Input() problemCode:string = '';
-  @Input() onlineJudge:string = '';
   languages:any = [];
+
   submitProblemForm: FormGroup = new FormGroup({
-    problemCode: new FormControl(this.problemCode),
-    ojType: new FormControl(this.onlineJudge),
-    solutionCode: new FormControl("", [Validators.required]),
-    isOpen: new FormControl(true, [Validators.required]),
-    idValue: new FormControl("", [Validators.required]),
-  });
+  problemCode: new FormControl(this.problemCode),
+  ojType: new FormControl(this.onlineJudge),    
+  solutionCode: new FormControl("", [Validators.required]),
+  isOpen: new FormControl(true, [Validators.required]),    
+  idValue: new FormControl("", [Validators.required]),});
 
   constructor(
     private _ProblemService: ProblemService, private _Router:Router) {}

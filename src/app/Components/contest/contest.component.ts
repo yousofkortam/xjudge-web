@@ -33,6 +33,12 @@ duration:any
   //   return hours;
   // }
 
+  trackByContestId(index: number, contest: any): string {
+   return contest.id; // Assuming problemCode is unique
+   
+  }
+
+
   getAllContests() {
     this.loading = true;
     this._ContestService.getAllContests(this.pageSize).subscribe({

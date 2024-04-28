@@ -31,6 +31,10 @@ export class ProblemComponent implements OnInit {
     this.getAllProblems();
   }
 
+  trackByProblemCode(index: number, problem: any): string {
+    return problem.problemCode; // Assuming problemCode is unique
+  }
+
   getAllProblems() {
     this.loading = true;
     this._problemService.getAllProblems(this.pageSize, this.pageNo).subscribe({
