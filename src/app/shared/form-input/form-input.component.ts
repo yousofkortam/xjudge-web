@@ -10,7 +10,8 @@ export class FormInputComponent {
   @Input() controller!: FormControl;
   @Input() span!: string;
   @Input() inputType: string = 'text'; // default to text
-  @Input()  button!:any
+  @Input() apiError!: string; // New input for validation error messages
+
   
   ngOnInit() {
     console.log(this.controller);

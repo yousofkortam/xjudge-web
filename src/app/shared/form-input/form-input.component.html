@@ -2,7 +2,5 @@
     <span >{{span}}</span>
     <input [type]="inputType"  [formControl]="controller" required />
     <span  *ngIf="(controller.touched || controller.dirty) && controller.invalid" class="mt-5" style="color:red !important">value is required</span>
-    <!-- <span *ngIf="controller.getError('pattern')" class="mt-0" style="color:red"></span> -->
-   
-    <i></i>
+    <span *ngIf="apiError" class="mt-5" style="color:red !important">{{ apiError }}</span> <i></i>
   </div> 

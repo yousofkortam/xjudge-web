@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
+  validations: any;
+
 
   loginForm = new FormGroup({
     userHandle:new FormControl(null, [Validators.required]),
@@ -51,6 +53,8 @@ export class LoginComponent implements OnInit {
         error: (response)=> {
           this.isLoading = false;
           this.apiError = response.error.error.message;
+          this.validations = response.error.error.validations;
+         
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
