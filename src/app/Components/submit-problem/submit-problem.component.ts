@@ -11,7 +11,7 @@ import { SubmitResultComponent } from '../submit-result/submit-result.component'
   styleUrls: ['./submit-problem.component.css']
 })
 export class SubmitProblemComponent implements OnInit {
-
+ 
   compilers:any=[]
   isLoading:boolean = false;
   apiError:string = '';

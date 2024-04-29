@@ -1,7 +1,7 @@
 <div  class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
     <div class="row d-flex">
         <div class="col-md-2 mt-5 pt-2 " id="left-panel">
-            <div class="list-group contest-running col-sm-4 col-lg-12 " >
+            <div class="list-group contest-running " >
                 <a href="" class="list-group-item" data-category="allContests"> All Contests</a>
                 <a href="" class="list-group-item" data-category="publicContests">Public Contests</a>
                 <a href="" class="list-group-item" data-category="myContests">My Contests</a>
@@ -12,15 +12,14 @@
                 <a href="" class="list-group-item" data-category="follow"> My Follow</a>
                 <input type="hidden" name="category" value="" />
             </div>
-
-            <div class="list-group contest-category col-sm-4 col-lg-12 mt-3 " style="padding-right:0; margin: 0 0 10px 0">
+            <div class="list-group contest-category  mt-3 " style="padding-right:0; margin: 0 0 10px 0">
                 <a href="" class="list-group-item " data-category="classical">
                     <img src="/assets/images/classical.gif"> Classical
                 </a>
                 <a href="" class="list-group-item" data-category="group">
                     <img src="/assets/images/group.png"> Group
                 </a>
-               
+   
             </div>
 
         </div>
@@ -66,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let contest of Contests; let i = index">
+                            <tr *ngFor="let contest of Contests; trackBy:trackByContestId; let i = index">
                                 <td><i class="fas fa-star"></i></td>
                                 <td> {{ contest.id }} </td>
                                 <td><a [href]="contest.title" target="_blank">{{contest.title}}</a></td>
