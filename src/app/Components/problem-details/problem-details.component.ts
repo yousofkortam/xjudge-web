@@ -62,8 +62,8 @@ export class ProblemDetailsComponent implements OnInit {
         problemCode: this.problemCode,
         source: this.source,
       },
-      width: '70%',
-      height: '95%'
+      width: '60%',
+      height: 'auto'
     },
   );
   }

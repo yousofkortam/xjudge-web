@@ -57,23 +57,23 @@ export class SubmitProblemComponent implements OnInit {
         }
       }
       console.log(submitionRequest);
-      this._ProblemService.submitProblem(submitionRequest).subscribe({
-        next: (response)=> {
-          if (response.success === true) {
-            console.log(response);
-            this.isLoading = false;
-            this.dialog.closeAll();
-            this.dialog.open(SubmitResultComponent, {
-              data: response.data,
-              width: '70%',
-              height: '90%'
-            });
+      let submitProblem$ = this._ProblemService.submitProblem(submitionRequest);
+      this.dialog.closeAll();
+      this.dialog.open(SubmitResultComponent, {
+        data: { 
+          response: submitProblem$,
+          dummy: {
+            verdict: "In Queue",
+            language: submitionRequest.compiler.name,
+            submitTime: "Now",
+            timeUsage: "0 ms",
+            memoryUsage: "0 KB",
+            isOpen: submitionRequest.isOpen,
+            solution: submitionRequest.solutionCode
           }
         },
-        error: (err)=> {
-          this.isLoading = false;
-          this.apiError = err.error.message;
-        }
+        width: '70%',
+        height: 'auto'
       });
     }
   }
