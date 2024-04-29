@@ -29,6 +29,9 @@ import { NgOptimizedImage } from '@angular/common';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
+import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -51,6 +54,7 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
     SubmitProblemComponent,
     CreateContestComponent,
     HoursMinutesPipe,
+    SubmitResultComponent,
    ],
   imports: [
     RouterModule,
@@ -65,7 +69,9 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
     MatPaginatorModule,
     MatSnackBarModule,
     NgOptimizedImage,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
