@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
 
 
 @Component({
@@ -31,6 +33,7 @@ export class ProblemDetailsComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
     private titleService: Title,
+    private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document) { }
 
   fetchEndPointToGetSpecificProblem() {
@@ -51,6 +54,19 @@ export class ProblemDetailsComponent implements OnInit {
 
      
 }
+
+
+  openModal() {
+    this.dialog.open(SubmitProblemComponent, {
+      data: {
+        problemCode: this.problemCode,
+        source: this.source,
+      },
+      width: '70%',
+      height: '95%'
+    },
+  );
+  }
 
   ngOnInit(): void {
     // this.loadMathJaxConfig(); this.loadMathJax();

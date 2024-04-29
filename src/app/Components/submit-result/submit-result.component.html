@@ -1,17 +1,41 @@
-<div class="modal fade modal-md mt-5 center" id="submitResultModal" tabindex="-1" aria-labelledby="submitResultModalLabelAria" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title " id="submitResultModalLabel">Result </h5>
-          <button type="button" class="btn-close ps-0 pe-3  border-none shadow-none " data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <span>Hello form Result popuop message {{ data | json }}</span>
-        </div>
+<mat-dialog-content class="dialog-content">
+  <h2 class="dialog-title">Submission Result</h2>
+  <div id="info-panel">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">status</th>
+          <th scope="col">Time</th>
+          <th scope="col">Lang</th>
+          <th scope="col">Submitted</th>
+          <th scope="col">Open</th>
+          <th scope="col">RemoteRunId</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="status" scope="row" [style.color]="data.verdict === 'Accepted' ? 'darkgreen' : 'red'">{{ data.verdict }}</td>
+          <td class="status">{{data.timeUsage}}</td>
+          <td class="status">{{data.language}}</td>
+          <td class="status">{{data.submitTime * 1000 | date:'medium'}}</td>
+          <td class="status">{{data.isOpen}}</td>
+          <td class="status">{{data.remoteRunId}}</td>
+        </tr>
+      </tbody>
+    </table>
 
-        <div class="modal-footer d-flex">
-           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-        </div>
+    <div id="code-solution">
+      <h3 class="code-title">Solution:</h3>
+      <pre class="code-block line-numbers">
+        <code class="language-cpp">
+          {{data.solution}}
+        </code>
+      </pre>
     </div>
-</div>
+    
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -30,6 +30,7 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { SubmitResultComponent } from './Components/submit-result/submit-result.
     MatPaginatorModule,
     MatSnackBarModule,
     NgOptimizedImage,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent],
