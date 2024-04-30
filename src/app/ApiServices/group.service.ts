@@ -22,4 +22,9 @@ constructor(private _HttpClient: HttpClient) { }
     );
   };
 
+  getGroupsAwnedByUser(): Observable<any> {
+    return this._HttpClient.get( `http://localhost:7070/group/owned`, { headers: this.headers }
+    );
+  }
+
 }

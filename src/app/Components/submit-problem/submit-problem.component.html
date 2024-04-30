@@ -29,9 +29,9 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
-  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Close</button>
+  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Cancel</button>
   <button type="submit" class="btn btn-success" mat-button [disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()">
-    <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
+    <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Submitting</span>
     <span *ngIf="!isLoading"><i class="fa fa-check"></i> Submit</span>
   </button>
 </mat-dialog-actions>

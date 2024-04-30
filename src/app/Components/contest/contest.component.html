@@ -29,13 +29,8 @@
                 <!-- pagination -->
                 <div class="mt-5 d-lg-flex justify-content-between">
                     <div class="d-flex col-lg-6 col-12">
-                        <!-- <div>
-                     <input type="submit" class="btn btn-light" value="Statistic" />
-                 </div> -->
                         <div>
-                            <button type="submit" class="btn ms-2 mb-0 border-none shadow-none" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal2" value="Create Contest" style="background-color:#0275d8; color:#fff">Create Contest</button>
-                            <app-create-contest></app-create-contest>
+                            <button mat-button (click)="openCreateContestDialog()"  class="btn ms-2 mb-0 border-none shadow-none" value="Create Contest" style="background-color:#0275d8; color:#fff">Create Contest</button>
                         </div>
                     </div>
                     <app-pagination [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)"
@@ -49,7 +44,7 @@
                         <thead>
                             <tr class="p-4">
                                 <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
-                                <th class="id ">ID</th>
+                                <th class="id ">#</th>
                                 <th class="title">
                                     Title
                                     <input #title (input)="searchByTitle(title.value)" type="text" id="title"
@@ -67,8 +62,8 @@
                         <tbody>
                             <tr *ngFor="let contest of Contests; trackBy:trackByContestId; let i = index">
                                 <td><i class="fas fa-star"></i></td>
-                                <td> {{ contest.id }} </td>
-                                <td><a [href]="contest.title" target="_blank">{{contest.title}}</a></td>
+                                <td> {{ i + 1 }} </td>
+                                <td><a [routerLink]="contest.id">{{contest.title}}</a></td>
                                 <td> {{ contest.beginTime * 1000 | date:'medium' }} </td>
                                 <td> {{ contest.duration / 60 / 60 | hoursMinutes }} </td>
                                 <td><a [href]="contest.owner" target="_blank">{{contest.handle}}</a></td>

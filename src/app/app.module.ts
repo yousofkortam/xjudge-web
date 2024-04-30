@@ -32,6 +32,7 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     CreateContestComponent,
     HoursMinutesPipe,
     SubmitResultComponent,
+    ContestDetailsComponent,
    ],
   imports: [
     RouterModule,

@@ -38,22 +38,20 @@ export class ProblemDetailsComponent implements OnInit {
 
   fetchEndPointToGetSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
-    
-     next: (response) => {
+
+      next: (response) => {
         console.log(response);
         if (response.success === true) {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
-          this.samples = response.data.samples       
-    }      
+          this.samples = response.data.samples
+        }
       },
       error: (err) => {
         console.log(err);
       }
     });
-
-     
-}
+  }
 
 
   openModal() {
@@ -63,24 +61,20 @@ export class ProblemDetailsComponent implements OnInit {
         source: this.source,
       },
       width: '60%',
-      height: 'auto'
+      height: 'auto',
+      disableClose: true
     },
-  );
+    );
   }
 
   ngOnInit(): void {
-    // this.loadMathJaxConfig(); this.loadMathJax();
     this.loadMathJaxConfig();
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
-      this.loadMathJax();
     });
-   
-   
-    this.fetchEndPointToGetSpecificProblem(); 
-      
-    
+    this.fetchEndPointToGetSpecificProblem();
+    this.loadMathJax();
   }
 
   loadMathJaxConfig() {

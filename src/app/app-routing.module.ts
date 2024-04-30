@@ -14,6 +14,7 @@ import { ResetPasswordComponent } from './Components/reset-password/reset-passwo
 import { ProtectedAuthGuard } from './Guards/auth.guard';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
+import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'home', component:HomeComponent },
   { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
+  { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },

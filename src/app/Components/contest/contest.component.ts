@@ -1,8 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
+import { CreateContestComponent } from '../create-contest/create-contest.component';
 
 @Component({
   selector: 'app-contest',
@@ -21,7 +23,8 @@ duration:any
   constructor(private _ContestService: ContestService,
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document) { }
+    @Inject(DOCUMENT) private document: Document,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getAllContests();
@@ -61,6 +64,14 @@ duration:any
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
     this.getAllContests();
+  }
+
+  openCreateContestDialog() {
+    this.dialog.open(CreateContestComponent, {
+      width: '65%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
   searchByTitle(title: String) {
