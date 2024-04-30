@@ -20,7 +20,6 @@ export class ContestDetailsComponent implements OnInit {
     private contestService: ContestService) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Contesst Details');
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.contestId = param.get('contestId');
     });
@@ -33,6 +32,7 @@ export class ContestDetailsComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.contest = response.data;
+        this.titleService.setTitle(this.contest.title);
       },
       error: (err) => {
         console.log(err);
