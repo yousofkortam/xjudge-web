@@ -39,7 +39,7 @@
 
             <div class="mb-3 mt-3 d-flex">
                 <label for="durationSeconds" class="col-md-2 mt-2 me-3">Duration</label>
-                <input id="durationSeconds" class="form-control" formControlName="durationSeconds" type="text"
+                <input id="durationSeconds" class="form-control" formControlName="durationSeconds" type="number"
                     placeholder="duration in minutes" />
                 <div
                     *ngIf="createContestForm.get('durationSeconds')?.errors && createContestForm.get('durationSeconds')?.touched ">
