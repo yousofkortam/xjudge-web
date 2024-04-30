@@ -33,6 +33,8 @@ import { SubmitResultComponent } from './Components/submit-result/submit-result.
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({
@@ -74,6 +76,8 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
     FormsModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatSliderModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
