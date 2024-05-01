@@ -17,7 +17,7 @@ export class ProblemService {
     );
   }
 
-  getSpecificProblem(problemSource: string, problemCode: number): Observable<any> {
+  getSpecificProblem(problemSource: string, problemCode: string): Observable<any> {
     return this._HttpClient.get(
       `http://localhost:7070/problem/${problemSource}-${problemCode}`,
       { headers: this.headers }
