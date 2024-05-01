@@ -1,0 +1,45 @@
+/* judge.component.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 50px;
+    
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    margin-right: 50px; /* Adjust spacing between nav items */
+}
+
+.nav-link {
+    color: black; /* Set default color */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.nav-link:hover {
+    background-color: white; /* Change background color to white when active */
+    color: blue; /* Change text color to blue when active */
+    padding: 10px; /* Add padding */
+    width: 100px; /* Add width */
+    height: 45px; /* A
+}
+
+.nav-link.active {
+    background-color: white; /* Change background color to white when active */
+    color: blue; /* Change text color to blue when active */
+    padding: 10px; /* Add padding */
+    width: 100px; /* Add width */
+    height: 40px; /* A
+}
+
+.btn-primary {
+    background-color: blue; /* Set button background color to blue */
+}

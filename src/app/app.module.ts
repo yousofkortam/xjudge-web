@@ -29,6 +29,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
+import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -57,6 +58,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     SubmitProblemComponent,
     CreateContestComponent,
     HoursMinutesPipe,
+    CreateGroupComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
    ],
