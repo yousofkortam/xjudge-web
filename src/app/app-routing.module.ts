@@ -14,7 +14,7 @@ import { ResetPasswordComponent } from './Components/reset-password/reset-passwo
 import { ProtectedAuthGuard } from './Guards/auth.guard';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
-
+import { CreateGroupComponent } from './Components/create-group/create-group.component';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   // {path: 'home',
@@ -33,6 +33,7 @@ const routes: Routes = [
   { path: 'problem/:source/:problemCode', component:ProblemDetailsComponent },
   { path: 'submit', component:SubmitProblemComponent },
   { path: 'pagination', component:PaginationComponent },
+  { path: 'create-group', component: CreateGroupComponent } ,
   { path: '**', component:NotFoundComponent },
 ];
 

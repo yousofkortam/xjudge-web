@@ -29,7 +29,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
-
+import { CreateGroupComponent } from './Components/create-group/create-group.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +51,7 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
     SubmitProblemComponent,
     CreateContestComponent,
     HoursMinutesPipe,
+    CreateGroupComponent,
    ],
   imports: [
     RouterModule,
