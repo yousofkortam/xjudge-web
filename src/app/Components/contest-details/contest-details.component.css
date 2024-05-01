@@ -1,0 +1,5 @@
+.green-slider .mat-slider-thumb,
+.green-slider .mat-slider-thumb-label,
+.green-slider .mat-slider-track-fill {
+    background-color: green !important;
+}

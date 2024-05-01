@@ -30,6 +30,13 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
+import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTabsModule } from '@angular/material/tabs';
+
 
 @NgModule({
   declarations: [
@@ -52,6 +59,8 @@ import { CreateGroupComponent } from './Components/create-group/create-group.com
     CreateContestComponent,
     HoursMinutesPipe,
     CreateGroupComponent,
+    SubmitResultComponent,
+    ContestDetailsComponent,
    ],
   imports: [
     RouterModule,
@@ -66,7 +75,11 @@ import { CreateGroupComponent } from './Components/create-group/create-group.com
     MatPaginatorModule,
     MatSnackBarModule,
     NgOptimizedImage,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatSliderModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

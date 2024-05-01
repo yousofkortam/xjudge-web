@@ -1,5 +1,6 @@
+import { ApiError } from './../../api-error';
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-form-input',
@@ -10,7 +11,8 @@ export class FormInputComponent {
   @Input() controller!: FormControl;
   @Input() span!: string;
   @Input() inputType: string = 'text'; // default to text
-  @Input()  button!:any
+  @Input() apiError!: ValidationErrors;// New input for validation error messages
+
   
   ngOnInit() {
     console.log(this.controller);

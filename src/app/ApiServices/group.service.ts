@@ -27,4 +27,10 @@ constructor(private _HttpClient: HttpClient) { }
   createGroup(groupData: any): Observable<any> {
     return this._HttpClient.post('http://localhost:7070/group', groupData, { headers: this.headers });
   }
+
+  getGroupsAwnedByUser(): Observable<any> {
+    return this._HttpClient.get( `http://localhost:7070/group/owned`, { headers: this.headers }
+    );
+  }
+
 }

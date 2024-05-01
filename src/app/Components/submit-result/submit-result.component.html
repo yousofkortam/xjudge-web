@@ -1,0 +1,46 @@
+<mat-dialog-content class="dialog-content">
+  <h2 class="dialog-title">Submission Result</h2>
+  <div id="info-panel">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">status</th>
+          <th scope="col">Time</th>
+          <th scope="col">Memory</th>
+          <th scope="col">Lang</th>
+          <th scope="col">Submitted</th>
+          <th scope="col">Open</th>
+          <th scope="col">RemoteRunId</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="status" scope="row" [style.color]="result.verdict === 'Accepted' ? 'darkgreen' : result.verdict === 'In Queue' ? 'black' : 'red'">
+            {{ result.verdict }}
+            <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
+          </td>
+          <td class="status">{{result.timeUsage}}</td>
+          <td class="status">{{result.memoryUsage}}</td>
+          <td class="status">{{result.language}}</td>
+          <td class="status">{{result.submitTime * 1000 | date:'medium'}}</td>
+          <td class="status">{{result.isOpen}}</td>
+          <td class="status">{{result.remoteRunId}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="code-solution">
+      <h3 class="code-title">Solution:</h3>
+      <pre class="code-block line-numbers">
+        <code class="language-cpp">
+          {{result.solution}}
+        </code>
+      </pre>
+    </div>
+    
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
