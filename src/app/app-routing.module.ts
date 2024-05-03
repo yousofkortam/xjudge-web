@@ -16,6 +16,7 @@ import { ProblemDetailsComponent } from './Components/problem-details/problem-de
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
+import { StatusComponent } from './Components/status/status.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
   // loadComponent: () =>import('./Components/home/home.component').then((c) => c.HomeComponent),},
   { path: 'home', component:HomeComponent },
   { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
+  { path: 'status', canActivate:[ProtectedAuthGuard], component:StatusComponent},
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
   { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },

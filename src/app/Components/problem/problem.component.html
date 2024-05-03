@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="col-md-10 text-center" id="right-panel">
-            <app-pagination [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)"></app-pagination>
+            <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)"></app-pagination>
             <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
                 width="100%">
                 <thead>
@@ -28,7 +28,7 @@
                     <th class="oj">
                         OJ
                         <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%" (change)="onEnterPress()">
-                            <option value="All">All</option>
+                            <option value="">All</option>
                             <option value="CodeForces">CodeForces</option>
                             <option value="AtCoder">AtCoder</option>
                         </select>

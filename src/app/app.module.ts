@@ -36,6 +36,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { StatusComponent } from './Components/status/status.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     CreateGroupComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
+    StatusComponent,
    ],
   imports: [
     RouterModule,

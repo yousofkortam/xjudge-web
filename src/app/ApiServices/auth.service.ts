@@ -53,6 +53,15 @@ export class AuthService implements OnInit {
     this.userData.next(decodedToken);
   }
 
+  getUserHandle() {
+    let token = localStorage.getItem('userToken');
+    if (token) {
+      let decodedToken: any = jwtDecode(token);
+      return decodedToken.sub;
+    }
+    return null;
+  }
+
   register(userData: object): Observable<any> {
     return this._HttpClient.post(
       'http://localhost:7070/auth/register',
