@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
+import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { AuthService } from 'src/app/ApiServices/auth.service';
 
 
 @Component({
@@ -18,19 +19,18 @@ export class ProblemDetailsComponent implements OnInit {
   source: any;
   problemCode: any;
   problemInfo: any = null;
+  problemSumbissions: any = [];
+  totalSubmissions: number = 0;
   samples: any = [];
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
 
-  submitProblemForm: FormGroup = new FormGroup({
-    language: new FormControl(null, [Validators.required]),
-    solution: new FormControl(null, [Validators.required]),
-  });
-
   constructor(
     private _ProblemService: ProblemService,
     private _ActivatedRoute: ActivatedRoute,
+    private submissionService: SubmissionService,
+    private authService: AuthService,
     private renderer: Renderer2,
     private titleService: Title,
     private dialog: MatDialog,
@@ -38,9 +38,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   fetchEndPointToGetSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
-
       next: (response) => {
-        console.log(response);
         if (response.success === true) {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
@@ -52,7 +50,6 @@ export class ProblemDetailsComponent implements OnInit {
       }
     });
   }
-
 
   openModal() {
     this.dialog.open(SubmitProblemComponent, {
@@ -75,6 +72,7 @@ export class ProblemDetailsComponent implements OnInit {
     });
     this.fetchEndPointToGetSpecificProblem();
     this.loadMathJax();
+    this.getProblemSubissions();
   }
 
   loadMathJaxConfig() {
@@ -94,6 +92,23 @@ export class ProblemDetailsComponent implements OnInit {
     script.async = false;
     script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
     this.renderer.appendChild(this.document.head, script);
+  }
+
+  getProblemSubissions() {
+    this.isLoading = true;
+    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
+      next: (response) => {
+        if (response.success === true) {
+          this.isLoading = false;
+          this.problemSumbissions = response.data.content;
+          this.totalSubmissions = response.data.totalElements;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.log(error);
+      }
+    });
   }
 
 }

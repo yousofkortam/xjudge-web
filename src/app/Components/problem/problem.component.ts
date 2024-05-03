@@ -65,4 +65,12 @@ export class ProblemComponent implements OnInit {
     });
   }
 
+  resetFilters() {
+    this.oj = '';
+    this.problemCode = '';
+    this.title = '';
+    this.contestName = '';
+    this.filterProblems();
+  }
+
 }

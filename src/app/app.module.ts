@@ -37,6 +37,8 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 
 
 @NgModule({
@@ -63,6 +65,8 @@ import { StatusComponent } from './Components/status/status.component';
     SubmitResultComponent,
     ContestDetailsComponent,
     StatusComponent,
+    ProfileComponent,
+    TimeAgoPipe,
    ],
   imports: [
     RouterModule,

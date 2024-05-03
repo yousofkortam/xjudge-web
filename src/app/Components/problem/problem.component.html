@@ -19,33 +19,50 @@
             </div>
         </div>
         <div class="col-md-10 text-center" id="right-panel">
-            <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize" (pageChange)="onPageChange($event)"></app-pagination>
+            <div class="mt-5 d-lg-flex justify-content-between">
+                <div class="d-flex col-lg-6 col-12">
+                    <div>
+                        <button mat-button (click)="filterProblems()" class="btn ms-2 mb-0 border-none shadow-none"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Filter</button>
+                    </div>
+                    <div>
+                        <button mat-button (click)="resetFilters()" class="btn ms-2 mb-0 border-none shadow-none"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Reset</button>
+                    </div>
+                </div>
+                <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
+                    (pageChange)="onPageChange($event)"></app-pagination>
+            </div>
             <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
                 width="100%">
                 <thead>
                     <tr>
-                    <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
-                    <th class="oj">
-                        OJ
-                        <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%" (change)="onEnterPress()">
-                            <option value="">All</option>
-                            <option value="CodeForces">CodeForces</option>
-                            <option value="AtCoder">AtCoder</option>
-                        </select>
-                    </th>
-                    <th class="prob_num">
-                        Prob
-                        <input [(ngModel)]="problemCode" type="text" id="probNum" name="probNum" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
-                    </th>
-                    <th class="title">
-                        Title
-                        <input [(ngModel)]="title" type="text" id="title" name="title" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
-                    </th>
-                    <th class="source hidden-md-down">
-                        Source
-                        <input [(ngModel)]="contestName" type="text" id="source" name="source" class="search_text" style="width:95%" (keyup.enter)="onEnterPress()" />
-                    </th>
-                    <th class="solved_users pb-4" data-toggle='tooltip' title="Sort by solved users">Solved</th>
+                        <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
+                        <th class="oj">
+                            OJ
+                            <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%"
+                                (change)="onEnterPress()">
+                                <option value="">All</option>
+                                <option value="CodeForces">CodeForces</option>
+                                <option value="AtCoder">AtCoder</option>
+                            </select>
+                        </th>
+                        <th class="prob_num">
+                            Prob
+                            <input [(ngModel)]="problemCode" type="text" id="probNum" name="probNum" class="search_text"
+                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                        </th>
+                        <th class="title">
+                            Title
+                            <input [(ngModel)]="title" type="text" id="title" name="title" class="search_text"
+                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                        </th>
+                        <th class="source hidden-md-down">
+                            Source
+                            <input [(ngModel)]="contestName" type="text" id="source" name="source" class="search_text"
+                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                        </th>
+                        <th class="solved_users pb-4" data-toggle='tooltip' title="Sort by solved users">Solved</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,7 +70,8 @@
                         <td><i class="fas fa-star"></i></td>
                         <td> {{ problem.oj }} </td>
                         <td><a [href]="problem.problemLink" target="_blank">{{ problem.problemCode }}</a></td>
-                        <td> <a href="problem/{{problem.oj}}/{{problem.problemCode}}">{{ problem.problemTitle }}</a> </td>
+                        <td> <a href="problem/{{problem.oj}}/{{problem.problemCode}}">{{ problem.problemTitle }}</a>
+                        </td>
                         <td><a [href]="problem.contestLink" target="_blank">{{ problem.contestName }}</a></td>
                         <td>{{ problem.solvedCount }}</td>
                     </tr>

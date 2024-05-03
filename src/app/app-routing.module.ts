@@ -17,6 +17,7 @@ import { SubmitProblemComponent } from './Components/submit-problem/submit-probl
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -33,12 +34,9 @@ const routes: Routes = [
   { path: 'forgetPassword', component:ForgetPasswordComponent },
   { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
   { path: 'register', component:RegisterComponent },
-  { path: 'pagination', component:PaginationComponent },
   { path: 'login', component:LoginComponent },
-  { path: 'problem/:source/:problemCode', component:ProblemDetailsComponent },
-  { path: 'submit', component:SubmitProblemComponent },
-  { path: 'pagination', component:PaginationComponent },
-  { path: 'create-group', component: CreateGroupComponent } ,
+  { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
+  { path: 'profile/:handle', component:ProfileComponent },
   { path: '**', component:NotFoundComponent },
 ];
 

@@ -79,4 +79,14 @@ export class StatusComponent implements OnInit {
     this.filterSubmissions();
   }
 
+  resetFilters() {
+    this.userHandle = '';
+    this.oj = '';
+    this.problemCode = '';
+    this.language = '';
+    this.allButtonColor = 'blue'; this.allTextColor = 'white';
+    this.mineButtonColor = 'white'; this.mineTextColor = 'black';
+    this.filterSubmissions();
+  }
+
 }
