@@ -27,7 +27,7 @@ export class ProblemComponent implements OnInit {
     private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Problem');
+    this.titleService.setTitle('Problems');
     this.filterProblems();
   }
 

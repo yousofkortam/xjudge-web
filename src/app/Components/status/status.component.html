@@ -6,7 +6,7 @@
                     class="list-group-item left-align-text" data-category="all"><span
                         [style.color]="allTextColor">All</span></button>
                 <button [style.background-color]="mineButtonColor" (click)="getMineSubmissions()"
-                    href="javascript:void(0)" class="list-group-item left-align-text" data-category="mine">
+                    class="list-group-item left-align-text" data-category="mine">
                     <span [style.color]="mineTextColor">Mine</span>
                 </button>
             </div>
@@ -74,9 +74,13 @@
                         <td><a target="_blank">{{ submission.ojType }}</a></td>
                         <td> <a href="problem/{{submission.ojType}}/{{submission.problemCode}}">{{
                                 submission.problemCode }}</a> </td>
-                        <td [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
-                            [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
-                            {{ submission.verdict }}
+                        <td>
+                            <button (click)="showSubmissionResult(i)"
+                                style="background: none; border: none; cursor: pointer;"
+                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
+                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                    {{submission.verdict}}
+                                </button>
                         </td> <!-- TODO: Implement link to open submission details if the user open it -->
                         <td> {{ submission.timeUsage }} </td>
                         <td> {{ submission.memoryUsage }} </td>

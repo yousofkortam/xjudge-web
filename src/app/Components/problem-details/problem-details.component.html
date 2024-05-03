@@ -64,10 +64,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let submission of problemSumbissions" class="my-sol">
-                            <td [style.color]="submission.verdict === 'Accepted' ? 'darkgreen' : 'red'"
+                        <tr *ngFor="let submission of problemSumbissions; let i = index" class="my-sol">
+                            <td>
+                                <button (click)="showSubmissionResult(i)"
+                                style="background: none; border: none; cursor: pointer;"
+                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
                                 [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
-                                <a>{{submission.verdict}}</a>
+                                    {{submission.verdict}}
+                                </button>
                             </td> <!-- TODO: Implement link to open submission details if the user is already logged in -->
                             <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
                         </tr>

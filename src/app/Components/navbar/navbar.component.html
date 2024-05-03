@@ -28,7 +28,10 @@
                 <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="login">Login</a>
             </li>
             <li *ngIf="!isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="register">register</a>
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="register">Register</a>
+            </li>
+            <li *ngIf="isLogin" class="nav_menu nav-item">
+                <a class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="profile/{{handle}}">Profile</a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
                 <a (click)="logOut()" class="nav-link p-2 p-lg-3" routerLinkActive="bg-dark text-white" routerLink="logout">Logout</a>
