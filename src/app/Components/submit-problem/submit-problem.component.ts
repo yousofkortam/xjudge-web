@@ -27,19 +27,11 @@ export class SubmitProblemComponent implements OnInit {
 
   constructor(
     private _ProblemService: ProblemService,
-    private _Router:Router,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
-    this._ProblemService.getCompilersForSubmitProblem(this.data.source).subscribe({
-      next: (response) => {
-        this.languages = response.data;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+    if (this.data.submit === true) this.getCompilers();
   }
 
 
@@ -62,6 +54,7 @@ export class SubmitProblemComponent implements OnInit {
       this.dialog.open(SubmitResultComponent, {
         data: { 
           response: submitProblem$,
+          submit: true,
           dummy: {
             verdict: "In Queue",
             language: submitionRequest.compiler.name,
@@ -76,6 +69,17 @@ export class SubmitProblemComponent implements OnInit {
         height: 'auto'
       });
     }
+  }
+
+  getCompilers() {
+    this._ProblemService.getCompilersForSubmitProblem(this.data.source).subscribe({
+      next: (response) => {
+        this.languages = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
  

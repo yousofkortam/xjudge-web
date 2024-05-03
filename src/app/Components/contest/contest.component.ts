@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { CreateContestComponent } from '../create-contest/create-contest.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contest',
@@ -23,10 +24,12 @@ duration:any
   constructor(private _ContestService: ContestService,
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
+    private titleService: Title,
     @Inject(DOCUMENT) private document: Document,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Contests');
     this.getAllContests();
   }
   // calculateHoursFromDuration(duration: string): number {

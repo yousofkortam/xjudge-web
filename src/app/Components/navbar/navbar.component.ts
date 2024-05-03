@@ -9,13 +9,16 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 export class NavbarComponent {
 
    isLogin:boolean = false ;
+   handle: string = '';
 
     constructor(private _AuthService:AuthService) {
       _AuthService.userData.subscribe ({
         next:()=> {
           this.isLogin = _AuthService.userData.getValue() !== null;
+          if (this.isLogin) this.handle = _AuthService.getUserHandle();
         }
       });
+      
     }
 
     logOut() {

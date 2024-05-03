@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { SubmitResultComponent } from '../submit-result/submit-result.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-status',
@@ -29,9 +32,12 @@ export class StatusComponent implements OnInit {
   constructor(
     private submissionService: SubmissionService,
     private authService: AuthService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private titleService: Title,
+    private dialog: MatDialog,) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Status');
     this.filterSubmissions();
   }
 
@@ -87,6 +93,20 @@ export class StatusComponent implements OnInit {
     this.allButtonColor = 'blue'; this.allTextColor = 'white';
     this.mineButtonColor = 'white'; this.mineTextColor = 'black';
     this.filterSubmissions();
+  }
+
+  showSubmissionResult(index: number) {
+    if (this.submissions[index].isOpen === true || this.submissions[index].userHandle === this.authService.getUserHandle()) {
+      this.dialog.open(SubmitResultComponent, {
+        data: { 
+          response: this.submissions[index],
+          submit: false
+        },
+        width: '70%',
+        height: 'auto'
+      });
+    }
+    
   }
 
 }

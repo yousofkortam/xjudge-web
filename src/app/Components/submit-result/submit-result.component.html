@@ -15,14 +15,17 @@
       </thead>
       <tbody>
         <tr>
-          <td class="status" scope="row" [style.color]="result.verdict === 'Accepted' ? 'darkgreen' : result.verdict === 'In Queue' ? 'black' : 'red'">
+          <td class="status" scope="row"
+          [style.color]="result.verdict === 'Accepted' ? '#5cb85c' : result.verdict === 'In Queue' ? 'black' : 'red'"
+          [style.font-weight]="result.verdict === 'Accepted' ? 'bold' : ''">
             {{ result.verdict }}
             <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
           </td>
           <td class="status">{{result.timeUsage}}</td>
           <td class="status">{{result.memoryUsage}}</td>
           <td class="status">{{result.language}}</td>
-          <td class="status">{{result.submitTime * 1000 | date:'medium'}}</td>
+          <td *ngIf="data.submit === true" class="status">{{result.submitTime * 1000 | date:'medium'}}</td>
+          <td *ngIf="data.submit === false" class="status">{{result.submitTime * 1000 | timeAgo}}</td>
           <td class="status">{{result.isOpen}}</td>
           <td class="status">{{result.remoteRunId}}</td>
         </tr>

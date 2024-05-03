@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { AuthService } from 'src/app/ApiServices/auth.service';
+import { SubmitResultComponent } from '../submit-result/submit-result.component';
 
 
 @Component({
@@ -102,12 +103,25 @@ export class ProblemDetailsComponent implements OnInit {
           this.isLoading = false;
           this.problemSumbissions = response.data.content;
           this.totalSubmissions = response.data.totalElements;
+          console.log(this.problemSumbissions);
+          
         }
       },
       error: (error) => {
         this.isLoading = false;
         console.log(error);
       }
+    });
+  }
+
+  showSubmissionResult(index: number) {
+    this.dialog.open(SubmitResultComponent, {
+      data: { 
+        response: this.problemSumbissions[index],
+        submit: false
+      },
+      width: '70%',
+      height: 'auto'
     });
   }
 
