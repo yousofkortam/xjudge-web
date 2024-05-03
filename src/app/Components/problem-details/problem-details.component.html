@@ -55,7 +55,7 @@
                 </dl>
             </div>
 
-            <div id="prob-my-sols" class=" text-center w-100">
+            <div *ngIf="problemSumbissions.length > 0" id="prob-my-sols" class=" text-center w-100">
                 <table class="table">
                     <thead class="table-light">
                         <tr style="background-color:#ebebeb">
@@ -64,15 +64,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="my-sol">
-                            <td><a href="">from api</a></td>
-                            <td class="my-sol-time">24 months ago</td>
+                        <tr *ngFor="let submission of problemSumbissions" class="my-sol">
+                            <td [style.color]="submission.verdict === 'Accepted' ? 'darkgreen' : 'red'"
+                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                <a>{{submission.verdict}}</a>
+                            </td> <!-- TODO: Implement link to open submission details if the user is already logged in -->
+                            <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
                         </tr>
-                        <tr class="my-sol">
-                            <td class="accepted"><a href=""> Accepted</a></td>
-                            <td class="my-sol-time">2 years ago</td>
-                        </tr>
-                        <tr>
+                        <tr *ngIf="totalSubmissions > 2">
                             <td colspan="2">
                                 <a routerLink="">More...</a>
                             </td>

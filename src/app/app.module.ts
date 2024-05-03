@@ -36,6 +36,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 
 
 @NgModule({
@@ -61,6 +64,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     CreateGroupComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
+    StatusComponent,
+    ProfileComponent,
+    TimeAgoPipe,
    ],
   imports: [
     RouterModule,
