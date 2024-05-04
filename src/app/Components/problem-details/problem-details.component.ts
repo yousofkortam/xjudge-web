@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Inject, Injectable, OnInit, Renderer2 } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
@@ -15,6 +16,11 @@ import { SubmitResultComponent } from '../submit-result/submit-result.component'
   templateUrl: './problem-details.component.html',
   styleUrls: ['./problem-details.component.css']
 })
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class ProblemDetailsComponent implements OnInit {
 
   source: any;
@@ -26,8 +32,16 @@ export class ProblemDetailsComponent implements OnInit {
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
+ 
+  showButtons: boolean = true;
+  
+  submitProblemForm: FormGroup = new FormGroup({
+    language: new FormControl(null, [Validators.required]),
+    solution: new FormControl(null, [Validators.required]),
+  });
 
   constructor(
+    private _Router:Router,
     private _ProblemService: ProblemService,
     private _ActivatedRoute: ActivatedRoute,
     private submissionService: SubmissionService,
@@ -35,15 +49,29 @@ export class ProblemDetailsComponent implements OnInit {
     private renderer: Renderer2,
     private titleService: Title,
     private dialog: MatDialog,
-    @Inject(DOCUMENT) private document: Document) { }
+    @Inject(DOCUMENT) private document: Document) {
 
-  fetchEndPointToGetSpecificProblem() {
+      this._Router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.checkUrl(event.url);
+        }
+      });
+     }
+     private checkUrl(url: string): void {
+      if (url.includes('/problem')) {
+        this.showButtons = false;
+      } else {
+        this.showButtons = true;
+      }
+    }
+  getSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
       next: (response) => {
         if (response.success === true) {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
-          this.samples = response.data.samples
+          this.samples = response.data.samples;
+         
         }
       },
       error: (err) => {
@@ -70,8 +98,9 @@ export class ProblemDetailsComponent implements OnInit {
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
+      
     });
-    this.fetchEndPointToGetSpecificProblem();
+    this.getSpecificProblem();
     this.loadMathJax();
     this.getProblemSubissions();
   }
@@ -93,6 +122,14 @@ export class ProblemDetailsComponent implements OnInit {
     script.async = false;
     script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
     this.renderer.appendChild(this.document.head, script);
+  }
+
+  refreshPage() {
+    // Navigate to the same route (refresh the component)
+    this._Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this._Router.navigate(['']);
+      console.log("hi ya soker")
+    });
   }
 
   getProblemSubissions() {

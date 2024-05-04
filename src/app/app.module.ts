@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
@@ -35,11 +36,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { HighlightJsModule } from 'ngx-highlight-js';
+import { OverviewComponent } from './Components/overview/overview.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
-
 
 @NgModule({
   declarations: [
@@ -64,6 +66,7 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
     CreateGroupComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
+    OverviewComponent,
     StatusComponent,
     ProfileComponent,
     TimeAgoPipe,
@@ -85,7 +88,8 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
     MatDialogModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    MatTabsModule,
+    HighlightJsModule ,
+  
   ],
   providers: [],
   bootstrap: [AppComponent],

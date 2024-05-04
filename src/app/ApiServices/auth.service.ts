@@ -1,3 +1,4 @@
+import { SubmitProblemComponent } from './../Components/submit-problem/submit-problem.component';
 import { HttpClient } from '@angular/common/http';
 import {Injectable, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
@@ -21,6 +22,7 @@ export class AuthService implements OnInit {
       let decodedToken: any = jwtDecode(token);
       this.userData.next(decodedToken);
     }
+    
   };
 
   constructor(
@@ -35,6 +37,7 @@ export class AuthService implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem("userToken")) {
       this.saveUserData();
+      
     }
 
     this.userData.subscribe(() => {
