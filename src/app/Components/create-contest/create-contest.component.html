@@ -8,7 +8,7 @@
                     <div class="btn-group ms-3 " role="group">
                         <button type="radio" class="border btn btn btn-secondary"
                             [class.active]="createContestForm.value.type === 'CLASSIC'" (click)="onClassicClick()"
-                            [ngStyle]="{'background-color': createContestForm.value.type === 'CLASSIC' ? 'grey' : 'white'}">
+                            [ngStyle]="{'background-color': createContestForm.value.type === 'CLASSIC' ? '#0275d8' : 'white'}">
                             <img src="/assets/images/classical.gif" height="20" width="20">
                             <span [ngStyle]="{'color': createContestForm.value.type === 'CLASSIC'? 'white' : 'black'}">
                                 Classical Contest
@@ -16,7 +16,7 @@
                         </button>
                         <button type="radio" class="border btn btn-secondary "
                             [class.active]="createContestForm.value.type === 'GROUP'" (click)="onGroupClick()"
-                            [ngStyle]="{'background-color': createContestForm.value.type === 'GROUP' ? 'grey' : 'white'}">
+                            [ngStyle]="{'background-color': createContestForm.value.type === 'GROUP' ? '#0275d8' : 'white'}">
                             <img src="/assets/images/group.png" height="20" width="20">
                             <span [ngStyle]="{'color': createContestForm.value.type === 'GROUP'? 'white' : 'black'}">
                                 Group Contest
@@ -79,7 +79,7 @@
                 <button type="radio" class="border btn btn btn-secondary"
                     [class.active]="createContestForm.value.visibility === 'PUBLIC'"
                     (click)="createContestForm.controls['visibility'].setValue('PUBLIC')"
-                    [ngStyle]="{'background-color': createContestForm.value.visibility === 'PUBLIC' ? 'grey' : 'white'}">
+                    [ngStyle]="{'background-color': createContestForm.value.visibility === 'PUBLIC' ? '#0275d8' : 'white'}">
                     <span [ngStyle]="{'color': createContestForm.value.visibility === 'PUBLIC'? 'white' : 'black'}">
                         Public
                     </span>
@@ -87,7 +87,7 @@
                 <button type="radio" class="border btn btn btn-secondary"
                     [class.active]="createContestForm.value.visibility === 'PRIVATE'"
                     (click)="createContestForm.controls['visibility'].setValue('PRIVATE')"
-                    [ngStyle]="{'background-color': createContestForm.value.visibility === 'PRIVATE' ? 'grey' : 'white'}">
+                    [ngStyle]="{'background-color': createContestForm.value.visibility === 'PRIVATE' ? '#0275d8' : 'white'}">
                     <span [ngStyle]="{'color': createContestForm.value.visibility === 'PRIVATE'? 'white' : 'black'}">
                         Private
                     </span>
@@ -166,10 +166,10 @@
 <mat-dialog-actions class="dialog-actions">
     <div class="dialog-actions" style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
         <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
-        <button type="submit" class="btn btn-success" [disabled]="createContestForm.invalid"
+        <button type="submit" class="btn btn-primary" [disabled]="createContestForm.invalid"
             (click)="handleCreateContest()">
             <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Creating</span>
-            <span *ngIf="!isLoading"><i class="fa fa-check"></i> Create</span>
+            <span *ngIf="!isLoading"> Create</span>
         </button>
     </div>
 </mat-dialog-actions>

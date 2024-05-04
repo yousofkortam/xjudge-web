@@ -30,8 +30,8 @@
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
   <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Cancel</button>
-  <button type="submit" class="btn btn-success" mat-button [disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()">
+  <button type="submit" class="btn btn-primary" mat-button [disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()">
     <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Submitting</span>
-    <span *ngIf="!isLoading"><i class="fa fa-check"></i> Submit</span>
+    <span *ngIf="!isLoading"> Submit</span>
   </button>
 </mat-dialog-actions>
