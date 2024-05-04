@@ -2,12 +2,10 @@
     <div class="row">
         <div class="col-md-2 mt-5 pt-2" id="left-panel">
             <div class="list-group bg-dark" id="prob-category">
-                <button [style.background-color]="allButtonColor" (click)="getAllSubmissions()"
-                    class="list-group-item left-align-text" data-category="all"><span
-                        [style.color]="allTextColor">All</span></button>
-                <button [style.background-color]="mineButtonColor" (click)="getMineSubmissions()"
-                    class="list-group-item left-align-text" data-category="mine">
-                    <span [style.color]="mineTextColor">Mine</span>
+
+                <button *ngFor="let button of buttons" (click)="button.click()" class="list-group-item left-align-text"
+                    [ngStyle]="button.style">
+                    {{button['name']}}
                 </button>
             </div>
         </div>
@@ -33,12 +31,12 @@
                         <th class="oj">
                             Who
                             <input [(ngModel)]="userHandle" type="text" id="handle" name="handle" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
                         </th>
                         <th class="prob_num">
                             OJ
                             <select [(ngModel)]="oj" id="OJ_s_Id" name="OJ_s_Id" class="search_text" style="width:100%"
-                                (change)="onEnterPress()">
+                                (change)="filterSubmissions()">
                                 <option value="">All</option>
                                 <option value="CodeForces">CodeForces</option>
                                 <option value="AtCoder">AtCoder</option>
@@ -47,7 +45,7 @@
                         <th class="title">
                             Prob
                             <input [(ngModel)]="problemCode" type="text" id="prob" name="prob" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
                         </th>
                         <th class="source hidden-md-down">
                             Verdict
@@ -61,7 +59,7 @@
                         <th class="source hidden-md-down">
                             Lang
                             <input [(ngModel)]="language" type="text" id="language" name="language" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
                         </th>
                         <th class="source hidden-md-down">
                             Submitted
@@ -79,8 +77,8 @@
                                 style="background: none; border: none; cursor: pointer;"
                                 [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
                                 [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
-                                    {{submission.verdict}}
-                                </button>
+                                {{submission.verdict}}
+                            </button>
                         </td> <!-- TODO: Implement link to open submission details if the user open it -->
                         <td> {{ submission.timeUsage }} </td>
                         <td> {{ submission.memoryUsage }} </td>

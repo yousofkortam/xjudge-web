@@ -31,7 +31,7 @@ export class SubmitProblemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
-    if (this.data.submit === true) this.getCompilers();
+    this.getCompilers();
   }
 
 

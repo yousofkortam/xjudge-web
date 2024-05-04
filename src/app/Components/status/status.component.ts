@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
 import { Title } from '@angular/platform-browser';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-status',
@@ -26,8 +27,10 @@ export class StatusComponent implements OnInit {
   problemCode: string = '';
   language: string = '';
 
-  allButtonColor: string = 'blue';  allTextColor: string = 'white';
-  mineButtonColor: string = 'white'; mineTextColor: string = 'black';
+  buttons: any = [
+    { 'name': 'All', 'style': {'background-color': '#0275d8', 'color': 'white'}, click: () => this.getAllSubmissions() },
+    { 'name': 'Mine', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getMineSubmissions() },
+  ];
 
   constructor(
     private submissionService: SubmissionService,
@@ -37,6 +40,7 @@ export class StatusComponent implements OnInit {
     private dialog: MatDialog,) { }
 
   ngOnInit(): void {
+    this.setButtonStyle('All', '#0275d8', 'white');
     this.titleService.setTitle('Status');
     this.filterSubmissions();
   }
@@ -57,16 +61,26 @@ export class StatusComponent implements OnInit {
     });
   }
 
+  setButtonStyle(button: string, color: string, textColor: string) {
+    for (let btn of this.buttons) {
+      if (btn.name === button) {
+        btn['style']['background-color'] = color;
+        btn['style']['color'] = textColor;
+      } else {
+        btn['style']['background-color'] = 'white';
+        btn['style']['color'] = 'black';
+      }
+    }
+  }
+
   getAllSubmissions() {
-    this.allButtonColor = 'blue'; this.allTextColor = 'white';
-    this.mineButtonColor = 'white'; this.mineTextColor = 'black';
+    this.setButtonStyle('All', '#0275d8', 'white');
     this.userHandle = '';
     this.filterSubmissions();
   }
 
   getMineSubmissions() {
-    this.allButtonColor = 'white'; this.allTextColor = 'black';
-    this.mineButtonColor = 'blue'; this.mineTextColor = 'white';
+    this.setButtonStyle('Mine', '#0275d8', 'white');
     this.userHandle = this.authService.getUserHandle();
     if (this.userHandle == null) {
       this.snackBar.open('You are not logged in!', 'Close', { duration: 3000 });
@@ -81,24 +95,19 @@ export class StatusComponent implements OnInit {
     this.filterSubmissions();
   }
 
-  onEnterPress() {
-    this.filterSubmissions();
-  }
-
   resetFilters() {
     this.userHandle = '';
     this.oj = '';
     this.problemCode = '';
     this.language = '';
-    this.allButtonColor = 'blue'; this.allTextColor = 'white';
-    this.mineButtonColor = 'white'; this.mineTextColor = 'black';
+    this.setButtonStyle('All', '#0275d8', 'white');
     this.filterSubmissions();
   }
 
   showSubmissionResult(index: number) {
     if (this.submissions[index].isOpen === true || this.submissions[index].userHandle === this.authService.getUserHandle()) {
       this.dialog.open(SubmitResultComponent, {
-        data: { 
+        data: {
           response: this.submissions[index],
           submit: false
         },
@@ -106,7 +115,6 @@ export class StatusComponent implements OnInit {
         height: 'auto'
       });
     }
-    
   }
 
 }

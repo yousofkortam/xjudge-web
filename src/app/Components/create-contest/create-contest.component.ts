@@ -113,15 +113,13 @@ export class CreateContestComponent implements OnInit {
   addNewProblemForm() {
     const problems = this.createContestForm.get('problems') as FormArray;
     this.enableDeleteProblem = true;
-    if (problems.length < 26) {
-      problems.push(new FormGroup({
-        problemAlias: new FormControl(null, [Validators.required]),
-        ojType: new FormControl("", [Validators.required]),
-        problemCode: new FormControl(null, [Validators.required]),
-        problemHashtag: new FormControl(null),
-        problemWeight: new FormControl(null, [Validators.required]),
-      }));
-    }
+    problems.push(new FormGroup({
+      problemAlias: new FormControl(null, [Validators.required]),
+      ojType: new FormControl("", [Validators.required]),
+      problemCode: new FormControl(null, [Validators.required]),
+      problemHashtag: new FormControl(null),
+      problemWeight: new FormControl(null, [Validators.required]),
+    }));
   }
 
   removeProblemForm(index:number) {
@@ -133,8 +131,14 @@ export class CreateContestComponent implements OnInit {
       this.enableDeleteProblem = false;
   }
 
-  getLetter(index:number) {
-    return String.fromCharCode(65 + index);
+  getLetter(index: number) {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    while (index >= 0) {
+      result = letters.charAt(index % 26) + result;
+      index = Math.floor(index / 26) - 1;
+    }
+    return result;
   }
 
 }

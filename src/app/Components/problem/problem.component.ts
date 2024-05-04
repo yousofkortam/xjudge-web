@@ -17,6 +17,8 @@ export class ProblemComponent implements OnInit {
   pageSize: number = 25;
   pageNo: number = 0;
 
+  SolvedAttemptedProblemsCount: any = { solved: 0, attempted: 0 };
+
   oj: string = '';
   problemCode: string = '';
   title: string = '';
@@ -29,6 +31,7 @@ export class ProblemComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Problems');
     this.filterProblems();
+    this.SolvedAttemptedProblemsCount = this.getSolvedAttemptedProblemsCount();
   }
 
   trackByProblemCode(index: number, problem: any): string {
@@ -71,6 +74,13 @@ export class ProblemComponent implements OnInit {
     this.title = '';
     this.contestName = '';
     this.filterProblems();
+  }
+
+  getSolvedAttemptedProblemsCount() {
+    return {
+      solved: this.Problems.filter((problem: any) => problem.solved === true).length,
+      attempted: this.Problems.filter((problem: any) => problem.solved === false).length
+    }
   }
 
 }
