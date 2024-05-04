@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row d-flex justify-content-center align-items-center pt-4">
+    <div class="col-12">
+      <div class="card" style="border-radius: 15px;">
+        <div class="card-body p-4">
+          <div class="d-flex text-black">
+            <div class="flex-shrink-0">
+              <img [src]="user.photoUrl ?? defaultProfileImage" [alt]="user.firstName + ' ' + user.lastName"
+                [title]="user.firstName + ' ' + user.lastName" [style]="{width: '180px', borderRadius: '10px'}"
+                class="img-fluid">
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="mb-1"> <strong>Full Name: </strong> {{user.firstName}} {{user.lastName}}</p>
+                <button *ngIf="isTheRightUser" class="btn btn-primary">Update</button>
+                <!-- TODO: Handle update button -->
+              </div>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Handle: </strong> {{user.handle}}</p>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>School:</strong> {{user.school ?? 'None'}}</p>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Email:</strong> {{user.email}} <i
+                  class="fas fa-check" style="color: green;"></i></p>
+              <div class="d-flex justify-content-between rounded-3 p-2 mb-2" style="background-color: #efefef;">
+                <div>
+                  <p class="small text-muted mb-1">Overall</p>
+                  <p>{{user.solvedCount + user.attemptedCount}}</p>
+                </div>
+                <div class="px-3">
+                  <p class="small text-muted mb-1">Solved</p>
+                  <p class="mb-0">{{user.solvedCount}}</p>
+                </div>
+                <div>
+                  <p class="small text-muted mb-1">Attempted</p>
+                  <p class="mb-0">{{user.attemptedCount}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

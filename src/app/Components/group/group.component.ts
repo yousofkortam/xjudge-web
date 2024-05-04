@@ -13,5 +13,9 @@ export class GroupComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Group');
   }
+  create() {
+    // Add logic for creating something
+    console.log('Create button clicked');
+  }
 
 }

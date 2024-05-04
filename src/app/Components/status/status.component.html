@@ -1,0 +1,94 @@
+<div class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-2 mt-5 pt-2" id="left-panel">
+            <div class="list-group bg-dark" id="prob-category">
+
+                <button *ngFor="let button of buttons" (click)="button.click()" class="list-group-item left-align-text"
+                    [ngStyle]="button.style">
+                    {{button['name']}}
+                </button>
+            </div>
+        </div>
+        <div class="col-md-10 text-center" id="right-panel">
+            <div class="mt-5 d-lg-flex justify-content-between">
+                <div class="d-flex col-lg-6 col-12">
+                    <div>
+                        <button mat-button (click)="filterSubmissions()" class="btn ms-2 mb-0 border-none shadow-none"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Filter</button>
+                    </div>
+                    <div>
+                        <button mat-button (click)="resetFilters()" class="btn ms-2 mb-0 border-none shadow-none"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Reset</button>
+                    </div>
+                </div>
+                <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
+                    (pageChange)="onPageChange($event)"></app-pagination>
+            </div>
+            <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
+                width="100%">
+                <thead>
+                    <tr>
+                        <th class="oj">
+                            Who
+                            <input [(ngModel)]="userHandle" type="text" id="handle" name="handle" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+                        </th>
+                        <th class="prob_num">
+                            OJ
+                            <select [(ngModel)]="oj" id="OJ_s_Id" name="OJ_s_Id" class="search_text" style="width:100%"
+                                (change)="filterSubmissions()">
+                                <option value="">All</option>
+                                <option value="CodeForces">CodeForces</option>
+                                <option value="AtCoder">AtCoder</option>
+                            </select>
+                        </th>
+                        <th class="title">
+                            Prob
+                            <input [(ngModel)]="problemCode" type="text" id="prob" name="prob" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+                        </th>
+                        <th class="source hidden-md-down">
+                            Verdict
+                        </th>
+                        <th class="source hidden-md-down">
+                            Time
+                        </th>
+                        <th class="source hidden-md-down">
+                            Mem
+                        </th>
+                        <th class="source hidden-md-down">
+                            Lang
+                            <input [(ngModel)]="language" type="text" id="language" name="language" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+                        </th>
+                        <th class="source hidden-md-down">
+                            Submitted
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let submission of submissions; let i = index;">
+                        <td> <a href="profile/{{submission.userHandle}}">{{ submission.userHandle }}</a> </td>
+                        <td><a target="_blank">{{ submission.ojType }}</a></td>
+                        <td> <a href="problem/{{submission.ojType}}/{{submission.problemCode}}">{{
+                                submission.problemCode }}</a> </td>
+                        <td>
+                            <button (click)="showSubmissionResult(i)"
+                                style="background: none; border: none; cursor: pointer;"
+                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
+                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                {{submission.verdict}}
+                            </button>
+                        </td> <!-- TODO: Implement link to open submission details if the user open it -->
+                        <td> {{ submission.timeUsage }} </td>
+                        <td> {{ submission.memoryUsage }} </td>
+                        <td> {{ submission.language }} </td>
+                        <td> {{ submission.submitTime * 1000 | timeAgo }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
+            <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter" style="display: none" />
+        </div>
+    </div>
+</div>

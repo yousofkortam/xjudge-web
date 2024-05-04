@@ -30,6 +30,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
+import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -37,6 +38,10 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { MatSliderModule } from '@angular/material/slider';
 import { HighlightJsModule } from 'ngx-highlight-js';
 import { OverviewComponent } from './Components/overview/overview.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -58,9 +63,13 @@ import { OverviewComponent } from './Components/overview/overview.component';
     SubmitProblemComponent,
     CreateContestComponent,
     HoursMinutesPipe,
+    CreateGroupComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
     OverviewComponent,
+    StatusComponent,
+    ProfileComponent,
+    TimeAgoPipe,
    ],
   imports: [
     RouterModule,

@@ -6,6 +6,9 @@ import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
+import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { AuthService } from 'src/app/ApiServices/auth.service';
+import { SubmitResultComponent } from '../submit-result/submit-result.component';
 
 
 @Component({
@@ -23,6 +26,8 @@ export class ProblemDetailsComponent implements OnInit {
   source: any;
   problemCode: any;
   problemInfo: any = null;
+  problemSumbissions: any = [];
+  totalSubmissions: number = 0;
   samples: any = [];
   isLoading: boolean = false;
   apiError: string = '';
@@ -39,6 +44,8 @@ export class ProblemDetailsComponent implements OnInit {
     private _Router:Router,
     private _ProblemService: ProblemService,
     private _ActivatedRoute: ActivatedRoute,
+    private submissionService: SubmissionService,
+    private authService: AuthService,
     private renderer: Renderer2,
     private titleService: Title,
     private dialog: MatDialog,
@@ -59,9 +66,7 @@ export class ProblemDetailsComponent implements OnInit {
     }
   getSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
-
       next: (response) => {
-        console.log(response);
         if (response.success === true) {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
@@ -74,7 +79,6 @@ export class ProblemDetailsComponent implements OnInit {
       }
     });
   }
-
 
   openModal() {
     this.dialog.open(SubmitProblemComponent, {
@@ -98,6 +102,7 @@ export class ProblemDetailsComponent implements OnInit {
     });
     this.getSpecificProblem();
     this.loadMathJax();
+    this.getProblemSubissions();
   }
 
   loadMathJaxConfig() {
@@ -118,6 +123,7 @@ export class ProblemDetailsComponent implements OnInit {
     script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
     this.renderer.appendChild(this.document.head, script);
   }
+
   refreshPage() {
     // Navigate to the same route (refresh the component)
     this._Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -125,4 +131,35 @@ export class ProblemDetailsComponent implements OnInit {
       console.log("hi ya soker")
     });
   }
+
+  getProblemSubissions() {
+    this.isLoading = true;
+    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
+      next: (response) => {
+        if (response.success === true) {
+          this.isLoading = false;
+          this.problemSumbissions = response.data.content;
+          this.totalSubmissions = response.data.totalElements;
+          console.log(this.problemSumbissions);
+          
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.log(error);
+      }
+    });
+  }
+
+  showSubmissionResult(index: number) {
+    this.dialog.open(SubmitResultComponent, {
+      data: { 
+        response: this.problemSumbissions[index],
+        submit: false
+      },
+      width: '70%',
+      height: 'auto'
+    });
+  }
+
 }

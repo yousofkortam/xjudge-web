@@ -52,11 +52,12 @@ export class AuthService implements OnInit {
   decodeUserData() {
     let encodedToken = JSON.stringify(localStorage.getItem('userToken'));
     let decodedToken: any = jwtDecode(encodedToken);
-    let userHandle:any =decodedToken.sub; 
-    console.log(decodedToken);
     this.userData.next(decodedToken);
+    return decodedToken;
+  }
 
-    return userHandle;
+  getUserHandle() {
+    return this.decodeUserData().sub;
   }
 
   register(userData: object): Observable<any> {

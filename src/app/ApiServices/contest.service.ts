@@ -64,4 +64,8 @@ export class ContestService {
   getGrouspqwned():Observable<any> {
     return this.groupService.getGroupsAwnedByUser();
   }
+
+  filterContests(category: string, status: string, owner: string, title:string, pageNo: number, size: number) {
+    return this._HttpClient.get(`http://localhost:7070/contest?category=${category}&status=${status}&owner=${owner}&title=${title}&pageNo=${pageNo}&size=${size}`,{ headers: this.headers });
+  }
 }
