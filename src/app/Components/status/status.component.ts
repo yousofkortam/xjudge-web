@@ -6,7 +6,6 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
 import { Title } from '@angular/platform-browser';
-import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-status',
