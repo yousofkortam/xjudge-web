@@ -24,12 +24,13 @@ export class UpdateProfileComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data.user.firstName);
+    console.log(this.data.user.email);
     
   }
 
   handleUpdateProfile() {
     this.isLoading = true;
-    this.userServive.updateUser(this.data.user.handle, this.updateProfielForm.value).subscribe({
+    this.userServive.updateUser(this.data.user.handle, this.data.user.email, this.updateProfielForm.value).subscribe({
       next: (res) => {
         console.log(res);
         this.isLoading = false;

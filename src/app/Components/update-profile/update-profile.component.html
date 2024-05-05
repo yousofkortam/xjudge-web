@@ -4,11 +4,11 @@
     <div class="dialog-container " >
         <h2 class="dialog-title pb-3">Update Profile</h2>
         <form [formGroup]="updateProfielForm">
-            <div class="row ">
-                <div class="col-lg-6 ">
-                    <div class="d-flex fname pt-sm-3 ">
-                        <label for="firstName"style="width: 50%;">First Name</label>
-                        <input type="text" required id="user-first-name" class="form-control ms-lg-5 ms-sm-2  ms-sm-4"  placeholder="First Name" formControlName="firstName" />
+            <div class="row mb-2">
+                <div class="col-xl-6 ">
+                    <div class="d-flex fname  ">
+                        <label for="firstName" class="col-3">First Name</label>
+                        <input type="text" required id="user-first-name" class="form-control ms-xl-5  ms-sm-4"  placeholder="First Name" formControlName="firstName" />
                     </div>
                     <div class="m-0 validation"
                         *ngIf="updateProfielForm.get('firstName')?.errors && updateProfielForm.get('firstName')?.touched ">
@@ -16,9 +16,9 @@
                             style="color:red">Required</span>
                     </div>
                 </div>
-                <div class="col-lg-6 pt-sm-3">
+                <div class="col-xl-6 ">
                 <div class="lname d-flex "> 
-                    <label for="lastName" style="width: 50%; ">Last Name</label>
+                    <label for="lastName"class="col-3" >Last Name</label>
                     <input type="text" required id="user-last-name" class="form-control  ms-sm-4" placeholder="Last Name"  formControlName="lastName" />
                 </div>
                     <div *ngIf="updateProfielForm.get('lastName')?.errors && updateProfielForm.get('lastName')?.touched ">
@@ -27,10 +27,18 @@
                 </div>
             </div>
             <div class="mt-3 mb-3 d-flex ">
-                <label for="handle" class="col-md-2 mt-2 me-3 col-4" >Handle</label>
+                <label for="handle" class="col-md-2  me-3 col-4" >Handle</label>
                 <input type="text" id="user-handle" class="form-control ms-lg-2" [value]="this.data.user.handle" placeholder="Handle" disabled/>
             </div>
-
+            <div class="mt-3 mb-3 d-flex ">
+                <label for="email" class="col-md-2 mt-2 me-3 col-4" >Email</label>
+                <input type="text" required id="user-email" class="form-control ms-lg-2" [value]="this.data.user.email"  placeholder="Email"
+                    formControlName="email" />
+                <div *ngIf="updateProfielForm.get('email')?.errors && updateProfielForm.get('email')?.touched ">
+                    <span *ngIf="updateProfielForm.get('email')?.getError('required')" class="m-0"
+                        style="color:red">Required</span>
+                </div>
+            </div>
            
             <div class="mt-3 mb-3 d-flex ">
                 <label for="school" class="col-md-2 mt-2 me-3 col-4" >School</label>
