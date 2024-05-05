@@ -124,13 +124,6 @@ export class ProblemDetailsComponent implements OnInit {
     this.renderer.appendChild(this.document.head, script);
   }
 
-  refreshPage() {
-    // Navigate to the same route (refresh the component)
-    this._Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this._Router.navigate(['']);
-      console.log("hi ya soker")
-    });
-  }
 
   getProblemSubissions() {
     this.isLoading = true;
@@ -160,6 +153,9 @@ export class ProblemDetailsComponent implements OnInit {
       width: '70%',
       height: 'auto'
     });
+  }
+  recrawl() {
+    window.location.reload();
   }
 
 }
