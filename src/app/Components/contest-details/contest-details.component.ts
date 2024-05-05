@@ -43,6 +43,7 @@ export class ContestDetailsComponent implements OnInit {
         this.contest = response.data;     
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
+        this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
         this.updateProgressBar();
         this.updateCountdownTimer();
       },
