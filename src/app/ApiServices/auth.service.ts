@@ -1,6 +1,6 @@
 import { SubmitProblemComponent } from './../Components/submit-problem/submit-problem.component';
 import { HttpClient } from '@angular/common/http';
-import {Injectable, OnInit} from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -16,33 +16,22 @@ export class AuthService implements OnInit {
     token: localStorage.getItem("userToken")
   };
 
-  saveUserData() {
-    let token = localStorage.getItem("userToken");
-    if (token) {
-      let decodedToken: any = jwtDecode(token);
-      this.userData.next(decodedToken);
-    }
-    
-  };
-
   constructor(
     private _HttpClient: HttpClient,
     private _Router: Router) {
-      if (this.isLogin())
-      {
-        this.decodeUserData();
-      }
+    if (this.isLogin()) {
+      this.decodeUserData();
     }
+  }
+
+  getUserToken() {
+    return localStorage.getItem('userToken');
+  }
 
   ngOnInit(): void {
-    if (localStorage.getItem("userToken")) {
-      this.saveUserData();
-      
-    }
-
     this.userData.subscribe(() => {
       setTimeout(() => {
-        if (localStorage.getItem("userToken")) {
+        if (this.getUserHandle()) {
           this.logOut();
         }
       }, 86400000);
@@ -52,7 +41,9 @@ export class AuthService implements OnInit {
   decodeUserData() {
     let encodedToken = JSON.stringify(localStorage.getItem('userToken'));
     let decodedToken: any = jwtDecode(encodedToken);
-    this.userData.next(decodedToken);
+    if (this.userData.value == null) {
+      this.userData.next(decodedToken);
+    }
     return decodedToken;
   }
 
@@ -68,13 +59,13 @@ export class AuthService implements OnInit {
   }
 
   login(userData: object): Observable<any> {
-    return this._HttpClient.post( 'http://localhost:7070/auth/login', userData );
+    return this._HttpClient.post('http://localhost:7070/auth/login', userData);
   }
 
   forgetPassword(email: string): Observable<any> {
     return this._HttpClient.post(
       'http://localhost:7070/auth/forget-password',
-      {email: email}
+      { email: email }
     );
 
   };
@@ -97,7 +88,6 @@ export class AuthService implements OnInit {
   logOut() {
     localStorage.removeItem('userToken');
     this.userData.next(null);
-    //navigate login
     this._Router.navigate(['/login']).then(r => r);
   }
 
