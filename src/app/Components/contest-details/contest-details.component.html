@@ -18,25 +18,17 @@
         </div>
     <div class="row">
             <div class="col-12">
-                <!-- Slider goes here -->
+                <!-- progress bar -->
                 <div style="width: 100%;">
                     <div class="progress">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" [style.width.%]="progressBarValue">
-                                <span class="sr-only">{{ progressBarValue }}% Complete</span>
-                            </div>
-                        </div>
-                
-                        <!-- Remaining time -->
-                        <div class="text-center mt-3">
-                            <p>Remaining time: {{ remainingTime | date: 'HH:mm:ss' }}</p>
-                        </div>
-                    </div>
             
+                        <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progressBarValue"
+                        aria-valuemin="0" aria-valuemax="100">
+                    </div>
                     
                    
+                    </div>
                 </div>
-        </div>
         <div class="row">
             <div class="col-4 text-start" id="info-elapsed"></div>
             <div class="col-4 text-center mt-5">
@@ -64,13 +56,19 @@
             </div>
 
 
-    <div class="content">
+    <div class="content container-fluid">
      
         <div *ngIf="selectedButton === 'overview'">
             <app-overview></app-overview>
         </div>
-        <div *ngIf="selectedButton === 'problem'">
+        <div *ngIf="selectedButton === 'problem'" class="container-fluid w-100 ms-0">
             <app-problem-details></app-problem-details>
+        </div>
+        <div *ngIf="selectedButton === 'status'">
+            <app-contest-status></app-contest-status>
+        </div>
+        <div *ngIf="selectedButton === 'rank'">
+            <app-contest-rank ></app-contest-rank>
         </div>
     </div>
 </div>  

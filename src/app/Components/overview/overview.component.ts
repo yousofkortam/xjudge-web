@@ -40,8 +40,7 @@ export class OverviewComponent implements OnInit {
         this.contests = response.data;
         this.titleService.setTitle(this.contests.title);
         this.problemSet = response.data.problemSet;
-        this.statistic =  this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
-        if (this.problemSet.numberOfAccepted !== 0) {
+       if (this.problemSet.numberOfAccepted !== 0) {
           this.statistic =this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
         } else {
           this.statistic = 0;

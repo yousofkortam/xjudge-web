@@ -42,6 +42,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
+import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
+import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
     StatusComponent,
     ProfileComponent,
     TimeAgoPipe,
+    ContestStatusComponent,
+    ContestRankComponent,
    ],
   imports: [
     RouterModule,
