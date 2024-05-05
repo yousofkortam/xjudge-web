@@ -7,30 +7,72 @@
             </div>
             <div class="col-4 text-center">
                 <h3>
-                    <i id="btn-favorite" class="fa fa-star-o"></i>
+                    <!-- <i id="btn-favorite" class="fa fa-star-o"></i> -->
                     {{contest.title}}
                 </h3>
             </div>
             <div class="col-4 text-end">
                 <b>End: </b>
-                <span class="timestamp">2023-12-29 23:35 UTC+3</span>
+                <span class="timestamp">{{contest.endTime* 1000 | date:'medium'}}</span>
             </div>
         </div>
-        <div class="row">
+    <div class="row">
             <div class="col-12">
                 <!-- Slider goes here -->
                 <div style="width: 100%;">
-                    <mat-slider class="green-slider" min="{{contest.beginTime}}" max="{{contest.endTime}}" step="1"
-                        value="12" style="width: 100%;"></mat-slider>
+                    <div class="progress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" [style.width.%]="progressBarValue">
+                                <span class="sr-only">{{ progressBarValue }}% Complete</span>
+                            </div>
+                        </div>
+                
+                        <!-- Remaining time -->
+                        <div class="text-center mt-3">
+                            <p>Remaining time: {{ remainingTime | date: 'HH:mm:ss' }}</p>
+                        </div>
+                    </div>
+            
+                    
+                   
                 </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-4 text-start" id="info-elapsed"></div>
-            <div class="col-4 text-center">
+            <div class="col-4 text-center mt-5">
                 <span id="info-running" class="text-success">{{contest.contestStatus}}</span>
             </div>
             <div class="col-4 text-end" id="info-remaining"></div>
         </div>
+    </div>
+    </div>
+    <div class="contest-details">
+        <div class="row ">
+            <div class="all-link d-flex ">
+                <div class="left  col-xl-6 col-lg-12 ">
+                <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">Overview</button>
+                <button class="link problem btn"(click)="onBtnClick('problem')">Problem</button>
+                <button class="link status btn" (click)="onBtnClick('status')"> Status</button>
+                <button class="link rank btn" (click)="onBtnClick('rank')">Rank</button>
+                
+            </div>
+                <div class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
+                    <button type="button" class="btn btn-secondary">Setting</button>
+                    <button type="button" class="btn btn-secondary">Update</button>
+                    <button type="button" class="btn btn-secondary">Delete</button>
+                </div>
+            </div>
+
+
+    <div class="content">
+     
+        <div *ngIf="selectedButton === 'overview'">
+            <app-overview></app-overview>
+        </div>
+        <div *ngIf="selectedButton === 'problem'">
+            <app-problem-details></app-problem-details>
+        </div>
+    </div>
+</div>  
     </div>
 </div>
