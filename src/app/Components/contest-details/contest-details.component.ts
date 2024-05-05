@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription, interval } from 'rxjs';
-import { map, takeWhile } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { AuthService } from 'src/app/ApiServices/auth.service';
 
 import { ContestService } from 'src/app/ApiServices/contest.service';
 
@@ -19,11 +19,13 @@ export class ContestDetailsComponent implements OnInit {
   selectedButton: string = 'overview';
   progressBarValue: number = 0;
   countdownTimer: string = '';
+  isLeaderOrManager: boolean = false;
 
   constructor(
     private titleService: Title, 
     private _ActivatedRoute: ActivatedRoute, 
-    private contestService: ContestService 
+    private contestService: ContestService ,
+    private authService: AuthService
   ){}
 
   ngOnInit(): void {
@@ -40,7 +42,9 @@ export class ContestDetailsComponent implements OnInit {
   getContestDetails() {
     this.contestService.getSpecificContestById(this.contestId).subscribe({
       next: (response) => {
-        this.contest = response.data;     
+        this.contest = response.data;
+        console.log(this.contest);
+        this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
         this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
