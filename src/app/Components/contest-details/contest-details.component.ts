@@ -19,6 +19,7 @@ export class ContestDetailsComponent implements OnInit {
   contest: any;
   selectedButton: string = 'overview'; // Track selected button
   progressBarValue: number = 0;
+  countdownTimer: string = '';
 
   constructor(
     private titleService: Title, 
@@ -34,10 +35,9 @@ export class ContestDetailsComponent implements OnInit {
     // Call function every second
     interval(1000).subscribe(() => {
       this.updateProgressBar();
+      this.updateCountdownTimer();
     });
   }
-
- 
 
   getContestDetails() {
     this.contestService.getSpecificContestById(this.contestId).subscribe({
@@ -47,6 +47,7 @@ export class ContestDetailsComponent implements OnInit {
         this.problemSet = response.data.problemSet;
         // Calculate initial progress
         this.updateProgressBar();
+        this.updateCountdownTimer();
         if (this.problemSet.numberOfAccepted !== 0) {
           this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
         } else {
@@ -64,7 +65,6 @@ export class ContestDetailsComponent implements OnInit {
     this.selectedButton = button;
   }
 
-
   // Function to update progress bar
   updateProgressBar() {
     if (this.contest) {
@@ -77,4 +77,17 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
+  // Function to update countdown timer
+  updateCountdownTimer() {
+    if (this.contest) {
+      const currentTime = new Date().getTime();
+      const beginTime = this.contest.beginTime * 1000;
+      const remainingTime = beginTime - currentTime;
+      const seconds = Math.floor(remainingTime / 1000) % 60;
+      const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
+      const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
+      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+      this.countdownTimer = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+  }
 }
