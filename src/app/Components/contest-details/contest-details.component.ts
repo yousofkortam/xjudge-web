@@ -32,7 +32,7 @@ export class ContestDetailsComponent implements OnInit {
       this.contestId = param.get('contestId');
     });
     this.getContestDetails();
-    // Call function every second
+ 
     interval(1000).subscribe(() => {
       this.updateProgressBar();
       this.updateCountdownTimer();
@@ -60,13 +60,11 @@ export class ContestDetailsComponent implements OnInit {
     });
   }
 
-  // Function to handle button clicks
-  onBtnClick(button: string) {
+ onBtnClick(button: string) {
     this.selectedButton = button;
   }
 
-  // Function to update progress bar
-  updateProgressBar() {
+ updateProgressBar() {
     if (this.contest) {
       const currentTime = new Date().getTime();
       const beginTime = this.contest.beginTime * 1000;
@@ -77,8 +75,7 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
-  // Function to update countdown timer
-  updateCountdownTimer() {
+ updateCountdownTimer() {
     if (this.contest) {
       const currentTime = new Date().getTime();
       const beginTime = this.contest.beginTime * 1000;
