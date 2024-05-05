@@ -18,14 +18,7 @@ export class ContestDetailsComponent implements OnInit {
   contestId: any;
   contest: any;
   selectedButton: string = 'overview'; // Track selected button
-
-  // progress bar
-  contestBeginTime!: number; // Contest begin time in milliseconds
-  contestEndTime!: number; // Contest end time in milliseconds
-  duration!: number; // Duration of the contest in seconds
-  progressBarValue: number = 0; // Progress bar value
-  remainingTime!: number; // Remaining time in milliseconds
-  private timerSubscription!: Subscription; // Subscription for timer
+  progressBarValue: number = 0;
 
   constructor(
     private titleService: Title, 
@@ -38,47 +31,13 @@ export class ContestDetailsComponent implements OnInit {
       this.contestId = param.get('contestId');
     });
     this.getContestDetails();
-
-   
-      this.contestBeginTime = this.contest.beginTime * 1000; // Convert to milliseconds
-      this.contestEndTime = this.contest.endTime * 1000; // Convert to milliseconds
-      this.duration = this.contest.duration; // Contest duration in seconds
-
-      // Set up timer to update progress bar and remaining time every second
-      const timer = interval(1000);
-      this.timerSubscription = timer.subscribe(() => {
-        this.updateProgressBar();
-        this.updateRemainingTime();
-      });
-   
+    // Call function every second
+    interval(1000).subscribe(() => {
+      this.updateProgressBar();
+    });
   }
 
-  ngOnDestroy(): void {
-    // Unsubscribe from timer to avoid memory leaks
-    if (this.timerSubscription) {
-      this.timerSubscription.unsubscribe();
-    }
-  }
-
-  // Function to update progress bar value
-  updateProgressBar(): void {
-    const currentTime = Date.now(); // Current time in milliseconds
-    const totalTime = this.contest.endTime - this.contest.beginTime; // Total time in milliseconds
-    const elapsedTime = currentTime - this.contest.beginTime; // Elapsed time in milliseconds
-    this.progressBarValue = (elapsedTime / totalTime) * 100; // Calculate progress bar value
-  }
-
-  // Function to update remaining time
-  updateRemainingTime(): void {
-    const currentTime = Date.now(); // Current time in milliseconds
-    const remainingTimeMs = this.contest.endTime - currentTime; // Remaining time in milliseconds
-    this.remainingTime = remainingTimeMs; // Remaining time in milliseconds
-  }
-
-
-
-   
-  
+ 
 
   getContestDetails() {
     this.contestService.getSpecificContestById(this.contestId).subscribe({
@@ -86,7 +45,8 @@ export class ContestDetailsComponent implements OnInit {
         this.contest = response.data;     
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
-        // this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
+        // Calculate initial progress
+        this.updateProgressBar();
         if (this.problemSet.numberOfAccepted !== 0) {
           this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
         } else {
@@ -103,4 +63,18 @@ export class ContestDetailsComponent implements OnInit {
   onBtnClick(button: string) {
     this.selectedButton = button;
   }
+
+
+  // Function to update progress bar
+  updateProgressBar() {
+    if (this.contest) {
+      const currentTime = new Date().getTime();
+      const beginTime = this.contest.beginTime * 1000;
+      const endTime = this.contest.endTime * 1000;
+      const elapsedTime = currentTime - beginTime;
+      const totalTime = endTime - beginTime;
+      this.progressBarValue = (elapsedTime / totalTime) * 100;
+    }
+  }
+
 }
