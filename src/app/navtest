@@ -1661,3 +1661,78 @@ loadMathJax() {
 
 }
 // "https://img.atcoder.jp/public/ba514ee/js/cdn/auto-render.min.js"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<mat-dialog-content>
+    <div class="dialog-container align-center justify-content-center row" >
+        <h2 class="dialog-title">Update Profile</h2>
+        <div class=" col-lg-12">
+            <form [formGroup]="updateProfielForm">
+
+                <div class="mt-3 mb-3 d-flex ">
+                    <label for="handle" class="col-md-2 mt-2 me-3">Handle</label>
+                    <input type="text" id="user-handle" class="form-control ms-lg-2" [value]="this.data.user.handle" placeholder="Handle" disabled/>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 ">
+                        <div class="d-flex fname pt-sm-3 ">
+                            <label for="firstName"style="width: 50%;">First Name</label>
+                            <input type="text" required id="user-first-name" class="form-control ms-lg-4"  placeholder="First Name" formControlName="firstName" />
+                        </div>
+                        <div class="m-0 validation"
+                            *ngIf="updateProfielForm.get('firstName')?.errors && updateProfielForm.get('firstName')?.touched ">
+                            <span *ngIf="updateProfielForm.get('firstName')?.getError('required')" 
+                                style="color:red">Required</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    <div class="lname d-flex pt-sm-3"> 
+                        <label for="lastName" style="width: 50%; padding-top:3px">Last Name</label>
+                        <input type="text" required id="user-last-name" class="form-control" placeholder="Last Name"  formControlName="lastName" />
+                    </div>
+                        <div *ngIf="updateProfielForm.get('lastName')?.errors && updateProfielForm.get('lastName')?.touched ">
+                            <span *ngIf="updateProfielForm.get('lastName')?.getError('required')" class="m-0 " style="color:red">Required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 mb-3 d-flex">
+                    <label for="school" class="col-md-2 mt-2 me-3">School</label>
+                    <input type="text" required id="user-school" class="form-control ms-lg-2" placeholder="School"
+                        formControlName="school" />
+                    <div *ngIf="updateProfielForm.get('school')?.errors && updateProfielForm.get('school')?.touched ">
+                        <span *ngIf="updateProfielForm.get('school')?.getError('required')" class="m-0"
+                            style="color:red">Required</span>
+                    </div>
+                </div>
+
+            </form>
+    </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+    <div class="dialog-actions" style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
+        <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="updateProfielForm.invalid"
+            (click)="handleUpdateProfile()">
+            <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Updatting</span>
+            <span *ngIf="!isLoading"> Update</span>
+        </button>
+    </div>
+</mat-dialog-actions>

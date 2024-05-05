@@ -1,6 +1,7 @@
 .dialog-content {
     padding: 20px;
     min-height: 550px;
+    width: 100%;
 }
 
 .dialog-actions {
