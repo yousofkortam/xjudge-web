@@ -1,19 +1,53 @@
 <div class="container">
     <div class="row">
         <mat-dialog-content>
-    <div class="dialog-container " >
-        <h2 class="dialog-title pb-3">Update Profile</h2>
-        <form [formGroup]="updateProfielForm">
-            <div class="row mb-2">
-                <div class="col-xl-6 ">
-                    <div class="d-flex fname  ">
-                        <label for="firstName" class="col-3">First Name</label>
-                        <input type="text" required id="user-first-name" class="form-control ms-xl-5  ms-sm-4"  placeholder="First Name" formControlName="firstName" />
+            <div class="dialog-container ">
+                <h2 class="dialog-title pb-3">Update Profile</h2>
+                <form [formGroup]="updateProfielForm">
+                    <div class="row ">
+                        <div class="col-lg-6 ">
+                            <div class="d-flex fname pt-sm-3 ">
+                                <label for="firstName" style="width: 50%;">First Name</label>
+                                <input type="text" required id="user-first-name"
+                                    class="form-control ms-lg-5 ms-sm-2  ms-sm-4" placeholder="First Name"
+                                    formControlName="firstName" />
+                            </div>
+                            <div class="m-0 validation"
+                                *ngIf="updateProfielForm.get('firstName')?.errors && updateProfielForm.get('firstName')?.touched ">
+                                <span *ngIf="updateProfielForm.get('firstName')?.getError('required')"
+                                    style="color:red">Required</span>
+                            </div>
+                            <div *ngIf="validationsErrors['firstName']" class="text-danger" role="alert">
+                                {{ validationsErrors.firstName }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 pt-sm-3">
+                            <div class="lname d-flex ">
+                                <label for="lastName" style="width: 50%; ">Last Name</label>
+                                <input type="text" required id="user-last-name" class="form-control  ms-sm-4"
+                                    placeholder="Last Name" formControlName="lastName" />
+                            </div>
+                            <div
+                                *ngIf="updateProfielForm.get('lastName')?.errors && updateProfielForm.get('lastName')?.touched ">
+                                <span *ngIf="updateProfielForm.get('lastName')?.getError('required')" class="m-0 "
+                                    style="color:red">Required</span>
+                            </div>
+                            <div *ngIf="validationsErrors['lastName']" class="text-danger" role="alert">
+                                {{ validationsErrors.lastName }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="m-0 validation"
-                        *ngIf="updateProfielForm.get('firstName')?.errors && updateProfielForm.get('firstName')?.touched ">
-                        <span *ngIf="updateProfielForm.get('firstName')?.getError('required')" 
-                            style="color:red">Required</span>
+                    <div class="mt-3 mb-3 d-flex">
+                        <label for="email" class="col-md-2 mt-2 me-3">Email</label>
+                        <input type="text" id="user-email" class="form-control" placeholder="Email"
+                            formControlName="email" />
+                        <div *ngIf="updateProfielForm.get('email')?.errors && updateProfielForm.get('email')?.touched ">
+                            <span *ngIf="updateProfielForm.get('email')?.getError('required')" class="m-0"
+                                style="color:red">Required</span>
+                        </div>
+                        <div *ngIf="validationsErrors['email']" class="text-danger" role="alert">
+                            {{ validationsErrors.email }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-6 ">
@@ -49,21 +83,31 @@
                         style="color:red">Required</span>
                 </div>
             </div>
+                    <div class="mt-3 mb-3 d-flex ">
+                        <label for="school" class="col-md-2 mt-2 me-3 col-4">School</label>
+                        <input type="text" id="user-school" class="form-control ms-lg-2" placeholder="School"
+                            formControlName="school" />
+                        <div
+                            *ngIf="updateProfielForm.get('school')?.errors && updateProfielForm.get('school')?.touched ">
+                            <span *ngIf="updateProfielForm.get('school')?.getError('required')" class="m-0"
+                                style="color:red">Required</span>
+                        </div>
+                    </div>
 
-        </form>
-    </div>
-</mat-dialog-content>
+                </form>
+            </div>
+        </mat-dialog-content>
 
-<mat-dialog-actions class="dialog-actions">
-    <div class="dialog-actions" style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
-        <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
-        <button type="submit" class="btn btn-primary" [disabled]="updateProfielForm.invalid"
-            (click)="handleUpdateProfile()">
-            <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Updatting</span>
-            <span *ngIf="!isLoading"> Update</span>
-        </button>
-    </div>
-</mat-dialog-actions>
+        <mat-dialog-actions class="dialog-actions">
+            <div class="dialog-actions"
+                style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
+                <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="updateProfielForm.invalid"
+                    (click)="handleUpdateProfile()">
+                    <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Updatting</span>
+                    <span *ngIf="!isLoading"> Update</span>
+                </button>
+            </div>
+        </mat-dialog-actions>
     </div>
 </div>
-

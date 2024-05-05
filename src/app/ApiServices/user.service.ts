@@ -17,9 +17,9 @@ export class UserService {
     );
   }
 
-  updateUser(handle: string, email:string , data: any) {
+  updateUser(data: any) {
     return this._HttpClient.put(
-      `http://localhost:7070/user/${handle}`,
+      `http://localhost:7070/user`,
       data,
       { headers: this.headers }
     );

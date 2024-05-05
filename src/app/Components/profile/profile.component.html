@@ -19,7 +19,7 @@
               </div>
               <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Handle: </strong> {{user.handle}}</p>
               <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>School:</strong> {{user.school ?? 'None'}}</p>
-              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Email:</strong> {{user.email}} <i  class="fas fa-check" style="color: green;"></i></p>
+              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Email:</strong> {{user.email}} <i *ngIf="user.isVerified" class="fas fa-check" style="color: green;"></i></p>
               <div class="d-flex justify-content-between rounded-3 p-4 mb-2 " style="background-color: #efefef;">
                 <div >
                   <p class="small text-muted mb-1">Overall</p>
