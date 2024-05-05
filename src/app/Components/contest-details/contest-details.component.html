@@ -73,16 +73,16 @@
                 </div>
 
                 <div class="content container-fluid">
-                    <div *ngIf="selectedButton === 'overview'">
-                        <app-overview [problemSet]="problemSet"></app-overview>
+                    <div *ngIf="selectedButton === 'overview' && contest.contestStatus !== 'SCHEDULED'">
+                        <app-overview [problemSet]="problemSet" [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
-                    <div *ngIf="selectedButton === 'problem'" class="container-fluid w-100 ms-0">
+                    <div *ngIf="selectedButton === 'problem' && contest.contestStatus !== 'SCHEDULED'" class="container-fluid w-100 ms-0">
                         <app-problem-details></app-problem-details>
                     </div>
-                    <div *ngIf="selectedButton === 'status'">
+                    <div *ngIf="selectedButton === 'status' && contest.contestStatus !== 'SCHEDULED'">
                         <app-contest-status></app-contest-status>
                     </div>
-                    <div *ngIf="selectedButton === 'rank'">
+                    <div *ngIf="selectedButton === 'rank' && contest.contestStatus !== 'SCHEDULED'">
                         <app-contest-rank></app-contest-rank>
                     </div>
                 </div>

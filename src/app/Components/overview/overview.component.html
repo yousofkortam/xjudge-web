@@ -6,7 +6,7 @@
                     <th class="status"></th>
                     <th class="status">Stat</th>
                     <th class="hash">#</th>
-                    <th class="origin">Origin</th>
+                    <th *ngIf="shorOrigin" class="origin">Origin</th>
                     <th class="title text-lg-start">Title</th>
                 </tr>
             </thead>
@@ -19,11 +19,12 @@
                             problem.problemHashtag
                             }}</a>
                     </td>
-                    <td>
+                    <td *ngIf="shorOrigin">
                         <a [href]="problem.problemLink" target="_blank">{{ problem.source }} {{ problem.problemCode}}</a>
                     </td>
                     <td class="text-lg-start">
-                        <a href="problem/{{problem.source}}/{{problem.problemCode}}">{{ problem.problemAlias }}</a>
+                        <a *ngIf="shorOrigin" href="problem/{{problem.source}}/{{problem.problemCode}}">{{ problem.problemAlias }}</a>
+                        <a *ngIf="!shorOrigin">{{ problem.problemAlias }}</a>
                     </td>
                 </tr>
             </tbody>
