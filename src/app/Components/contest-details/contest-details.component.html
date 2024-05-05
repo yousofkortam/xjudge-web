@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-12">
                 <!-- progress bar -->
-                <div style="width: 100%">
+                <div *ngIf="contest.contestStatus === 'RUNNING'" class="mt-4" style="width: 100%">
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progressBarValue"
                             aria-valuemin="0" aria-valuemax="100"></div>
@@ -31,17 +31,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4" id="info-elapsed">
-                        <span>
-                            <p class="text-start">
-                                Time until contest starts: {{ countdownTimer }}
-                            </p>
+                    <div class="col-12 text-center mt-2">
+                        <div *ngIf="contest.contestStatus === 'SCHEDULED'">
+                            <span>Start Countdown</span>
+                            <p class="countdown-time text-primary">{{ countdownTimer }}</p>
+                          </div>
+                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running">
+                            <span>Running</span>
+                            <p class="countdown-time text-danger">{{ countdownTimer }}</p>
                         </span>
-                    </div>
-                    <div class="col-4 text-center mt-5">
-                        <span id="info-running" class="text-success">{{
-                            contest.contestStatus
-                            }}</span>
+                        <span *ngIf="contest.contestStatus === 'ENDED'" id="info-finished">
+                            <span class="countdown-time text-success">{{contest.contestStatus}}</span>
+                        </span>
                     </div>
                     <div class="col-4 text-end" id="info-remaining"></div>
                 </div>

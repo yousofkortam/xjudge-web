@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th class="status"></th>
-                    <th class="status">Status</th>
+                    <th class="status">Stat</th>
                     <th class="hash">#</th>
                     <th class="origin">Origin</th>
                     <th class="title text-lg-start">Title</th>
@@ -13,7 +13,7 @@
             <tbody>
                 <tr *ngFor=" let problem of problemSet;  trackBy: trackByProblemCode;  let i = index "  class="text-center justify-content-center center">
                     <td></td>
-                    <td>{{ problem.numberOfSubmission / problem.numberOfAccepted }}</td>
+                    <td>{{ problem.numberOfAccepted }} / {{ problem.numberOfSubmission }}</td>
                     <td>
                         <a  target="_blank">{{
                             problem.problemHashtag

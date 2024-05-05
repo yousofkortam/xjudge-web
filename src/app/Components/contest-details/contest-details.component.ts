@@ -14,10 +14,9 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
 export class ContestDetailsComponent implements OnInit {
   loading: boolean = false;
   problemSet: any = [];   
-  statistic!: number;
   contestId: any;
   contest: any;
-  selectedButton: string = 'overview'; // Track selected button
+  selectedButton: string = 'overview';
   progressBarValue: number = 0;
   countdownTimer: string = '';
 
@@ -32,7 +31,6 @@ export class ContestDetailsComponent implements OnInit {
       this.contestId = param.get('contestId');
     });
     this.getContestDetails();
-    // Call function every second
     interval(1000).subscribe(() => {
       this.updateProgressBar();
       this.updateCountdownTimer();
@@ -45,14 +43,8 @@ export class ContestDetailsComponent implements OnInit {
         this.contest = response.data;     
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
-        // Calculate initial progress
         this.updateProgressBar();
         this.updateCountdownTimer();
-        if (this.problemSet.numberOfAccepted !== 0) {
-          this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
-        } else {
-          this.statistic = 0;
-        }
       },
       error: (err) => {
         console.log(err);
@@ -60,12 +52,10 @@ export class ContestDetailsComponent implements OnInit {
     });
   }
 
-  // Function to handle button clicks
   onBtnClick(button: string) {
     this.selectedButton = button;
   }
 
-  // Function to update progress bar
   updateProgressBar() {
     if (this.contest) {
       const currentTime = new Date().getTime();
@@ -77,17 +67,36 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
-  // Function to update countdown timer
   updateCountdownTimer() {
     if (this.contest) {
       const currentTime = new Date().getTime();
       const beginTime = this.contest.beginTime * 1000;
-      const remainingTime = beginTime - currentTime;
+      const endTime = this.contest.endTime * 1000;
+      let remainingTime;
+  
+      if (currentTime < beginTime) {
+        this.contest.contestStatus = 'SCHEDULED';
+        remainingTime = beginTime - currentTime;
+      } else if (currentTime < endTime) {
+        this.contest.contestStatus = 'RUNNING';
+        remainingTime = endTime - currentTime;
+      } else {
+        this.contest.contestStatus = 'ENDED';
+        return;
+      }
+  
       const seconds = Math.floor(remainingTime / 1000) % 60;
       const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
       const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
       const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-      this.countdownTimer = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      if (days > 0) {
+        this.countdownTimer = `${days.toString().padStart(2, '0')} : ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+      } else if (hours > 0) {
+        this.countdownTimer = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+      } else {
+        this.countdownTimer = `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+      }
     }
   }
 }

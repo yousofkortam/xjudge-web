@@ -11,40 +11,47 @@
 .progress-bar {
     transition: width 0.5s;
 }
-.card{
+
+.card {
     background-color: #fff;
 }
-.contest-details{
+
+.contest-details {
     background-color: transparent;
     margin-top: 10px;
 }
-.link{
-    
+
+.link {
+
     color: #0275d8;
     /* text-align: center;display: flex;
     border: 1px solid transparent;
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem; */
 }
-.link:hover{
+
+.link:hover {
     color: #014c8c;
 }
+
 .link:focus,
-.link:active{
+.link:active {
     background-color: #fff;
     border-color: #ddd #ddd transparent;
     color: #55595c;
 }
-.all-link{
+
+.all-link {
     /* border-bottom: 1px solid #ddd; */
     justify-content: space-between;
-    
+
 }
 
-.right{
+.right {
     padding-bottom: 5px;
 }
-.btn{
+
+.btn {
     border: 1px solid transparent;
     border-radius: .25rem;
     cursor: pointer;
@@ -55,12 +62,14 @@
     padding: .5rem 1rem;
     text-align: center;
 }
+
 .btn-secondary {
     background-color: #fff;
     border-color: #ccc;
     color: #373a3c;
 }
-.btn-secondary:focus, 
+
+.btn-secondary:focus,
 .btn-secondary:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
@@ -85,3 +94,8 @@
     color: #55595c;
     padding-bottom: 5px;
 } */
+
+.countdown-time {
+    font-size: 1.6em;
+    font-weight: bold;
+}
