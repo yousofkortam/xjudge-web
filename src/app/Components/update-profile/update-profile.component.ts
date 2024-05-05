@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/ApiServices/user.service';
 
 @Component({
@@ -22,6 +23,8 @@ export class UpdateProfileComponent implements OnInit {
 
   constructor(
     private userServive: UserService,
+    private router: Router,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
 
   ngOnInit(): void {
@@ -35,6 +38,10 @@ export class UpdateProfileComponent implements OnInit {
       next: (res) => {
         console.log(res);
         this.isLoading = false;
+        this.dialog.closeAll();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/profile', this.data.user.handle]);
+        }); 
       },
       error: (err) => {
         console.log(err);

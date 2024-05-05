@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { UserService } from 'src/app/ApiServices/user.service';
 import { UpdateProfileComponent } from '../update-profile/update-profile.component';
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private titleService: Title,
     private authService: AuthService,
+    private router: Router,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -40,8 +41,11 @@ export class ProfileComponent implements OnInit {
         console.log(response);
         this.user = response.data;
       },
-      error: (error) => {
-        console.log(error);
+      error: (err) => {
+        console.log(err);
+        if (err.error.error.statusCode == 404) {
+          this.router.navigate(['/notFound']);
+        }
       }
     });
   }
