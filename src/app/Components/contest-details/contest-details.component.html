@@ -27,12 +27,13 @@
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progressBarValue"
                             aria-valuemin="0" aria-valuemax="100"></div>
-                        <!-- Countdown timer -->
+
                     </div>
                 </div>
-                <div class="row">
+                <div class="row">                       
+                     <!-- Countdown timer -->
                     <div class="col-4" id="info-elapsed">
-                        <div class="row mt-3" *ngIf="!contestStarted">
+                        <div class="row mt-3">
                             <div class="col-12 text-center">
                                 <p>Time until contest starts: {{ countdownTimer }}</p>
                             </div>

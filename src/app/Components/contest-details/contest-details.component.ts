@@ -14,13 +14,12 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
 export class ContestDetailsComponent implements OnInit {
   loading: boolean = false;
   problemSet: any = [];   
-  statistic: number = 0; 
+  statistic!: number;
   contestId: any;
   contest: any;
   selectedButton: string = 'overview'; // Track selected button
   progressBarValue: number = 0;
   countdownTimer: string = '';
-  contestStarted: boolean = false; // Variable to track whether contest has started
 
   constructor(
     private titleService: Title, 
@@ -49,17 +48,10 @@ export class ContestDetailsComponent implements OnInit {
         // Calculate initial progress
         this.updateProgressBar();
         this.updateCountdownTimer();
-        // Calculate statistic
-        if (this.problemSet.numberOfAccepted !== undefined && this.problemSet.numberOfAccepted !== null && this.problemSet.numberOfAccepted !== 0) {
+        if (this.problemSet.numberOfAccepted !== 0) {
           this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
         } else {
           this.statistic = 0;
-        }
-        // Check if contest has started
-        const currentTime = new Date().getTime();
-        const beginTime = this.contest.beginTime * 1000;
-        if (currentTime >= beginTime) {
-          this.contestStarted = true;
         }
       },
       error: (err) => {
@@ -75,7 +67,7 @@ export class ContestDetailsComponent implements OnInit {
 
   // Function to update progress bar
   updateProgressBar() {
-    if (this.contest && !this.contestStarted) { // Update progress only if contest hasn't started
+    if (this.contest) {
       const currentTime = new Date().getTime();
       const beginTime = this.contest.beginTime * 1000;
       const endTime = this.contest.endTime * 1000;
@@ -87,20 +79,15 @@ export class ContestDetailsComponent implements OnInit {
 
   // Function to update countdown timer
   updateCountdownTimer() {
-    if (this.contest && !this.contestStarted) { // Update countdown timer only if contest hasn't started
+    if (this.contest) {
       const currentTime = new Date().getTime();
       const beginTime = this.contest.beginTime * 1000;
       const remainingTime = beginTime - currentTime;
-      if (remainingTime > 0) {
-        const seconds = Math.floor(remainingTime / 1000) % 60;
-        const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
-        const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
-        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-        this.countdownTimer = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      } else {
-        this.countdownTimer = 'Contest has started';
-        this.contestStarted = true;
-      }
+      const seconds = Math.floor(remainingTime / 1000) % 60;
+      const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
+      const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
+      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+      this.countdownTimer = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
   }
 }
