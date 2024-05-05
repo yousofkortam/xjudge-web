@@ -28,12 +28,12 @@ export class UpdateProfileComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
 
   ngOnInit(): void {
+
   }
 
   handleUpdateProfile() {
     this.isLoading = true;
     console.log(this.updateProfielForm.value);
-    
     this.userServive.updateUser(this.updateProfielForm.value).subscribe({
       next: (res) => {
         console.log(res);
