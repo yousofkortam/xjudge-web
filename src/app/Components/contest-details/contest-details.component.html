@@ -32,11 +32,11 @@
                 </div>
                 <div class="row">
                     <div class="col-4" id="info-elapsed">
-                        <span>
-                            <p class="text-start">
-                                Time until contest starts: {{ countdownTimer }}
-                            </p>
-                        </span>
+                        <div class="row mt-3" *ngIf="!contestStarted">
+                            <div class="col-12 text-center">
+                                <p>Time until contest starts: {{ countdownTimer }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-4 text-center mt-5">
                         <span id="info-running" class="text-success">{{
