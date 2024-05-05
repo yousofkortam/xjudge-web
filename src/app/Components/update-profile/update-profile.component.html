@@ -15,6 +15,9 @@
                         <span *ngIf="updateProfielForm.get('firstName')?.getError('required')" 
                             style="color:red">Required</span>
                     </div>
+                    <div *ngIf="validationsErrors['firstName']" class="text-danger" role="alert">
+                        {{ validationsErrors.firstName }}
+                    </div>
                 </div>
                 <div class="col-lg-6 pt-sm-3">
                 <div class="lname d-flex "> 
@@ -24,6 +27,20 @@
                     <div *ngIf="updateProfielForm.get('lastName')?.errors && updateProfielForm.get('lastName')?.touched ">
                         <span *ngIf="updateProfielForm.get('lastName')?.getError('required')" class="m-0 " style="color:red">Required</span>
                     </div>
+                    <div *ngIf="validationsErrors['lastName']" class="text-danger" role="alert">
+                        {{ validationsErrors.lastName }}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 mb-3 d-flex">
+                <label for="email" class="col-md-2 mt-2 me-3">Email</label>
+                <input type="text" id="user-email" class="form-control" placeholder="Email" formControlName="email" />
+                <div *ngIf="updateProfielForm.get('email')?.errors && updateProfielForm.get('email')?.touched ">
+                    <span *ngIf="updateProfielForm.get('email')?.getError('required')" class="m-0"
+                        style="color:red">Required</span>
+                </div>
+                <div *ngIf="validationsErrors['email']" class="text-danger" role="alert">
+                    {{ validationsErrors.email }}
                 </div>
             </div>
             <div class="mt-3 mb-3 d-flex ">
