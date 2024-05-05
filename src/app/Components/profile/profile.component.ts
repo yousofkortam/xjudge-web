@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { UserService } from 'src/app/ApiServices/user.service';
+import { UpdateProfileComponent } from '../update-profile/update-profile.component';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +22,8 @@ export class ProfileComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute,
     private userService: UserService,
     private titleService: Title,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe((param) => {
@@ -40,6 +43,17 @@ export class ProfileComponent implements OnInit {
       error: (error) => {
         console.log(error);
       }
+    });
+  }
+
+  openUpdateProfileDialog() {
+    this.dialog.open(UpdateProfileComponent, {
+      data: {
+        user: this.user
+      },
+      width: '40%',
+      height: 'auto',
+      disableClose: true
     });
   }
 
