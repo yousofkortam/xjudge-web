@@ -32,16 +32,16 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-2">
-                        <div *ngIf="contest.contestStatus === 'SCHEDULED'">
-                            <span>Start Countdown</span>
+                        <div *ngIf="contest.contestStatus === 'SCHEDULED'" class="text-primary">
+                            <span class="fw-bold">Start Countdown</span>
                             <p class="countdown-time text-primary">{{ countdownTimer }}</p>
                           </div>
-                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running">
-                            <span>Running</span>
-                            <p class="countdown-time text-danger">{{ countdownTimer }}</p>
+                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running" class="text-success ">
+                            <span class="fw-bold">Running</span>
+                            <p class="countdown-time text-success">{{ countdownTimer }}</p>
                         </span>
-                        <span *ngIf="contest.contestStatus === 'ENDED'" id="info-finished">
-                            <span class="countdown-time text-success">{{contest.contestStatus}}</span>
+                        <span *ngIf="contest.contestStatus === 'ENDED'" class="text-danger" id="info-finished">
+                            <span class="countdown-time  fw-bold">{{contest.contestStatus}}</span>
                         </span>
                     </div>
                     <div class="col-4 text-end" id="info-remaining"></div>
