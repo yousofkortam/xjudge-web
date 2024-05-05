@@ -17,7 +17,9 @@ export class ContestDetailsComponent implements OnInit {
   statistic!: number;
   contestId: any;
   contest: any;
-  selectedButton: string = 'overview'; // Track selected button
+  // Track selected button
+  selectedButton: string = 'overview'; 
+  // progress bar
   progressBarValue: number = 0;
   countdownTimer: string = '';
 
@@ -44,15 +46,15 @@ export class ContestDetailsComponent implements OnInit {
       next: (response) => {
         this.contest = response.data;     
         this.titleService.setTitle(this.contest.title);
-        this.problemSet = response.data.problemSet;
-        // Calculate initial progress
-        this.updateProgressBar();
-        this.updateCountdownTimer();
-        if (this.problemSet.numberOfAccepted !== 0) {
+        this.problemSet = response.data.problemSet;     
+        if (this.problemSet.numberOfAccepted !== undefined && this.problemSet.numberOfAccepted !== null && this.problemSet.numberOfAccepted !== 0) {
           this.statistic = this.problemSet.numberOfSubmission / this.problemSet.numberOfAccepted;
         } else {
           this.statistic = 0;
         }
+        
+        this.updateProgressBar();
+        this.updateCountdownTimer();
       },
       error: (err) => {
         console.log(err);
