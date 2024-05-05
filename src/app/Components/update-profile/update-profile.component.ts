@@ -11,10 +11,12 @@ import { UserService } from 'src/app/ApiServices/user.service';
 export class UpdateProfileComponent implements OnInit {
 
   isLoading: boolean = false;
+  validationsErrors: any = {};
 
   updateProfielForm: FormGroup = new FormGroup({
     firstName:new FormControl(this.data.user.firstName, [Validators.required]),
-    lastName:new FormControl(this.data.user.lastName, [Validators.required ]),
+    lastName:new FormControl(this.data.user.lastName, [Validators.required]),
+    email: new FormControl(this.data.user.email, [Validators.required, Validators.email]),
     school:new FormControl(this.data.user.school),
   });
 
@@ -23,19 +25,20 @@ export class UpdateProfileComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
 
   ngOnInit(): void {
-    console.log(this.data.user.firstName);
-    
   }
 
   handleUpdateProfile() {
     this.isLoading = true;
-    this.userServive.updateUser(this.data.user.handle, this.updateProfielForm.value).subscribe({
+    console.log(this.updateProfielForm.value);
+    
+    this.userServive.updateUser(this.updateProfielForm.value).subscribe({
       next: (res) => {
         console.log(res);
         this.isLoading = false;
       },
       error: (err) => {
         console.log(err);
+        this.validationsErrors = err.error.errors;
         this.isLoading = false;
       }
     });
