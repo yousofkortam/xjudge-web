@@ -32,15 +32,15 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-2">
-                        <div *ngIf="contest.contestStatus === 'SCHEDULED'" class="text-primary">
+                        <div *ngIf="contest.contestStatus === 'SCHEDULED'" class="fs-3 text-primary">
                             <span class="fw-bold">Start Countdown</span>
                             <p class="countdown-time text-primary fw-bold fs-1">{{ countdownTimer }}</p>
                           </div>
-                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running" class="text-success ">
+                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running" class="fs-3 text-success ">
                             <span class="fw-bold">Running</span>
                             <p class="countdown-time text-success fw-bold fs-1">{{ countdownTimer }}</p>
                         </span>
-                        <span *ngIf="contest.contestStatus === 'ENDED'" class="text-danger" id="info-finished">
+                        <span *ngIf="contest.contestStatus === 'ENDED'" class="fs-3 text-danger" id="info-finished">
                             <span class="countdown-time  fw-bold fs-1">{{contest.contestStatus}}</span>
                         </span>
                     </div>
@@ -55,13 +55,13 @@
                         <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
                             Overview
                         </button>
-                        <button class="link problem btn" (click)="onBtnClick('problem')" routerLinkActive="active">
+                        <button class="link problem btn" (click)="onBtnClick('problem')">
                             Problem
                         </button>
-                        <button class="link status btn" (click)="onBtnClick('status')" routerLinkActive="active">
+                        <button class="link status btn" (click)="onBtnClick('status')">
                             Status
                         </button>
-                        <button class="link rank btn" (click)="onBtnClick('rank')" routerLinkActive="active">
+                        <button class="link rank btn" (click)="onBtnClick('rank')">
                             Rank
                         </button>
                     </div>
