@@ -13,11 +13,8 @@
             <div class="flex-grow-1 ms-3 me-4">
               <div class="d-flex justify-content-between align-items-center">
                 <p class="mb-1"> <strong>Full Name: </strong> {{user.firstName}} {{user.lastName}}</p>
-<<<<<<< HEAD
-                <button *ngIf="isTheRightUser" class="btn btn-primary mt-2 me-2">Update</button>
-=======
-                <button *ngIf="isTheRightUser" class="btn btn-primary mt-2 me-" (click)="openUpdateProfileDialog()">Update</button>
->>>>>>> 5ff4b1db124f306b1a8efe027d4eecb5ffae13d1
+
+                <button *ngIf="isTheRightUser" class="btn btn-primary mt-2 me-2" (click)="openUpdateProfileDialog()">Update</button>
                 <!-- TODO: Handle update button implementation -->
               </div>
               <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Handle: </strong> {{user.handle}}</p>

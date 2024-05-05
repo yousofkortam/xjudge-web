@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
       data: {
         user: this.user
       },
-      width: '40%',
+      width: '50%',
       height: 'auto',
       disableClose: true
     });

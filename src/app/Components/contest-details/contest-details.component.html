@@ -74,7 +74,7 @@
 
                 <div class="content container-fluid">
                     <div *ngIf="selectedButton === 'overview'">
-                        <app-overview></app-overview>
+                        <app-overview [problemSet]="problemSet"></app-overview>
                     </div>
                     <div *ngIf="selectedButton === 'problem'" class="container-fluid w-100 ms-0">
                         <app-problem-details></app-problem-details>
