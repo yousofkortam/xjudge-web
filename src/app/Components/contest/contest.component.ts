@@ -93,7 +93,6 @@ export class ContestComponent implements OnInit {
     this.loading = true;
     this._ContestService.filterContests(category, status, owner, this.title, this.pageNo, this.pageSize).subscribe({
       next: (response: any) => {
-        console.log(response);
         if (response.success === true) {
           this.loading = false;
           this.Contests = response.data.content;

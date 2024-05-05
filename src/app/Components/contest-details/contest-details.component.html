@@ -55,13 +55,13 @@
                         <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
                             Overview
                         </button>
-                        <button class="link problem btn" (click)="onBtnClick('problem')">
+                        <button class="link problem btn" (click)="onBtnClick('problem')" routerLinkActive="active">
                             Problem
                         </button>
-                        <button class="link status btn" (click)="onBtnClick('status')">
+                        <button class="link status btn" (click)="onBtnClick('status')" routerLinkActive="active">
                             Status
                         </button>
-                        <button class="link rank btn" (click)="onBtnClick('rank')">
+                        <button class="link rank btn" (click)="onBtnClick('rank')" routerLinkActive="active">
                             Rank
                         </button>
                     </div>
@@ -74,7 +74,7 @@
 
                 <div class="content container-fluid">
                     <div *ngIf="selectedButton === 'overview'">
-                        <app-overview></app-overview>
+                        <app-overview [problemSet]="problemSet"></app-overview>
                     </div>
                     <div *ngIf="selectedButton === 'problem'" class="container-fluid w-100 ms-0">
                         <app-problem-details></app-problem-details>

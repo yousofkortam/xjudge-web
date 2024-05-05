@@ -1,0 +1,19 @@
+.dialog-content {
+    padding: 20px;
+    min-height: 550px;
+}
+
+.dialog-actions {
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+.dialog-actions .btn {
+    margin-left: 10px;
+}
+
+#code-solution {
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+}

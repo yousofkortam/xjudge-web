@@ -44,6 +44,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
+import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { ContestRankComponent } from './Components/contest-rank/contest-rank.com
     TimeAgoPipe,
     ContestStatusComponent,
     ContestRankComponent,
+    UpdateProfileComponent,
    ],
   imports: [
     RouterModule,
