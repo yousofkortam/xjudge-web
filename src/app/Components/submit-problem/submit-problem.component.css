@@ -8,3 +8,39 @@ label
     border: none !important;
     outline: none !important;
 }
+
+.dialog-content {
+    padding: 20px;
+  }
+  
+  .dialog-title {
+    margin-bottom: 20px;
+  }
+  
+  .dialog-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .dialog-form .form-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .dialog-form .btn-group .btn {
+    margin-right: 10px;
+  }
+  
+  .dialog-form .error-message {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 5px;
+  }
+  
+  .dialog-actions {
+    padding: 20px;
+    justify-content: flex-end;
+  }
+  
+  .dialog-actions .btn {
+    margin-left: 10px;
+  }

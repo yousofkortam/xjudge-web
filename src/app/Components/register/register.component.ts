@@ -82,7 +82,7 @@ export class RegisterComponent implements OnInit {
           this.isLoading = false;
           this.apiError = response.error.error.message;
           this.validations = response.error.error.validations;
-         
+          
         },
       });
     }

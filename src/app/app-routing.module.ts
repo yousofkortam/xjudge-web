@@ -15,9 +15,14 @@ import { ProtectedAuthGuard } from './Guards/auth.guard';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
+<<<<<<< HEAD
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
 import { GroupsComponent } from './Components/groups/groups.component';
+=======
+import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
+
+>>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   // {path: 'home',
@@ -26,6 +31,7 @@ const routes: Routes = [
   { path: 'home', component:HomeComponent },
   { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
+  { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },

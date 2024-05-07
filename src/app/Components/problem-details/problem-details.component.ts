@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
 
 
 @Component({
@@ -31,40 +33,48 @@ export class ProblemDetailsComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute,
     private renderer: Renderer2,
     private titleService: Title,
+    private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document) { }
 
   fetchEndPointToGetSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
-    
-     next: (response) => {
+
+      next: (response) => {
         console.log(response);
         if (response.success === true) {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
-          this.samples = response.data.samples       
-    }      
+          this.samples = response.data.samples
+        }
       },
       error: (err) => {
         console.log(err);
       }
     });
+  }
 
-     
-}
+
+  openModal() {
+    this.dialog.open(SubmitProblemComponent, {
+      data: {
+        problemCode: this.problemCode,
+        source: this.source,
+      },
+      width: '60%',
+      height: 'auto',
+      disableClose: true
+    },
+    );
+  }
 
   ngOnInit(): void {
-    // this.loadMathJaxConfig(); this.loadMathJax();
     this.loadMathJaxConfig();
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
-      this.loadMathJax();
     });
-   
-   
-    this.fetchEndPointToGetSpecificProblem(); 
-      
-    
+    this.fetchEndPointToGetSpecificProblem();
+    this.loadMathJax();
   }
 
   loadMathJaxConfig() {

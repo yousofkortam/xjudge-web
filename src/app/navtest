@@ -1584,3 +1584,80 @@ display: none;
   -webkit-animation: SlowFloat 3s infinite alternate;
   animation: SlowFloat 3s infinite alternate;
 }
+
+
+
+
+
+<script src="https://img.atcoder.jp/public/ba514ee/js/lib/jquery-1.9.1.min.js"></script>
+        <link rel="stylesheet" href="https://img.atcoder.jp/public/ba514ee/css/cdn/katex.min.css">
+        <script defer="" src="https://img.atcoder.jp/public/ba514ee/js/cdn/katex.min.js"></script>
+        <script defer="" src="https://img.atcoder.jp/public/ba514ee/js/cdn/auto-render.min.js"></script>
+        <script>
+                $(function () { $('var').each(function () 
+                { var html = $(this).html().replace(/<sub>/g, '_{').replace(/<\/sub>/g, '}'); 
+                 $(this).html('\\(' + html + '\\)'); }); });
+ </script>
+
+ <script>  var katexOptions = {
+          delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\(", right: "\\)", display: false },
+              { left: "\\[", right: "\\]", display: true }
+          ], ignoredTags: ["script", "noscript", "style", "textarea", "code", "option"], 
+              ignoredClasses: ["prettyprint", "source-code-for-copy"],    
+              throwOnError: false};
+              document.addEventListener("DOMContentLoaded", function () { renderMathInElement(document.body, katexOptions); });
+</script>
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$$$','$$$']], DisplayMath: [['$$$$$$','$$$$$$']]}
+    });
+
+</script>
+<script type="text/javascript" غير متزامن
+        src="https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+
+
+loadMathJaxConfig() {
+  let scriptCodeForces = this.renderer.createElement('script');
+  scriptCodeForces.type = 'text/x-mathjax-config';
+  scriptCodeForces.text = `MathJax.Hub.Config({ tex2jax: {inlineMath: [['$$$','$$$']], displayMath: [['$$$$$$','$$$$$$']]}});`;
+
+  // let scriptAtCoder = this.renderer.createElement('script');
+  // scriptAtCoder.text = `var katexOptions = {
+  //   delimiters: [
+  //       { left: "$$", right: "$$", display: true },
+  //       { left: "\\(", right: "\\)", display: false },
+  //       { left: "\\[", right: "\\]", display: true }  ],
+  //       ignoredTags: ["script", "noscript", "style", "textarea", "code", "option"],
+  //       ignoredClasses: ["prettyprint", "source-code-for-copy"],
+  //       throwOnError: false};
+  //       document.addEventListener("DOMContentLoaded", function () { renderMathInElement(document.body, katexOptions);
+  //        });`;
+  this.renderer.appendChild(this.document.head, scriptCodeForces );
+  // this.renderer.appendChild(this.document.body, scriptAtCoder );
+}
+
+loadMathJax() {
+  let scriptCodeForces = this.renderer.createElement('script');
+  scriptCodeForces.type = 'text/javascript';
+  scriptCodeForces.async = false;
+  scriptCodeForces.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
+ 
+  // let scriptAtCoder = this.renderer.createElement('script');
+  // scriptAtCoder.type = 'text/javascript';
+  // scriptAtCoder.async = false;
+  // scriptAtCoder.src = 'https://img.atcoder.jp/public/ba514ee/js/cdn/katex.min.js';
+ 
+  this.renderer.appendChild(this.document.head, scriptCodeForces);
+  // this.renderer.appendChild(this.document.body,scriptAtCoder );
+}
+
+}
+// "https://img.atcoder.jp/public/ba514ee/js/cdn/auto-render.min.js"

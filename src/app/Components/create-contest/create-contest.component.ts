@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 
@@ -8,43 +9,132 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
   templateUrl: './create-contest.component.html',
   styleUrls: ['./create-contest.component.css']
 })
-export class CreateContestComponent {
+export class CreateContestComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
+  userGroups: any = [];
+
+  isGroupSelected:boolean = false;
+  enableDeleteProblem:boolean = false;
   
   createContestForm: FormGroup = new FormGroup({
     title:new FormControl(null, [Validators.required]),
     durationSeconds:new FormControl(null, [Validators.required ]),
-    type:new FormControl(null, [Validators.required ]),
-    visibility:new FormControl(null, [Validators.required ]),
+    type:new FormControl("CLASSIC", [Validators.required ]),
+    visibility:new FormControl("PUBLIC", [Validators.required ]),
     beginTime:new FormControl(null, [Validators.required ]),
-    problems:new FormControl(null, [Validators.required ]),
-    groupId :new FormControl(null, [Validators.required ]),
-    password :new FormControl(null, [Validators.required ]),
+    problems:new FormArray([
+      new FormGroup({
+        problemAlias: new FormControl(null, [Validators.required]),
+        ojType: new FormControl("", [Validators.required]),
+        problemCode: new FormControl(null, [Validators.required]),
+        problemHashtag: new FormControl(null),
+        problemWeight: new FormControl(null, [Validators.required]),
+      })
+    ]),
+    groupId :new FormControl(0),
+    password :new FormControl(null),
     description :new FormControl(null, [Validators.required ]),
-  });
+  }, { validators: this.groupIdValidator });
  
-  constructor(private _ContestService: ContestService , private _Router: Router) {}
+  constructor(
+    private _ContestService: ContestService,
+    private _Router: Router,
+    private dialgo: MatDialog) {}
+
+  ngOnInit(): void {
+    this.getGroupsAwnedByUser();
+  }
 
 
-  handleSubmitProblem(createContestForm:FormGroup){
+  handleCreateContest() {
     this.isLoading = true;
-    if(createContestForm.valid){
-      this._ContestService.createContest().subscribe({
-        next: (response)=> {
-          if (response.success === true) {
-            localStorage.setItem('userToken', response.token);
-            this._Router.navigate(['/contest']);
-            this.isLoading= false;
-          }
-        },
-        error: (err)=> {
-          this.isLoading = false;
-          this.apiError = err.error.message;
+    const formValue = this.createContestForm.value;
+    formValue.durationSeconds = formValue.durationSeconds * 60;
+    const beginTimeDate = new Date(formValue.beginTime);
+    formValue.beginTime = Math.floor(beginTimeDate.getTime() / 1000);
+    formValue.problems.forEach((problem: any, i: number) => {
+        problem.problemHashtag = this.getLetter(i);
+    });
+    this._ContestService.createContest(formValue).subscribe({
+      next: (response)=> {
+        console.log(response);
+        if (response.success === true) {
+          this.isLoading= false;
+          this.dialgo.closeAll();
+          this._Router.navigate(['/contest', response.data.id]);
         }
-      });
+      },
+      error: (err)=> {
+        this.isLoading = false;
+        this.apiError = err.error.message;
+      }
+    });
+  }
+
+  getGroupsAwnedByUser() {
+    this._ContestService.getGrouspqwned().subscribe({
+      next: (response)=> {
+        this.userGroups = response.data;
+      },
+      error: (err)=> {
+        console.log(err);
+      }
+    });
+  }
+
+  groupIdValidator(control: AbstractControl): ValidationErrors | null {
+    const typeControl = control.get('type');
+    const groupIdControl = control.get('groupId');
+
+    if (typeControl?.value === 'GROUP' && groupIdControl?.value === 0) {
+      return { "GroupRequired": true };
     }
+  
+    return null;
+  }
+
+  onClassicClick() {
+    this.isGroupSelected = false;
+    this.createContestForm.controls['type'].setValue('CLASSIC');
+    this.createContestForm.controls['groupId'].setValue(0);
+  }
+
+  onGroupClick() {
+    this.isGroupSelected = true;
+    this.createContestForm.controls['type'].setValue('GROUP');
+  }
+
+  getFormProblems() {
+    return (this.createContestForm.get('problems') as FormArray).controls;
+  }
+
+  addNewProblemForm() {
+    const problems = this.createContestForm.get('problems') as FormArray;
+    this.enableDeleteProblem = true;
+    if (problems.length < 26) {
+      problems.push(new FormGroup({
+        problemAlias: new FormControl(null, [Validators.required]),
+        ojType: new FormControl("", [Validators.required]),
+        problemCode: new FormControl(null, [Validators.required]),
+        problemHashtag: new FormControl(null),
+        problemWeight: new FormControl(null, [Validators.required]),
+      }));
+    }
+  }
+
+  removeProblemForm(index:number) {
+    const problems = this.createContestForm.get('problems') as FormArray;
+    if (problems.length > 1)
+      problems.removeAt(index);
+
+    if (problems.length === 1)
+      this.enableDeleteProblem = false;
+  }
+
+  getLetter(index:number) {
+    return String.fromCharCode(65 + index);
   }
 
 }

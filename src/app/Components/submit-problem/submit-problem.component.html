@@ -1,49 +1,37 @@
-<div class="modal fade modal-md mt-5 center" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title " id="exampleModal2Label">Submit </h5>
-          <button type="button" class="btn-close ps-0 pe-3  border-none shadow-none " data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form [formGroup]="submitProblemForm">
-                <div class="row" id="open-row" style="margin-right: 13vw;">
-                    <div class=" d-flex">
-                    <label for="submit-open" class="col-md-2 form-label  mt-2 me-5" >Open:</label>
-                    <div class="btn-group col-md-6 " role="group">
-                        <input type="hidden" formControlName="isOpen">
-                        <button type="radio" class="border btn btn-secondary" [class.active]="submitProblemForm.value.isOpen === true" (click)="submitProblemForm.controls['isOpen'].setValue(true)">Yes</button>
-                        <button type="radio" class="border btn btn-secondary" [class.active]="submitProblemForm.value.isOpen === false" (click)="submitProblemForm.controls['isOpen'].setValue(false)">No</button>
-                    </div>
-                    </div>
-                </div>
-              <div class="mb-3">
-                <label for="language" style="margin-right: 25vw;">Language:</label>
-                <select id="form3" class="form-select mt-3" formControlName="idValue" >
-                    <option value="" selected>Select Language</option>
-                    <option *ngFor="let language of languages" value="{{language.idValue}}">{{language.name}}</option>
-                </select>
-                <div *ngIf="submitProblemForm.get('language')?.errors && submitProblemForm.get('language')?.touched ">
-                    <span *ngIf="submitProblemForm.get('language')?.getError('required')" class="m-0" style="color:red">Language is mandatory</span>
-                </div>
-              <i></i>
-              </div>
-
-              <div class="mb-3">
-                 <label for="solution"  style="margin-right: 25vw;">Solution:</label>
-                  <textarea id="solution" class="form-control" formControlName="solutionCode" placeholder="Solution goes here"></textarea>
-                  <div *ngIf="submitProblemForm.get('solution')?.errors && submitProblemForm.get('solution')?.touched ">
-                      <span *ngIf="submitProblemForm.get('solution')?.getError('required')" class="m-0" style="color:red">Solution is mandatory</span>
-                  </div>
-                  <i></i>
-               </div>
-            </form>
-        </div>
-
-        <div class="modal-footer d-flex">
-           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-           <button type="submit" class="btn btn-primary "[disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()"> <span >Submit</span></button>
-        </div>
-        </div>
+<mat-dialog-content class="dialog-content">
+  <h2 class="dialog-title">Submit</h2>
+  <form [formGroup]="submitProblemForm" class="dialog-form">
+    <div class="form-group">
+      <label for="submit-open" class="form-label">Open:</label>
+      <div class="btn-group" role="group">
+        <input type="hidden" formControlName="isOpen">
+        <button type="radio" class="btn btn-outline-success" [class.active]="submitProblemForm.value.isOpen === true" (click)="submitProblemForm.controls['isOpen'].setValue(true)">Yes</button>
+        <button type="radio" class="btn btn-outline-danger" [class.active]="submitProblemForm.value.isOpen === false" (click)="submitProblemForm.controls['isOpen'].setValue(false)">No</button>
+      </div>
     </div>
-</div>
+    <div class="form-group">
+      <label for="language" class="form-label">Language:</label>
+      <select id="form3" class="form-control" formControlName="idValue">
+        <option value="" selected>Select Language</option>
+        <option *ngFor="let language of languages" value="{{language.idValue}}">{{language.name}}</option>
+      </select>
+      <div *ngIf="submitProblemForm.get('language')?.errors && submitProblemForm.get('language')?.touched" class="error-message">
+        <span *ngIf="submitProblemForm.get('language')?.getError('required')">Language is mandatory</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="solution" class="form-label">Solution:</label>
+      <textarea id="solution" class="form-control" formControlName="solutionCode" placeholder="Solution goes here" rows="8"></textarea>
+      <div *ngIf="submitProblemForm.get('solution')?.errors && submitProblemForm.get('solution')?.touched" class="error-message">
+        <span *ngIf="submitProblemForm.get('solution')?.getError('required')">Solution is mandatory</span>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Cancel</button>
+  <button type="submit" class="btn btn-success" mat-button [disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()">
+    <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Submitting</span>
+    <span *ngIf="!isLoading"><i class="fa fa-check"></i> Submit</span>
+  </button>
+</mat-dialog-actions>

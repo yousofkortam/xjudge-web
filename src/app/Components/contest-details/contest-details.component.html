@@ -1,0 +1,36 @@
+<div class="container p-4">
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-4 text-start">
+                <b>Begin: </b>
+                <span class="timestamp">{{contest.beginTime * 1000 | date:'medium'}}</span>
+            </div>
+            <div class="col-4 text-center">
+                <h3>
+                    <i id="btn-favorite" class="fa fa-star-o"></i>
+                    {{contest.title}}
+                </h3>
+            </div>
+            <div class="col-4 text-end">
+                <b>End: </b>
+                <span class="timestamp">{{contest.endTime * 1000 | date:'medium'}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- Slider goes here -->
+                <div style="width: 100%;">
+                    <mat-slider class="green-slider" min="{{contest.beginTime}}" max="{{contest.endTime}}" step="1"
+                        value="12" style="width: 100%;"></mat-slider>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-start" id="info-elapsed"></div>
+            <div class="col-4 text-center">
+                <span id="info-running" class="text-success">{{contest.contestStatus}}</span>
+            </div>
+            <div class="col-4 text-end" id="info-remaining"></div>
+        </div>
+    </div>
+</div>
