@@ -13,9 +13,14 @@ export class GroupComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Group');
   }
-  create() {
-    // Add logic for creating something
-    console.log('Create button clicked');
+  currentTab: string = 'myGroups'; // Default tab
+
+  showMyGroups() {
+    this.currentTab = 'myGroups';
+  }
+
+  showExploreGroups() {
+    this.currentTab = 'exploreGroups';
   }
 
 }

@@ -34,14 +34,15 @@ export class CreateGroupComponent implements OnInit {
         (response) => {
           console.log('Group created successfully:', response);
           this._Router.navigate(['/group']);
-          
         },
         (error) => {
           console.error('Error creating group:', error);
         }
+
       );
     } else {
       console.log('Form is invalid!');
     }
+   
   }
 }

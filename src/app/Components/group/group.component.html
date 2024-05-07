@@ -1,11 +1,10 @@
-<!-- judge.component.html -->
 <div class="navbar" id="group-tabs">
     <div class="nav-container">
         <div class="nav-item">
-            <a class="nav-link active" [routerLink]="['/my-groups']" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive" aria-expanded="true">My Groups</a>
+            <button class="nav-link active" (click)="showMyGroups()" [class.active]="currentTab === 'myGroups'">My Groups</button>
         </div>
         <div class="nav-item">
-            <a class="nav-link active" [routerLink]="['/explore-groups']" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive">Explore</a>
+            <button class="nav-link active" (click)="showExploreGroups()" [class.active]="currentTab === 'exploreGroups'">Explore</button>
         </div>
     </div>
     <!-- <div class="btn-group" role="group">
@@ -18,4 +17,12 @@
         <app-create-group></app-create-group>
     </div>
 
+</div>
+
+<div *ngIf="currentTab === 'myGroups'">
+    <app-my-groups></app-my-groups>
+</div>
+
+<div *ngIf="currentTab === 'exploreGroups'">
+    <app-explore-groups></app-explore-groups>
 </div>

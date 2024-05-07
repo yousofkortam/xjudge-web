@@ -30,7 +30,9 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
-
+import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
+import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
+import {GroupsComponent} from './Components/groups/groups.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +54,9 @@ import { CreateGroupComponent } from './Components/create-group/create-group.com
     CreateContestComponent,
     HoursMinutesPipe,
     CreateGroupComponent,
+    MyGroupsComponent,
+    ExploreGroupsComponent,
+    GroupsComponent
    ],
   imports: [
     RouterModule,

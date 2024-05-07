@@ -15,6 +15,9 @@ import { ProtectedAuthGuard } from './Guards/auth.guard';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
+import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
+import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
+import { GroupsComponent } from './Components/groups/groups.component';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   // {path: 'home',
@@ -34,7 +37,10 @@ const routes: Routes = [
   { path: 'submit', component:SubmitProblemComponent },
   { path: 'pagination', component:PaginationComponent },
   { path: 'create-group', component: CreateGroupComponent } ,
+  { path: 'allGroups',component: ExploreGroupsComponent},
+  { path: 'myGroups',component:MyGroupsComponent},
   { path: '**', component:NotFoundComponent },
+  { path: 'groups',component:GroupsComponent}
 ];
 
 @NgModule({
