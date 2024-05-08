@@ -25,10 +25,7 @@ export class ProblemService {
   };
 
   filterProblem(source: string, problemCode: string, title: string, contestName: string, pageSize: number, pageNo: number): Observable<any> {
-    return this._HttpClient.get(
-      `http://localhost:7070/problem?source=${source}&problemCode=${problemCode}&title=${title}&size=${pageSize}&pageNo=${pageNo}&contestName=${contestName}`,
-      { headers: this.headers }
-    );
+    return this._HttpClient.get(`http://localhost:7070/problem?source=${source}&problemCode=${problemCode}&title=${title}&size=${pageSize}&pageNo=${pageNo}&contestName=${contestName}`,  { headers: this.headers } );
   }
 
   submitProblem(userData: object): Observable<any> {
@@ -38,5 +35,7 @@ export class ProblemService {
   getCompilersForSubmitProblem(onlineJudge:string): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`);
   }
+
+
 
 }

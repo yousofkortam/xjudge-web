@@ -21,6 +21,8 @@ export class ContestDetailsComponent implements OnInit {
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
 
+  problemHashtag:any
+
   constructor(
     private titleService: Title, 
     private _ActivatedRoute: ActivatedRoute, 
@@ -48,6 +50,7 @@ export class ContestDetailsComponent implements OnInit {
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
         this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
+        this.problemHashtag= this.problemSet.problemHashtag
         this.updateProgressBar();
         this.updateCountdownTimer();
       },

@@ -47,6 +47,7 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
+import { ProblemSelectorHashtagComponent } from './Components/problem-selector-hashtag/problem-selector-hashtag.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { UpdateProfileComponent } from './Components/update-profile/update-profi
     ContestStatusComponent,
     ContestRankComponent,
     UpdateProfileComponent,
+    ProblemSelectorHashtagComponent,
    ],
   imports: [
     RouterModule,

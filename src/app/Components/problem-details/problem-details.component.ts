@@ -33,6 +33,8 @@ export class ProblemDetailsComponent implements OnInit {
   apiError: string = '';
   title: string = '';
  
+  // contest problem
+  contestId:any
   showButtons: boolean = true;
   
   submitProblemForm: FormGroup = new FormGroup({
@@ -57,6 +59,7 @@ export class ProblemDetailsComponent implements OnInit {
         }
       });
      }
+  
      private checkUrl(url: string): void {
       if (url.includes('/problem')) {
         this.showButtons = false;
@@ -64,7 +67,34 @@ export class ProblemDetailsComponent implements OnInit {
         this.showButtons = true;
       }
     }
-  getSpecificProblem() {
+
+  ngOnInit(): void {
+    this.loadMathJaxConfig();
+    this._ActivatedRoute.paramMap.subscribe((param) => {
+      this.source = param.get('source');
+      this.problemCode = param.get('problemCode');
+
+    });
+    this.getSpecificProblem();
+    
+    this.loadMathJax();
+    this.getProblemSubissions();
+  }
+ 
+  openModal() {
+    this.dialog.open(SubmitProblemComponent, {
+      data: {
+        problemCode: this.problemCode,
+        source: this.source,
+      },
+      width: '60%',
+      height: 'auto',
+      disableClose: true
+    },
+    );
+  }
+
+ getSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
       next: (response) => {
         if (response.success === true) {
@@ -80,49 +110,6 @@ export class ProblemDetailsComponent implements OnInit {
     });
   }
 
-  openModal() {
-    this.dialog.open(SubmitProblemComponent, {
-      data: {
-        problemCode: this.problemCode,
-        source: this.source,
-      },
-      width: '60%',
-      height: 'auto',
-      disableClose: true
-    },
-    );
-  }
-
-  ngOnInit(): void {
-    this.loadMathJaxConfig();
-    this._ActivatedRoute.paramMap.subscribe((param) => {
-      this.source = param.get('source');
-      this.problemCode = param.get('problemCode');
-      
-    });
-    this.getSpecificProblem();
-    this.loadMathJax();
-    this.getProblemSubissions();
-  }
-
-  loadMathJaxConfig() {
-    let script = this.renderer.createElement('script');
-    script.type = 'text/x-mathjax-config';
-    script.text = `
-      MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$$$','$$$']], displayMath: [['$$$$$$','$$$$$$']]}
-      });
-    `;
-    this.renderer.appendChild(this.document.head, script);
-  }
-
-  loadMathJax() {
-    let script = this.renderer.createElement('script');
-    script.type = 'text/javascript';
-    script.async = false;
-    script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
-    this.renderer.appendChild(this.document.head, script);
-  }
 
 
   getProblemSubissions() {
@@ -154,8 +141,31 @@ export class ProblemDetailsComponent implements OnInit {
       height: 'auto'
     });
   }
+ 
   recrawl() {
     window.location.reload();
   }
+ 
+  loadMathJaxConfig() {
+    let script = this.renderer.createElement('script');
+    script.type = 'text/x-mathjax-config';
+    script.text = `
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$$$','$$$']], displayMath: [['$$$$$$','$$$$$$']]}
+      });
+    `;
+    this.renderer.appendChild(this.document.head, script);
+  }
 
+  loadMathJax() {
+    let script = this.renderer.createElement('script');
+    script.type = 'text/javascript';
+    script.async = false;
+    script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
+    this.renderer.appendChild(this.document.head, script);
+  }
+
+  
+ 
 }
+

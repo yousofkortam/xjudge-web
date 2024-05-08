@@ -4,6 +4,9 @@
 
             <div id="prob-operation" class="row ">
                 <div class=" mt-5 w-100">
+                    <div class=" text-center w-100 " >
+                        <app-problem-selector-hashtag [class.d-none]="showButtons == false"> </app-problem-selector-hashtag>
+                    </div>    
                     <div class="col-xs-8">
                         <button (click)="openModal()" type="button" class="btn btn-success" >
                             <i class="fa fa-check"></i> Submit </button>
@@ -14,6 +17,7 @@
            
              <!-- contest problem --> 
                 <div class=" text-center w-100 "  [class.d-none]="showButtons == false">
+                    <app-problem-selector-hashtag></app-problem-selector-hashtag>
                     <div class=" col-xs-6 col-sm-12" >
                         <button type="button" class="btn btn-secondary" > <i class="fa fa-list-ul "></i>Status </button>
                     </div>
@@ -23,7 +27,7 @@
                  </div>
 
                 <div class=" text-center ">
-                    <div class="w-100">
+                    <div class="w-100" [class.d-none]="showButtons == true">
                     <div class="col-xs-8">
                         <button class="recrawl btn btn-secondary " (click)="recrawl()"> 
                             <i class="fa fa-refresh me-1"></i>Recrawl</button>
@@ -90,7 +94,7 @@
             <div class="d-flex mt-5 ">
                 <h2 class="text-bold" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; line-height: 1.5; color: #333;"><i class="fas fa-star"></i>{{problemInfo.title}}</h2>
                 <p class="mt-2 ms-2" style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.5; color: #666;">
-                  <a [href]="problemInfo.problemLink"
+                  <a [href]="problemInfo.problemLink"[class.d-none]="showButtons == true"
                      target="_blank" style="color: #007bff;">{{problemInfo.source}}-{{problemInfo.problemCode}}
                      <i class="fa fa-external-link"></i>
                   </a>
@@ -160,3 +164,4 @@
         </div>
     </div>
 </div>
+
