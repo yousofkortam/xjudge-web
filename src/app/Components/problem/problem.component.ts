@@ -13,11 +13,13 @@ export class ProblemComponent implements OnInit {
   loading: boolean = false;
   Problems: any = [];
   totalPages: number = 0;
+  totalElements: number = 0;
   pageSize: number = 25;
   pageNo: number = 0;
-  searchPageNumber: number = 0;
 
-  oj: string = 'All';
+  SolvedAttemptedProblemsCount: any = { solved: 0, attempted: 0 };
+
+  oj: string = '';
   problemCode: string = '';
   title: string = '';
   contestName: string = '';
@@ -27,50 +29,28 @@ export class ProblemComponent implements OnInit {
     private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Problem');
-    this.getAllProblems();
+    this.titleService.setTitle('Problems');
+    this.filterProblems();
+    this.SolvedAttemptedProblemsCount = this.getSolvedAttemptedProblemsCount();
   }
 
   trackByProblemCode(index: number, problem: any): string {
     return problem.problemCode; // Assuming problemCode is unique
   }
 
-  getAllProblems() {
-    this.loading = true;
-    this._problemService.getAllProblems(this.pageSize, this.pageNo).subscribe({
-      next: (response) => {
-        console.log(response);
-        if (response.success === true) {
-          this.loading = false;
-          this.Problems = response.data.content;
-          this.totalPages = response.data.totalPages;
-          this.pageNo = response.data.pageable.pageNumber;
-        }
-      },
-      error: (error) => {
-        this.loading = false;
-        console.log(error);
-      }
-    });
-  }
-
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
-    this.getAllProblems();
+    this.filterProblems();
   }
 
   onEnterPress() {
-    if (this.oj === 'All') {
-      this.oj = '';
-    }
-    this.searchProblem(this.oj, this.problemCode, this.title, this.contestName);
-    this.oj = 'All';
+    this.filterProblems();
   }
 
-  searchProblem(source: string, problemCode: string, title: string, contestName: string) {
+  filterProblems() {
     this.loading = true;
-    this._problemService.filterProblem(source, problemCode, title, contestName, this.pageSize, this.searchPageNumber).subscribe({
+    this._problemService.filterProblem(this.oj, this.problemCode, this.title, this.contestName, this.pageSize, this.pageNo).subscribe({
       next: (response) => {
         console.log(response);
         if (response.success === true) {
@@ -78,6 +58,7 @@ export class ProblemComponent implements OnInit {
           this.Problems = response.data.content;
           this.totalPages = response.data.totalPages;
           this.pageNo = response.data.pageable.pageNumber;
+          this.totalElements = response.data.totalElements;
         }
       },
       error: (error) => {
@@ -85,6 +66,21 @@ export class ProblemComponent implements OnInit {
         console.log(error);
       }
     });
+  }
+
+  resetFilters() {
+    this.oj = '';
+    this.problemCode = '';
+    this.title = '';
+    this.contestName = '';
+    this.filterProblems();
+  }
+
+  getSolvedAttemptedProblemsCount() {
+    return {
+      solved: this.Problems.filter((problem: any) => problem.solved === true).length,
+      attempted: this.Problems.filter((problem: any) => problem.solved === false).length
+    }
   }
 
 }

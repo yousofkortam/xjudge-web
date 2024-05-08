@@ -11,22 +11,22 @@
                     </div>
                 </div>
 
-                <!-- <div class="row ">
-                    <div class=" col-xs-6 col-sm-12">
-                        <a routerLink="/submissions" class="btn btn-secondary"> <i
-                                class="fa fa-list-ul "></i>Submissions </a>
+           
+             <!-- contest problem --> 
+                <div class=" text-center w-100 "  [class.d-none]="showButtons == false">
+                    <div class=" col-xs-6 col-sm-12" >
+                        <button type="button" class="btn btn-secondary" > <i class="fa fa-list-ul "></i>Status </button>
                     </div>
                     <div class="col-xs-6 col-sm-12">
-                        <button routerLink="/leaderboard" type="button" class="btn btn-secondary"> <i
-                                class="fa fa-list-ol "></i>Leaderboard </button>
+                        <button  type="button" class="btn btn-secondary"> <i class="fa fa-list-ol "></i>My Status </button>
                     </div>
-                </div> -->
+                 </div>
 
                 <div class=" text-center ">
                     <div class="w-100">
                     <div class="col-xs-8">
-                        <a href="" class="recrawl btn btn-secondary "> 
-                            <i class="fa fa-refresh me-1"></i>Recrawl</a>
+                        <button class="recrawl btn btn-secondary " (click)="recrawl()"> 
+                            <i class="fa fa-refresh me-1"></i>Recrawl</button>
                     </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                 </dl>
             </div>
 
-            <div id="prob-my-sols" class=" text-center w-100">
+            <div *ngIf="problemSumbissions.length > 0" id="prob-my-sols" class=" text-center w-100">
                 <table class="table">
                     <thead class="table-light">
                         <tr style="background-color:#ebebeb">
@@ -64,15 +64,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="my-sol">
-                            <td><a href="">from api</a></td>
-                            <td class="my-sol-time">24 months ago</td>
+                        <tr *ngFor="let submission of problemSumbissions; let i = index" class="my-sol">
+                            <td>
+                                <button (click)="showSubmissionResult(i)"
+                                style="background: none; border: none; cursor: pointer;"
+                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
+                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                    {{submission.verdict}}
+                                </button>
+                            </td> <!-- TODO: Implement link to open submission details if the user is already logged in -->
+                            <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
                         </tr>
-                        <tr class="my-sol">
-                            <td class="accepted"><a href=""> Accepted</a></td>
-                            <td class="my-sol-time">2 years ago</td>
-                        </tr>
-                        <tr>
+                        <tr *ngIf="totalSubmissions > 2">
                             <td colspan="2">
                                 <a routerLink="">More...</a>
                             </td>
@@ -93,6 +96,7 @@
                   </a>
                 </p>
             </div>
+   <!--Problem description  -->
             <div class="description me-5 pb-5">
                 <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['story']" class="story">
                     <h4 class="fw-bolder">Story</h4>

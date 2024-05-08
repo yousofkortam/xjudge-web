@@ -3,34 +3,97 @@
         <div class="row">
             <div class="col-4 text-start">
                 <b>Begin: </b>
-                <span class="timestamp">{{contest.beginTime * 1000 | date:'medium'}}</span>
+                <span class="timestamp">{{
+                    contest.beginTime * 1000 | date : "medium"
+                    }}</span>
             </div>
             <div class="col-4 text-center">
                 <h3>
-                    <i id="btn-favorite" class="fa fa-star-o"></i>
-                    {{contest.title}}
+                    <!-- <i id="btn-favorite" class="fa fa-star-o"></i> -->
+                    {{ contest.title }}
                 </h3>
             </div>
             <div class="col-4 text-end">
                 <b>End: </b>
-                <span class="timestamp">{{contest.endTime * 1000 | date:'medium'}}</span>
+                <span class="timestamp">{{
+                    contest.endTime * 1000 | date : "medium"
+                    }}</span>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <!-- Slider goes here -->
-                <div style="width: 100%;">
-                    <mat-slider class="green-slider" min="{{contest.beginTime}}" max="{{contest.endTime}}" step="1"
-                        value="12" style="width: 100%;"></mat-slider>
+                <!-- progress bar -->
+                <div *ngIf="contest.contestStatus === 'RUNNING'" class="mt-4" style="width: 100%">
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progressBarValue"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <!-- Countdown timer -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center mt-2">
+                        <div *ngIf="contest.contestStatus === 'SCHEDULED'" class="fs-3 text-primary">
+                            <span class="fw-bold">Start Countdown</span>
+                            <p class="countdown-time text-primary fw-bold fs-1">{{ countdownTimer }}</p>
+                        </div>
+                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running" class="fs-3 text-success ">
+                            <span class="fw-bold">Running</span>
+                            <p class="countdown-time text-success fw-bold fs-1">{{ countdownTimer }}</p>
+                        </span>
+                        <span *ngIf="contest.contestStatus === 'ENDED'" class="fs-3 text-danger" id="info-finished">
+                            <span class="countdown-time  fw-bold fs-1">{{contest.contestStatus}}</span>
+                        </span>
+                    </div>
+                    <div class="col-4 text-end" id="info-remaining"></div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-4 text-start" id="info-elapsed"></div>
-            <div class="col-4 text-center">
-                <span id="info-running" class="text-success">{{contest.contestStatus}}</span>
+        <div class="contest-details">
+            <div class="row">
+                <div class="all-link d-flex">
+                    <div class="left col-xl-6 col-lg-12">
+                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
+                            Overview
+                        </button>
+                        <button class="link problem btn" (click)="onBtnClick('problem')">
+                            Problem
+                        </button>
+                        <button class="link status btn" (click)="onBtnClick('status')">
+                            Status
+                        </button>
+                        <button class="link rank btn" (click)="onBtnClick('rank')">
+                            Rank
+                        </button>
+                    </div>
+                    <div class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
+                        <button type="button" class="btn btn-secondary">Setting</button>
+                        <button type="button" class="btn btn-secondary">Update</button>
+                        <button type="button" class="btn btn-secondary">Delete</button>
+                    </div>
+                </div>
+
+                <div class="content container-fluid">
+                    <div *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-overview [problemSet]="problemSet"
+                            [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
+                    </div>
+                    <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
+                        class="container-fluid w-100 ms-0">
+                        <app-problem-details></app-problem-details>
+                    </div>
+                    <div *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-status></app-contest-status>
+                    </div>
+                    <div *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-rank></app-contest-rank>
+                    </div>
+                </div>
             </div>
-            <div class="col-4 text-end" id="info-remaining"></div>
         </div>
+    </div>
+    <div align="end">
+        <p> <span
+                [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
+            Prepared by <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a> </p>
     </div>
 </div>

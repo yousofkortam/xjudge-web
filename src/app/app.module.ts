@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
@@ -30,20 +31,24 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
-<<<<<<< HEAD
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
-import {GroupsComponent} from './Components/groups/groups.component';
-=======
+import { GroupsComponent } from './Components/groups/groups.component';
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { HighlightJsModule } from 'ngx-highlight-js';
+import { OverviewComponent } from './Components/overview/overview.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
+import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
+import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
+import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
 
-
->>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,14 +70,18 @@ import { MatTabsModule } from '@angular/material/tabs';
     CreateContestComponent,
     HoursMinutesPipe,
     CreateGroupComponent,
-<<<<<<< HEAD
     MyGroupsComponent,
     ExploreGroupsComponent,
     GroupsComponent
-=======
     SubmitResultComponent,
     ContestDetailsComponent,
->>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
+    OverviewComponent,
+    StatusComponent,
+    ProfileComponent,
+    TimeAgoPipe,
+    ContestStatusComponent,
+    ContestRankComponent,
+    UpdateProfileComponent,
    ],
   imports: [
     RouterModule,
@@ -91,7 +100,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatDialogModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    MatTabsModule,
+    HighlightJsModule ,
+  
   ],
   providers: [],
   bootstrap: [AppComponent],
