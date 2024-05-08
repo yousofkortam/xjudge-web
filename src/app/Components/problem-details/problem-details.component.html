@@ -4,34 +4,35 @@
 
             <div id="prob-operation" class="row ">
                 <div class=" mt-5 w-100">
-                    <div class=" text-center w-100 " >
-                        <app-problem-selector-hashtag [class.d-none]="showButtons == false"> </app-problem-selector-hashtag>
-                    </div>    
+                    <div class=" text-center w-100 ">
+                        <app-problem-selector-hashtag [class.d-none]="showButtons == false">
+                        </app-problem-selector-hashtag>
+                    </div>
                     <div class="col-xs-8">
-                        <button (click)="openModal()" type="button" class="btn btn-success" >
+                        <button (click)="openModal()" type="button" class="btn btn-success">
                             <i class="fa fa-check"></i> Submit </button>
-                       <!-- <app-submit-problem [onlineJudge]="problemInfo.source" [problemCode]="problemInfo.problemCode"></app-submit-problem> -->
                     </div>
                 </div>
 
-           
-             <!-- contest problem --> 
-                <div class=" text-center w-100 "  [class.d-none]="showButtons == false">
+
+                <!-- contest problem -->
+                <div class=" text-center w-100 " [class.d-none]="showButtons == false">
                     <app-problem-selector-hashtag></app-problem-selector-hashtag>
-                    <div class=" col-xs-6 col-sm-12" >
-                        <button type="button" class="btn btn-secondary" > <i class="fa fa-list-ul "></i>Status </button>
+                    <div class=" col-xs-6 col-sm-12">
+                        <button type="button" class="btn btn-secondary"> <i class="fa fa-list-ul "></i>Status </button>
                     </div>
                     <div class="col-xs-6 col-sm-12">
-                        <button  type="button" class="btn btn-secondary"> <i class="fa fa-list-ol "></i>My Status </button>
+                        <button type="button" class="btn btn-secondary"> <i class="fa fa-list-ol "></i>My Status
+                        </button>
                     </div>
-                 </div>
+                </div>
 
                 <div class=" text-center ">
                     <div class="w-100" [class.d-none]="showButtons == true">
-                    <div class="col-xs-8">
-                        <button class="recrawl btn btn-secondary " (click)="recrawl()"> 
-                            <i class="fa fa-refresh me-1"></i>Recrawl</button>
-                    </div>
+                        <div class="col-xs-8">
+                            <button class="recrawl btn btn-secondary " (click)="recrawl()">
+                                <i class="fa fa-refresh me-1"></i>Recrawl</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,12 +72,13 @@
                         <tr *ngFor="let submission of problemSumbissions; let i = index" class="my-sol">
                             <td>
                                 <button (click)="showSubmissionResult(i)"
-                                style="background: none; border: none; cursor: pointer;"
-                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
-                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                    style="background: none; border: none; cursor: pointer;"
+                                    [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
+                                    [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
                                     {{submission.verdict}}
                                 </button>
-                            </td> <!-- TODO: Implement link to open submission details if the user is already logged in -->
+                            </td>
+                            <!-- TODO: Implement link to open submission details if the user is already logged in -->
                             <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
                         </tr>
                         <tr *ngIf="totalSubmissions > 2">
@@ -92,76 +94,21 @@
 
         <div class="col-lg-8 text-start mb-5" style="background-color:#ebebeb">
             <div class="d-flex mt-5 ">
-                <h2 class="text-bold" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; line-height: 1.5; color: #333;"><i class="fas fa-star"></i>{{problemInfo.title}}</h2>
-                <p class="mt-2 ms-2" style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.5; color: #666;">
-                  <a [href]="problemInfo.problemLink"[class.d-none]="showButtons == true"
-                     target="_blank" style="color: #007bff;">{{problemInfo.source}}-{{problemInfo.problemCode}}
-                     <i class="fa fa-external-link"></i>
-                  </a>
+                <h2 class="text-bold"
+                    style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; line-height: 1.5; color: #333;">
+                    <i class="fas fa-star"></i>{{problemInfo.title}}</h2>
+                <p class="mt-2 ms-2"
+                    style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.5; color: #666;">
+                    <a [href]="problemInfo.problemLink" [class.d-none]="showButtons == true" target="_blank"
+                        style="color: #007bff;">{{problemInfo.source}}-{{problemInfo.problemCode}}
+                        <i class="fa fa-external-link"></i>
+                    </a>
                 </p>
             </div>
-   <!--Problem description  -->
-            <div class="description me-5 pb-5">
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['story']" class="story">
-                    <h4 class="fw-bolder">Story</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.extraInfo['story']"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.statement" class="statement">
-                    <h4 class="fw-bolder">Problem Statement</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.statement"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['scoring']" class="scoring">
-                    <h4 class="fw-bolder">Scoring</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.extraInfo['scoring']"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['inputAndOutput']" class="scoring">
-                    <h4 class="fw-bolder">Input and Output</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.extraInfo['inputAndOutput']"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['inputGeneration']" class="scoring">
-                    <h4 class="fw-bolder">Input Generation</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.extraInfo['inputGeneration']"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['tools']" class="scoring">
-                    <h4 class="fw-bolder">Tools (Input generator, local tester and visualizer)</h4>
-                    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333;" [innerHtml]="problemInfo.extraInfo['tools']"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo.extraInfo?.['constrains']">
-                    <h4 class="fw-bolder">Constrains</h4>
-                    <section [innerHtml]="problemInfo.extraInfo['constrains']">
-                    </section>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo?.['input']" class="input">
-                    <h4 class="fw-bolder">Input</h4>
-                    <p [innerHtml]="problemInfo.input"></p>
-                </div>
-                <div ngClass="ms-5 me-5 pt-5" *ngIf="problemInfo?.['output']" class="output">
-                    <h4 class="fw-bolder">Output</h4>
-                    <p [innerHtml]="problemInfo.output"></p>
-                </div>
-                <div class="sampleTests ps-5 pe-5 pb-2 pt-5" *ngFor="let sample of samples; let i = index;">
-                    <h4 class="fw-bolder">Sample {{ i + 1 }}</h4>
-                    <table class="table table-bordered sample">
-                        <thead>
-                            <tr style="background-color:#ebebeb">
-                                <th class="w-50">Input</th>
-                                <th class="w-50">Output</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td [innerHtml]="sample.input" class="text-start"></td>
-                                <td [innerHtml]="sample.output" class="text-start"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <section [innerHTML]="sample.note"></section> <!-- For AtCoder -->
-                </div>
-                <div class="ms-5" *ngIf="problemInfo.extraInfo?.['noteSection']"> <!-- For Codeforces -->
-                    <section [innerHTML]="problemInfo.extraInfo.noteSection"></section>
-                </div>
+            <!-- Problem description rendered form backend (MVC)  -->
+            <div class="row" style="border-radius: 10px;">
+                <iframe #myIframe class="w-full h-full" id="prob-statement" [src]="descriptionUrl" scrolling="no" style="width: 100%; height: 5000px;"></iframe>
             </div>
         </div>
     </div>
 </div>
-
