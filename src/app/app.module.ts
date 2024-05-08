@@ -41,7 +41,6 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { MatSliderModule } from '@angular/material/slider';
 import { HighlightJsModule } from 'ngx-highlight-js';
 import { OverviewComponent } from './Components/overview/overview.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
@@ -72,7 +71,7 @@ import { UpdateProfileComponent } from './Components/update-profile/update-profi
     CreateGroupComponent,
     MyGroupsComponent,
     ExploreGroupsComponent,
-    GroupsComponent
+    GroupsComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
     OverviewComponent,
