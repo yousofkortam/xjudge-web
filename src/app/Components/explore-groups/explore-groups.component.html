@@ -1,0 +1,6 @@
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchText" placeholder="Search Groups" class="inp">
+  <button (click)="searchGroups()">Search</button>
+</div>
+
+<app-groups [groups]="groups"></app-groups>

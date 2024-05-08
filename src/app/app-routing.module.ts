@@ -15,6 +15,9 @@ import { ProtectedAuthGuard } from './Guards/auth.guard';
 import { ProblemDetailsComponent } from './Components/problem-details/problem-details.component';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
+import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
+import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
+import { GroupsComponent } from './Components/groups/groups.component';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
@@ -35,9 +38,14 @@ const routes: Routes = [
   { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
   { path: 'register', component:RegisterComponent },
   { path: 'login', component:LoginComponent },
+  { path: 'submit', component:SubmitProblemComponent },
+  { path: 'create-group', component: CreateGroupComponent } ,
+  { path: 'allGroups',component: ExploreGroupsComponent},
+  { path: 'myGroups',component:MyGroupsComponent},
   { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
   { path: 'profile/:handle', component:ProfileComponent },
   { path: '**', component:NotFoundComponent },
+  { path: 'groups',component:GroupsComponent}
 ];
 
 @NgModule({
