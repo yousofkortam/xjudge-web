@@ -77,6 +77,9 @@ export class ProblemDetailsComponent implements OnInit {
       this.problemCode = param.get('problemCode');
 
     });
+    this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${this.source}-${this.problemCode}`);
+    console.log(this.descriptionUrl);
+    
     this.getSpecificProblem();
     this.getProblemSubissions();
   }
@@ -101,7 +104,6 @@ export class ProblemDetailsComponent implements OnInit {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
           this.samples = response.data.samples;
-          this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7071/api/problem/${this.problemInfo.source}/123/B`);
         }
       },
       error: (err) => {

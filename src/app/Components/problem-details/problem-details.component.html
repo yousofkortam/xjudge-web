@@ -37,15 +37,11 @@
                 </div>
             </div>
 
-            <div id="prob-properties" class=" ms-0 w-100">
+            <div id="prob-properties" class="ms-0 w-100">
                 <div class="card w-100">
-                    <div class="d-flex ">
-                        <dt class="col-sm-4">Time limit</dt>
-                        <dd class="col-sm-6 ms-5">{{problemInfo.timeLimit}}</dd>
-                    </div>
-                    <div class="d-flex  w-100">
-                        <dt class="col-sm-4">Mem limit</dt>
-                        <dd class="col-sm-6 ms-5">{{problemInfo.memoryLimit}}</dd>
+                    <div class="d-flex" *ngFor="let property of problemInfo.properties">
+                        <dt class="col-sm-4">{{property.title}}</dt>
+                        <dd class="col-sm-6 ms-5">{{property.content}}</dd>
                     </div>
                 </div>
             </div>
@@ -78,7 +74,6 @@
                                     {{submission.verdict}}
                                 </button>
                             </td>
-                            <!-- TODO: Implement link to open submission details if the user is already logged in -->
                             <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
                         </tr>
                         <tr *ngIf="totalSubmissions > 2">
@@ -100,12 +95,11 @@
                 <p class="mt-2 ms-2"
                     style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.5; color: #666;">
                     <a [href]="problemInfo.problemLink" [class.d-none]="showButtons == true" target="_blank"
-                        style="color: #007bff;">{{problemInfo.source}}-{{problemInfo.problemCode}}
+                        style="color: #007bff;">{{problemInfo.onlineJudge}} - {{problemInfo.code}}
                         <i class="fa fa-external-link"></i>
                     </a>
                 </p>
             </div>
-            <!-- Problem description rendered form backend (MVC)  -->
             <div class="row" style="border-radius: 10px;">
                 <iframe #myIframe class="w-full h-full" id="prob-statement" [src]="descriptionUrl" scrolling="no" style="width: 100%; height: 5000px;"></iframe>
             </div>
