@@ -25,7 +25,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   source: any;
   problemCode: any;
-  problemInfo: any = null;
+  problemInfo: any = Object;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
   samples: any = [];

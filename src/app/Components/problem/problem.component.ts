@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Title } from '@angular/platform-browser';
+import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 
 @Component({
@@ -17,6 +18,8 @@ export class ProblemComponent implements OnInit {
   pageSize: number = 25;
   pageNo: number = 0;
 
+  onlineJudges: any = [];
+
   SolvedAttemptedProblemsCount: any = { solved: 0, attempted: 0 };
 
   oj: string = '';
@@ -26,9 +29,11 @@ export class ProblemComponent implements OnInit {
 
   constructor(
     private _problemService: ProblemService,
+    private onlineJudgeService: OnlineJudgeService,
     private titleService: Title) { }
 
   ngOnInit(): void {
+    this.getOnlineJudges();
     this.titleService.setTitle('Problems');
     this.filterProblems();
     this.SolvedAttemptedProblemsCount = this.getSolvedAttemptedProblemsCount();
@@ -81,6 +86,20 @@ export class ProblemComponent implements OnInit {
       solved: this.Problems.filter((problem: any) => problem.solved === true).length,
       attempted: this.Problems.filter((problem: any) => problem.solved === false).length
     }
+  }
+
+  getOnlineJudges() {
+    this.onlineJudgeService.getOnlineJudges().subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response.success === true) {
+          this.onlineJudges = response.data;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
 }
