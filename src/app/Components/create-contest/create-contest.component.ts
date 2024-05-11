@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
+import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 
 @Component({
   selector: 'app-create-contest',
@@ -14,6 +15,8 @@ export class CreateContestComponent implements OnInit {
   isLoading:boolean = false;
   apiError:string = '';
   userGroups: any = [];
+
+  onlineJudges: any = [];
 
   isGroupSelected:boolean = false;
   enableDeleteProblem:boolean = false;
@@ -40,10 +43,12 @@ export class CreateContestComponent implements OnInit {
  
   constructor(
     private _ContestService: ContestService,
+    private onlineJudgeService: OnlineJudgeService,
     private _Router: Router,
     private dialgo: MatDialog) {}
 
   ngOnInit(): void {
+    this.getOnlineJudges();
     this.getGroupsAwnedByUser();
   }
 
@@ -139,6 +144,17 @@ export class CreateContestComponent implements OnInit {
       index = Math.floor(index / 26) - 1;
     }
     return result;
+  }
+
+  getOnlineJudges() {
+    return this.onlineJudgeService.getOnlineJudges().subscribe({
+      next: (response)=> {
+        this.onlineJudges = response.data;
+      },
+      error: (err)=> {
+        console.log(err);
+      }
+    });
   }
 
 }

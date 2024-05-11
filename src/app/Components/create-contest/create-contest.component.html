@@ -142,8 +142,7 @@
                         <td>
                             <select class="form-select" formControlName="ojType">
                                 <option value="">oj</option>
-                                <option value="CodeForces">Codeforces</option>
-                                <option value="AtCoder">AtCoder</option>
+                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}</option>
                             </select>
                         </td>
                         <td><input class="form-control" formControlName="problemCode"></td>
