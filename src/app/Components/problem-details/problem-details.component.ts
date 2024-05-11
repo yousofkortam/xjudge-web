@@ -32,16 +32,11 @@ export class ProblemDetailsComponent implements OnInit {
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
- 
-  // contest problem
-
-  
+// contest
   contestId:any
   showButtons: boolean = true;
   
-  @ViewChild(ContestDetailsComponent) problemSet!: ContestDetailsComponent;
-
-  
+ 
   submitProblemForm: FormGroup = new FormGroup({
     language: new FormControl(null, [Validators.required]),
     solution: new FormControl(null, [Validators.required]),
@@ -73,10 +68,10 @@ export class ProblemDetailsComponent implements OnInit {
       }
     }
 
-  ngOnInit(): void {
-    console.log(this.problemSet.problemHashtag)
 
-    this.loadMathJaxConfig();
+  ngOnInit(): void {
+    
+   this.loadMathJaxConfig();
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');

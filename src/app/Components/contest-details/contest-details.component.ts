@@ -23,7 +23,7 @@ export class ContestDetailsComponent implements OnInit {
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
 
-  problemHashtag: string = '';
+  problemHashtag: any;
 
 
   constructor(
