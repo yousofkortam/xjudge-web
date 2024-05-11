@@ -5,7 +5,14 @@
             <div id="prob-operation" class="row ">
                 <div class=" mt-5 w-100">
                     <div class=" text-center w-100 " >
-                        <app-problem-selector-hashtag [class.d-none]="showButtons == false"> </app-problem-selector-hashtag>
+                     
+                        <div class="col-xs-6 col-sm-12 d-flex">
+                            <div >
+                              <a type="button" style="text-decoration: none; color:blue" class="me-4">{{ problemSet.problemHashtag }}</a>
+                              <h1>hamboza </h1>
+                            </div>
+                          </div>
+                          
                     </div>    
                     <div class="col-xs-8">
                         <button (click)="openModal()" type="button" class="btn btn-success" >
@@ -17,7 +24,6 @@
            
              <!-- contest problem --> 
                 <div class=" text-center w-100 "  [class.d-none]="showButtons == false">
-                    <app-problem-selector-hashtag></app-problem-selector-hashtag>
                     <div class=" col-xs-6 col-sm-12" >
                         <button type="button" class="btn btn-secondary" > <i class="fa fa-list-ul "></i>Status </button>
                     </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 
@@ -10,22 +10,21 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
 export class ProblemSelectorHashtagComponent {
 
   Problems: any = [];
-  problemHashtag: string = '';
+  
   contestId!: number ;
-  problemSet: any;
+ 
+  
+    @Input() problemSet: any = [];
+
   constructor(
     private _Router:Router,
     private _ContestService: ContestService,
     private _ActivatedRoute: ActivatedRoute) { }
-
-    trackByProblemCode(index: number, problem: any): string {
-    return problem.problemCode; // Assuming problemCode is unique
-  }
-
-
+ 
   ngOnInit(): void {
     this.getHashtagOfEachProblem()
   }
+  
   getHashtagOfEachProblem(){
 
       this._ContestService.getSpecificContestById(this.contestId).subscribe({
