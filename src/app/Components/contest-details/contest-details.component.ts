@@ -16,12 +16,15 @@ export class ContestDetailsComponent implements OnInit {
   problemSet: any = [];   
   contestId: any;
   contest: any;
+
   selectedButton: string = 'overview';
+
   progressBarValue: number = 0;
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
 
-  problemHashtag:any
+  problemHashtag: string = '';
+
 
   constructor(
     private titleService: Title, 
