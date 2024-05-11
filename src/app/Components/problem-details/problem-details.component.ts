@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, Injectable, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
@@ -9,7 +9,7 @@ import { SubmitProblemComponent } from '../submit-problem/submit-problem.compone
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
-
+import { ContestDetailsComponent } from '../contest-details/contest-details.component';
 
 @Component({
   selector: 'app-problem-details',
@@ -36,8 +36,13 @@ export class ProblemDetailsComponent implements OnInit {
   descriptionUrl: SafeResourceUrl = '';
  
   // contest problem
+
+  
   contestId:any
   showButtons: boolean = true;
+  
+  @ViewChild(ContestDetailsComponent) problemSet!: ContestDetailsComponent;
+
   
   submitProblemForm: FormGroup = new FormGroup({
     language: new FormControl(null, [Validators.required]),
@@ -72,6 +77,9 @@ export class ProblemDetailsComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log(this.problemSet.problemHashtag)
+
+    this.loadMathJaxConfig();
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
@@ -84,7 +92,7 @@ export class ProblemDetailsComponent implements OnInit {
     this.getProblemSubissions();
   }
  
-  openModal() {
+openModal() {
     this.dialog.open(SubmitProblemComponent, {
       data: {
         problemCode: this.problemCode,
@@ -97,7 +105,7 @@ export class ProblemDetailsComponent implements OnInit {
     );
   }
 
- getSpecificProblem() {
+getSpecificProblem() {
     this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
       next: (response) => {
         if (response.success === true) {
@@ -112,9 +120,7 @@ export class ProblemDetailsComponent implements OnInit {
     });
   }
 
-
-
-  getProblemSubissions() {
+getProblemSubissions() {
     this.isLoading = true;
     this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
       next: (response) => {
