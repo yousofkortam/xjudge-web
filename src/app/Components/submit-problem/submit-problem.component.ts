@@ -40,7 +40,7 @@ export class SubmitProblemComponent implements OnInit {
     this.isLoading = true;
     if(this.submitProblemForm.valid){
       let submitionRequest = {
-        problemCode: this.data.problemCode,
+        code: this.data.problemCode,
         ojType: this.data.source,
         solutionCode: this.submitProblemForm.value.solutionCode,
         isOpen: this.submitProblemForm.value.isOpen,
