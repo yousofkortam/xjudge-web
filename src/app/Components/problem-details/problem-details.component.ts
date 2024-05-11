@@ -79,7 +79,6 @@ export class ProblemDetailsComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.problemSet.problemHashtag)
 
-    this.loadMathJaxConfig();
     this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
