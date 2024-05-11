@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { DOCUMENT } from '@angular/common';
-import { Title } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
@@ -32,6 +32,8 @@ export class ProblemDetailsComponent implements OnInit {
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
+
+  descriptionUrl: SafeResourceUrl = '';
  
   // contest problem
 
@@ -56,6 +58,7 @@ export class ProblemDetailsComponent implements OnInit {
     private renderer: Renderer2,
     private titleService: Title,
     private dialog: MatDialog,
+    private sanitizer: DomSanitizer,
     @Inject(DOCUMENT) private document: Document) {
 
       this._Router.events.subscribe((event) => {
@@ -82,8 +85,10 @@ export class ProblemDetailsComponent implements OnInit {
       this.problemCode = param.get('problemCode');
 
     });
+    this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${this.source}-${this.problemCode}`);
+    console.log(this.descriptionUrl);
+    
     this.getSpecificProblem();
-    this.loadMathJax();
     this.getProblemSubissions();
   }
  
@@ -148,27 +153,6 @@ getProblemSubissions() {
   recrawl() {
     window.location.reload();
   }
- 
-  loadMathJaxConfig() {
-    let script = this.renderer.createElement('script');
-    script.type = 'text/x-mathjax-config';
-    script.text = `
-      MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$$$','$$$']], displayMath: [['$$$$$$','$$$$$$']]}
-      });
-    `;
-    this.renderer.appendChild(this.document.head, script);
-  }
-
-  loadMathJax() {
-    let script = this.renderer.createElement('script');
-    script.type = 'text/javascript';
-    script.async = false;
-    script.src = 'https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full';
-    this.renderer.appendChild(this.document.head, script);
-  }
-
-  
  
 }
 
