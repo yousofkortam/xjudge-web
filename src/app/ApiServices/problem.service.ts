@@ -33,9 +33,7 @@ export class ProblemService {
   }
 
   getCompilersForSubmitProblem(onlineJudge: string): Observable<any> {
-    return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`);
+    return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`, { headers: this.headers });
   }
-
-
-
+  
 }
