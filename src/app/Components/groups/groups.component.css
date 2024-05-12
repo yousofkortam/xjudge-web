@@ -1,112 +1,111 @@
 /* You can remove the previous CSS as Bootstrap handles the styling */
+.all{
+  margin: 20px;
+}
+.group {
+  display: flex;
+  align-items: stretch;
+  margin: 20px;
+}
 
-.all {
-    display: block;
-  }
-  
-  /* Style for the container of each group */
-  .group {
-    display: flex;
-    align-items: stretch;
-    margin: 20px;
-  }
-  
-  .user-role-leader {
-    background-color: #5bc0de;
-    color: white;
-    /* Optional for better contrast */
-  }
-  
-  .user-role-manager {
-    background-color: #5bc0de;
-    /* Blue variant for managers */
-    color: white;
-    /* Optional for better contrast */
-  }
-  
-  .user-role-member {
-    background-color: transparent;
-    /* No background color for members */
-  }
-  
-  .tag {
-    border-radius: .25rem;
-    color: #fff;
-    padding-right: 2px;
-    border-radius: 5px;
-  }
-  
-  
-  
-  .group-container {
-    margin-bottom: 20px;
-    width: 300px;
-    background-color: #fff;
-    border-radius: .25rem;
-    display: block;
-    position: relative;
-    height: 150px;
-    -webkit-border-radius: 10px;
-    box-shadow: 3px 3px 6px #888;
-  }
-  
-  .leaderHanlde {
-    margin-bottom: 5px;
-    width: 120px;
-    -webkit-border-radius: 10px;
-    box-shadow: 3px 3px 6px #888;
-    font-size: 18px;
-    padding: 0;
-    color: blue;
-    height: 150px;
-  
-  
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: .25rem;
-    display: block;
-    margin-bottom: .75rem;
-    position: relative;
-  }
-  
-  /* Style for the group name */
-  .group-name {
-    height: 40px;
-    display: flex;
-  }
-  
-  .name {
-    font-size: 18px;
-    text-decoration: none;
-    color: white;
-  }
-  
-  .bg-custom {
-    background-color: #ffa1a1;
-    /* Custom background color */
-  }
-  
-  .fa {
-    display: inline-block;
-    font: normal normal normal 14px / 1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  /* Style for the group description */
-  .group-description {
-    margin-top: 5px;
-    color: #bbb;
-    height: 60px;
-    overflow: hidden;
-    padding: 5px;
-    text-overflow: ellipsis;
-  }
-  
-  /* Style for the number of users */
-  .group-users {
-    margin-top: 5px;
-    font-style: italic;
-    display: flex;
-  }
+
+
+.user-role-leader {
+  background-color: #5bc0de;
+  color: white;
+  /* Optional for better contrast */
+}
+
+.user-role-manager {
+  background-color: #5bc0de;
+  /* Blue variant for managers */
+  color: white;
+  /* Optional for better contrast */
+}
+
+.user-role-member {
+  background-color: transparent;
+  /* No background color for members */
+}
+
+.tag {
+  border-radius: .25rem;
+  color: #fff;
+  padding-right: 2px;
+  border-radius: 5px;
+}
+
+
+
+.group-container {
+  margin: 20px;
+  width: 300px;
+  background-color: #fff;
+  border-radius: .25rem;
+  display: block;
+  position: relative;
+  height: 150px;
+  -webkit-border-radius: 10px;
+  box-shadow: 3px 3px 6px #888;
+}
+
+.leaderHanlde {
+  margin-bottom: 5px;
+  width: 120px;
+  -webkit-border-radius: 10px;
+  box-shadow: 3px 3px 6px #888;
+  font-size: 18px;
+  padding: 0;
+  color: blue;
+  height: 150px;
+
+
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+  display: block;
+  margin-bottom: .75rem;
+  position: relative;
+}
+
+/* Style for the group name */
+.group-name {
+  height: 40px;
+  display: flex;
+}
+
+.name {
+  font-size: 18px;
+  text-decoration: none;
+  color: white;
+}
+
+.bg-custom {
+  background-color: #ec1971d8;
+  /* background-color: #ffa1a1;*/
+}
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px / 1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Style for the group description */
+.group-description {
+  margin-top: 5px;
+  color: #bbb;
+  height: 60px;
+  overflow: hidden;
+  padding: 5px;
+  text-overflow: ellipsis;
+}
+
+/* Style for the number of users */
+.group-users {
+  margin-top: 5px;
+  font-style: italic;
+  display: flex;
+}

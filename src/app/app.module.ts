@@ -75,6 +75,8 @@ import { ProblemSelectorHashtagComponent } from './Components/problem-selector-h
     GroupsComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
+    SubmitResultComponent,
+    ContestDetailsComponent,
     OverviewComponent,
     StatusComponent,
     ProfileComponent,
