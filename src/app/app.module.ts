@@ -30,11 +30,10 @@ import { CreateContestComponent } from './Components/create-contest/create-conte
 import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
-<<<<<<< HEAD
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
 import {GroupsComponent} from './Components/groups/groups.component';
-=======
+
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -42,8 +41,6 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 
-
->>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,14 +62,11 @@ import { MatTabsModule } from '@angular/material/tabs';
     CreateContestComponent,
     HoursMinutesPipe,
     CreateGroupComponent,
-<<<<<<< HEAD
     MyGroupsComponent,
     ExploreGroupsComponent,
-    GroupsComponent
-=======
+    GroupsComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
->>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
    ],
   imports: [
     RouterModule,

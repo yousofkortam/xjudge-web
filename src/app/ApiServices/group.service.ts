@@ -28,7 +28,7 @@ constructor(private _HttpClient: HttpClient) { }
     return this._HttpClient.post('http://localhost:7070/group', groupData, { headers: this.headers });
   }
 
-<<<<<<< HEAD
+
   getGroupsByUserHandle(pageNo: number, size: number): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/group/userHandle?pageNo=${pageNo}&size=${size}`, { headers: this.headers });
   }
@@ -37,12 +37,10 @@ constructor(private _HttpClient: HttpClient) { }
     return this._HttpClient.get(`http://localhost:7070/group/public?pageNo=${pageNo}&size=${size}`, { headers: this.headers });
   }
 
-  
-=======
+
   getGroupsAwnedByUser(): Observable<any> {
     return this._HttpClient.get( `http://localhost:7070/group/owned`, { headers: this.headers }
     );
   }
 
->>>>>>> 38de1fb09bd0888f96f478ff0c726700b624eea5
 }
