@@ -43,8 +43,7 @@
                             <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%"
                                 (change)="onEnterPress()">
                                 <option value="">All</option>
-                                <option value="CodeForces">CodeForces</option>
-                                <option value="AtCoder">AtCoder</option>
+                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}</option>
                             </select>
                         </th>
                         <th class="prob_num">
@@ -68,11 +67,11 @@
                 <tbody>
                     <tr *ngFor="let problem of Problems; trackBy:trackByProblemCode; let i = index; ">
                         <td><i class="fas fa-star"></i></td>
-                        <td> {{ problem.oj }} </td>
-                        <td><a [href]="problem.problemLink" target="_blank">{{ problem.problemCode }}</a></td>
-                        <td> <a href="problem/{{problem.oj}}/{{problem.problemCode}}">{{ problem.problemTitle }}</a>
+                        <td> {{ problem.onlineJudge }} </td>
+                        <td><a [href]="problem.problemLink" target="_blank">{{ problem.code }}</a></td>
+                        <td> <a href="problem/{{problem.onlineJudge}}/{{problem.code}}">{{ problem.title }}</a>
                         </td>
-                        <td><a [href]="problem.contestLink" target="_blank">{{ problem.contestName }}</a></td>
+                        <td><a [href]="problem.contestLink ?? '/problem'">{{ problem.contestName }}</a></td>
                         <td>{{ problem.solvedCount }}</td>
                     </tr>
                 </tbody>

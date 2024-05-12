@@ -33,12 +33,7 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
-<<<<<<< HEAD
-import {GroupsComponent} from './Components/groups/groups.component';
-
-=======
 import { GroupsComponent } from './Components/groups/groups.component';
->>>>>>> 379578d6f7452cf158773ce0494ad49321442c03
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -46,13 +41,13 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { MatSliderModule } from '@angular/material/slider';
 import { HighlightJsModule } from 'ngx-highlight-js';
 import { OverviewComponent } from './Components/overview/overview.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
+import { ProblemSelectorHashtagComponent } from './Components/problem-selector-hashtag/problem-selector-hashtag.component';
 
 @NgModule({
   declarations: [
@@ -77,12 +72,9 @@ import { UpdateProfileComponent } from './Components/update-profile/update-profi
     CreateGroupComponent,
     MyGroupsComponent,
     ExploreGroupsComponent,
-<<<<<<< HEAD
     GroupsComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
-=======
-    GroupsComponent
     SubmitResultComponent,
     ContestDetailsComponent,
     OverviewComponent,
@@ -92,7 +84,7 @@ import { UpdateProfileComponent } from './Components/update-profile/update-profi
     ContestStatusComponent,
     ContestRankComponent,
     UpdateProfileComponent,
->>>>>>> 379578d6f7452cf158773ce0494ad49321442c03
+    ProblemSelectorHashtagComponent,
    ],
   imports: [
     RouterModule,

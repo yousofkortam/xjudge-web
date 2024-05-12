@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
 import { Title } from '@angular/platform-browser';
+import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 
 @Component({
   selector: 'app-status',
@@ -20,6 +21,8 @@ export class StatusComponent implements OnInit {
   pageSize: number = 25;
   pageNo: number = 0;
 
+  onlineJudges: any = [];
+
   // filter options
   userHandle: string = '';
   oj: string = '';
@@ -33,12 +36,14 @@ export class StatusComponent implements OnInit {
 
   constructor(
     private submissionService: SubmissionService,
+    private onlineJudgeService: OnlineJudgeService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private titleService: Title,
     private dialog: MatDialog,) { }
 
   ngOnInit(): void {
+    this.getOnlineJudges();
     this.setButtonStyle('All', '#0275d8', 'white');
     this.titleService.setTitle('Status');
     this.filterSubmissions();
@@ -114,6 +119,17 @@ export class StatusComponent implements OnInit {
         height: 'auto'
       });
     }
+  }
+
+  getOnlineJudges() {
+    this.onlineJudgeService.getOnlineJudges().subscribe({
+      next: (response) => {
+        this.onlineJudges = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
 }

@@ -16,10 +16,15 @@ export class ContestDetailsComponent implements OnInit {
   problemSet: any = [];   
   contestId: any;
   contest: any;
+
   selectedButton: string = 'overview';
+
   progressBarValue: number = 0;
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
+
+  problemHashtag: string = '';
+
 
   constructor(
     private titleService: Title, 
@@ -48,6 +53,7 @@ export class ContestDetailsComponent implements OnInit {
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
         this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
+        this.problemHashtag= this.problemSet.problemHashtag
         this.updateProgressBar();
         this.updateCountdownTimer();
       },
