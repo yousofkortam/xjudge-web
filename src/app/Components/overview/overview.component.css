@@ -1,0 +1,28 @@
+table{
+    font-size: 14px;
+    font-family: Verdana, Open Sans, sans-serif;
+    
+}
+table.table thead{
+    background-color: hsla(0, 0%, 100%, .5) !important;
+}
+
+th{
+    border: 1px solid #eceeef;
+    text-align: center;
+    justify-content: center;
+}
+.status{
+    width: 150px;
+}
+.hash{
+    width: 100px;
+}
+.origin{
+    width: 180px;
+}
+
+tr{
+   
+    background-color: rgba(0, 0, 0, .05);
+}

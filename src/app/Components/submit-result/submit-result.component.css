@@ -1,3 +1,8 @@
+.dialog-content {
+  padding: 20px;
+  min-height: 550px;
+}
+
 #code-solution {
     margin-top: 20px;
   }
@@ -24,4 +29,27 @@
   
   .dialog-actions .btn {
     margin-left: 10px;
+  }
+
+  #code-solution {
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .code-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .code-block {
+    background-color: #e8e8e8;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+  }
+  
+  .language-cpp {
+    color: #000080;
   }

@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,14 +33,26 @@ import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
+<<<<<<< HEAD
 import {GroupsComponent} from './Components/groups/groups.component';
 
+=======
+import { GroupsComponent } from './Components/groups/groups.component';
+>>>>>>> 379578d6f7452cf158773ce0494ad49321442c03
 import { SubmitResultComponent } from './Components/submit-result/submit-result.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { HighlightJsModule } from 'ngx-highlight-js';
+import { OverviewComponent } from './Components/overview/overview.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
+import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
+import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
+import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
 
 @NgModule({
   declarations: [
@@ -64,9 +77,22 @@ import { MatTabsModule } from '@angular/material/tabs';
     CreateGroupComponent,
     MyGroupsComponent,
     ExploreGroupsComponent,
+<<<<<<< HEAD
     GroupsComponent,
     SubmitResultComponent,
     ContestDetailsComponent,
+=======
+    GroupsComponent
+    SubmitResultComponent,
+    ContestDetailsComponent,
+    OverviewComponent,
+    StatusComponent,
+    ProfileComponent,
+    TimeAgoPipe,
+    ContestStatusComponent,
+    ContestRankComponent,
+    UpdateProfileComponent,
+>>>>>>> 379578d6f7452cf158773ce0494ad49321442c03
    ],
   imports: [
     RouterModule,
@@ -85,7 +111,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatDialogModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    MatTabsModule,
+    HighlightJsModule ,
+  
   ],
   providers: [],
   bootstrap: [AppComponent],

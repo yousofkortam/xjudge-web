@@ -19,6 +19,8 @@ import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
 import { ExploreGroupsComponent } from './Components/explore-groups/explore-groups.component';
 import { GroupsComponent } from './Components/groups/groups.component';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
+import { StatusComponent } from './Components/status/status.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -27,6 +29,7 @@ const routes: Routes = [
   // loadComponent: () =>import('./Components/home/home.component').then((c) => c.HomeComponent),},
   { path: 'home', component:HomeComponent },
   { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
+  { path: 'status', canActivate:[ProtectedAuthGuard], component:StatusComponent},
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
   { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
@@ -34,14 +37,13 @@ const routes: Routes = [
   { path: 'forgetPassword', component:ForgetPasswordComponent },
   { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
   { path: 'register', component:RegisterComponent },
-  { path: 'pagination', component:PaginationComponent },
   { path: 'login', component:LoginComponent },
-  { path: 'problem/:source/:problemCode', component:ProblemDetailsComponent },
   { path: 'submit', component:SubmitProblemComponent },
-  { path: 'pagination', component:PaginationComponent },
   { path: 'create-group', component: CreateGroupComponent } ,
   { path: 'allGroups',component: ExploreGroupsComponent},
   { path: 'myGroups',component:MyGroupsComponent},
+  { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
+  { path: 'profile/:handle', component:ProfileComponent },
   { path: '**', component:NotFoundComponent },
   { path: 'groups',component:GroupsComponent}
 ];
