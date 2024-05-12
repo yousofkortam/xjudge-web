@@ -106,9 +106,16 @@ getSpecificProblem() {
           this.titleService.setTitle(this.problemInfo.title);
           this.samples = response.data.samples;
         }
+       
+      
+        
       },
       error: (err) => {
-        console.log(err);
+        console.log(err.error);
+        if (err.error.success === false) {
+          this._Router.navigate(['/notFound']);
+       
+         }
       }
     });
   }

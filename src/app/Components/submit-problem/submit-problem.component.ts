@@ -75,6 +75,7 @@ export class SubmitProblemComponent implements OnInit {
   getCompilers() {
     this._ProblemService.getCompilersForSubmitProblem(this.data.source).subscribe({
       next: (response) => {
+        console.log(response)
         this.languages = response.data;
       },
       error: (err) => {
