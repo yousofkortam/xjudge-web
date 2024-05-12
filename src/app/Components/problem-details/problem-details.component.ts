@@ -9,7 +9,6 @@ import { SubmitProblemComponent } from '../submit-problem/submit-problem.compone
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
-import { ContestDetailsComponent } from '../contest-details/contest-details.component';
 
 @Component({
   selector: 'app-problem-details',
@@ -36,14 +35,10 @@ export class ProblemDetailsComponent implements OnInit {
   descriptionUrl: SafeResourceUrl = '';
  
   // contest problem
-
-  
   contestId:any
   showButtons: boolean = true;
   
-  @ViewChild(ContestDetailsComponent) problemSet!: ContestDetailsComponent;
-
-  
+ 
   submitProblemForm: FormGroup = new FormGroup({
     language: new FormControl(null, [Validators.required]),
     solution: new FormControl(null, [Validators.required]),
@@ -77,9 +72,8 @@ export class ProblemDetailsComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log(this.problemSet.problemHashtag)
-
-    this._ActivatedRoute.paramMap.subscribe((param) => {
+    
+   this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
 
@@ -112,9 +106,16 @@ getSpecificProblem() {
           this.titleService.setTitle(this.problemInfo.title);
           this.samples = response.data.samples;
         }
+       
+      
+        
       },
       error: (err) => {
-        console.log(err);
+        console.log(err.error);
+        if (err.error.success === false) {
+          this._Router.navigate(['/notFound']);
+       
+         }
       }
     });
   }

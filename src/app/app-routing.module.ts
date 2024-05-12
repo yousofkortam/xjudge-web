@@ -43,7 +43,9 @@ const routes: Routes = [
   { path: 'allGroups',component: ExploreGroupsComponent},
   { path: 'myGroups',component:MyGroupsComponent},
   { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
-  { path: 'profile/:handle', component:ProfileComponent },
+  { path: 'profile/:handle', component:ProfileComponent }, 
+   { path: 'notFound', component:NotFoundComponent },
+
   { path: '**', component:NotFoundComponent },
   { path: 'groups',component:GroupsComponent}
 ];

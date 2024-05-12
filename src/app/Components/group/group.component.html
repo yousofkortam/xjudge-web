@@ -1,25 +1,49 @@
 <div class="navbar" id="group-tabs">
-    <div class="nav-container">
-        <div class="nav-item">
-            <button class="nav-link active" (click)="showMyGroups()" [class.active]="currentTab === 'myGroups'">My Groups</button>
-        </div>
-        <div class="nav-item">
-            <button class="nav-link active" (click)="showExploreGroups()" [class.active]="currentTab === 'exploreGroups'">Explore</button>
-        </div>
+  <div class="nav-container">
+    <div class="nav-item">
+      <button
+        class="nav-link active"
+        (click)="showMyGroups()"
+        [class.active]="currentTab === 'myGroups'"
+      >
+        My Groups
+      </button>
     </div>
-
-    <div>
-        <button type="submit" class="btn ms-2 mb-0 border-none shadow-none" data-bs-toggle="modal"
-            data-bs-target="#exampleModal2" value="Create Contest" style="background-color:#0275d8; color:#fff">Create Group</button>
-        <app-create-group></app-create-group>
+    <div class="nav-item">
+      <button
+        class="nav-link active"
+        (click)="showExploreGroups()"
+        [class.active]="currentTab === 'exploreGroups'"
+      >
+        Explore
+      </button>
     </div>
+  </div>
+  <!-- <div class="btn-group" role="group">
+        <button class="btn btn-primary" [routerLink]="['/create-group']">Create Group</button>
+    </div> -->
 
+  <div>
+    <button
+      type="submit"
+      class="btn ms-2 mb-0 border-none shadow-none"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal2"
+      value="Create Contest"
+      style="background-color: #0275d8; color: #fff"
+    >
+      Create Group
+    </button>
+    <app-create-group></app-create-group>
+  </div>
 </div>
-
-<div *ngIf="currentTab === 'myGroups'">
-    <app-my-groups></app-my-groups>
-</div>
-
-<div *ngIf="currentTab === 'exploreGroups'">
-    <app-explore-groups></app-explore-groups>
+<div class="container">
+  <div class="row">
+    <div *ngIf="currentTab === 'myGroups'" >
+      <app-my-groups></app-my-groups>
+    </div>
+    <div *ngIf="currentTab === 'exploreGroups'" >
+      <app-explore-groups></app-explore-groups>
+    </div>
+  </div>
 </div>
