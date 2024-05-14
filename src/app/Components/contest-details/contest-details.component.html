@@ -44,12 +44,7 @@
                             <span class="countdown-time  fw-bold fs-1">{{contest.contestStatus}}</span>
                         </span>
                     </div>
-                    <div class="col-4 text-end" id="info-remaining"></div>
-               
-                    <!-- Problem Hashtag -->
-                  <!-- contest-details.component.html -->
-
-
+                    <div class="col-4 text-end" id="info-remaining"></div>                 
                 </div>
             </div>
         </div>
@@ -57,18 +52,10 @@
             <div class="row">
                 <div class="all-link d-flex">
                     <div class="left col-xl-6 col-lg-12">
-                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
-                            Overview
-                        </button>
-                        <button class="link problem btn" (click)="onBtnClick('problem')">
-                            Problem
-                        </button>
-                        <button class="link status btn" (click)="onBtnClick('status')">
-                            Status
-                        </button>
-                        <button class="link rank btn" (click)="onBtnClick('rank')">
-                            Rank
-                        </button>
+                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active"> Overview </button>
+                        <button class="link problem btn" (click)="onBtnClick('problem')"> Problem </button>
+                        <button class="link status btn" (click)="onBtnClick('status')"> Status </button>
+                        <button class="link rank btn" (click)="onBtnClick('rank')"> Rank </button>
                     </div>
                     <div class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
                         <button type="button" class="btn btn-secondary">Setting</button>
@@ -82,9 +69,8 @@
                         <app-overview [problemSet]="problemSet"
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
-                    <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
-                        class="container-fluid w-100 ms-0">
-                        <app-problem-details></app-problem-details>
+                    <div *ngIf="selectedButton === 'problem' " >
+                        <app-problem-details [problemSet]="problemSet" class="container-fluid"></app-problem-details>
                     </div>
                     <div *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-contest-status></app-contest-status>

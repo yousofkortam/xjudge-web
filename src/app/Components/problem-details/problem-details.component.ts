@@ -9,6 +9,7 @@ import { SubmitProblemComponent } from '../submit-problem/submit-problem.compone
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
+import { ContestDetailsComponent } from '../contest-details/contest-details.component';
 
 @Component({
   selector: 'app-problem-details',
@@ -35,8 +36,17 @@ export class ProblemDetailsComponent implements OnInit {
   descriptionUrl: SafeResourceUrl = '';
  
   // contest problem
-  contestId:any
+  [x: string]: any;
+  @Input() problemSet: any = [];
+  @Input() shorOrigin: boolean = false;
+  contestId: any;
+  contests: any;
+
+  @ViewChild(ContestDetailsComponent) details!: ContestDetailsComponent;
+
   showButtons: boolean = true;
+
+  
   
  
   submitProblemForm: FormGroup = new FormGroup({
@@ -62,7 +72,7 @@ export class ProblemDetailsComponent implements OnInit {
         }
       });
      }
-  
+
      private checkUrl(url: string): void {
       if (url.includes('/problem')) {
         this.showButtons = false;
@@ -76,14 +86,22 @@ export class ProblemDetailsComponent implements OnInit {
    this._ActivatedRoute.paramMap.subscribe((param) => {
       this.source = param.get('source');
       this.problemCode = param.get('problemCode');
-
+      this.details.contestId = param.get('contestId')
     });
     this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${this.source}-${this.problemCode}`);
     console.log(this.descriptionUrl);
     
     this.getSpecificProblem();
     this.getProblemSubissions();
+    
+    // this.getProblemDetailsFromContest();
   }
+ 
+getProblemDetailsFromContest(problemHashtag:string){
+  this.details.getProblemDetailsWithHashtag()
+console.log(this.details)
+// هو مش شايف اللينك اللي بيحصله ريندر ف الفريم عشان مش شايف السورس و الكود بتاع البروبليم اللي جايه من الكونتست
+}
  
 openModal() {
     this.dialog.open(SubmitProblemComponent, {
@@ -105,14 +123,10 @@ getSpecificProblem() {
           this.problemInfo = response.data
           this.titleService.setTitle(this.problemInfo.title);
           this.samples = response.data.samples;
-        }
-       
-      
-        
+        }        
       },
       error: (err) => {
-        console.log(err.error);
-        if (err.error.success === false) {
+       if (err.error.success === false) {
           this._Router.navigate(['/notFound']);
        
          }
@@ -128,8 +142,7 @@ getProblemSubissions() {
           this.isLoading = false;
           this.problemSumbissions = response.data.content;
           this.totalSubmissions = response.data.totalElements;
-          console.log(this.problemSumbissions);
-          
+          console.log(this.problemSumbissions);         
         }
       },
       error: (error) => {
@@ -155,4 +168,3 @@ getProblemSubissions() {
   }
  
 }
-

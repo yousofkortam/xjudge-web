@@ -16,14 +16,18 @@ export class ContestDetailsComponent implements OnInit {
   problemSet: any = [];   
   contestId: any;
   contest: any;
+  problemHashtag: any;
 
   selectedButton: string = 'overview';
+  problemInfo: any = Object;
+  samples: any = [];
+  source:string=''
+  code:any
 
   progressBarValue: number = 0;
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
 
-  problemHashtag: any;
 
 
   constructor(
@@ -48,7 +52,7 @@ export class ContestDetailsComponent implements OnInit {
     this.contestService.getSpecificContestById(this.contestId).subscribe({
       next: (response) => {
         this.contest = response.data;
-        console.log(this.contest);
+      //  console.log(this.contest);
         this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
@@ -62,7 +66,21 @@ export class ContestDetailsComponent implements OnInit {
       }
     });
   }
-
+getProblemDetailsWithHashtag(){
+  this.contestService.getSpecificProblemDetailsByHashtag(this.contestId,this.problemHashtag).subscribe({
+    next: (response) => {
+      console.log(response)
+      this.problemInfo = response.data
+      this.titleService.setTitle(this.problemInfo.title);
+      this.samples = response.data.samples;
+      this.source = this.problemInfo.onlineJudge;
+      this.code = this.problemInfo.code
+    },
+    error: (err) => {
+      console.log(err);
+    }
+  });
+}
   onBtnClick(button: string) {
     this.selectedButton = button;
   }

@@ -8,8 +8,6 @@ import { Title } from '@angular/platform-browser';
 })
 export class OverviewComponent implements OnInit {
   [x: string]: any;
-
-  loading: boolean = false;
   @Input() problemSet: any = [];
   @Input() shorOrigin: boolean = false;
   contestId: any;

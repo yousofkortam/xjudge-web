@@ -1,31 +1,23 @@
-<div>
-  <div class="container">
-    <div class="row">
-      <div *ngIf="groups" class="all">
-        <div *ngFor="let group of groups" class="group" class="col-sm-3">
-
-          <div class="group-container card">
-            <div class="card-header group-name bg-custom text-white d-flex justify-content-between">
-              <a href="/group" class="name">{{ group.name }}</a>
-              <span
-                [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}"
-                class="tag">
-                {{ group.userGroupRole }}
-              </span>
-            </div>
-            <div class="card-body group-description">
-              <p>{{ group.description }}</p>
-            </div>
-            <div class="group-users">
-              <i class="fa fa-users ms-3"></i>
-              <i class="fa fa-times ms-2"></i>
-              <h4> {{ group.members }}</h4>
-            </div>
-          </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="all d-flex col-xl-4 col-lg-6 col-sm-6" *ngFor="let group of groups">
+      <div class="card" style="height: fit-content;">
+        <div class="card-header bg-custom "style="padding: unset !important;">
+         <a href="/group" class="name col-xl-8 col-sm-6 ps-3 mt-3" >{{ group.name }}</a>
+          <p [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}"
+            class="tag text-center col-xl-4 col-sm-6 mt-3"> {{ group.userGroupRole }}
+          </p>
         </div>
+        <div class="card-body" style="padding: unset !important;">
+          <h5 class="card-title ps-3" style="padding-top: 2vh; ">{{ group.description }}</h5>
+          <div class=" card-text d-flex left-align-text ps-3" style="padding-top: 2vh; ">
+            <i class="fa fa-users "></i>
+            <i class="fa fa-times ms-2"></i>
+            <p class="ms-2 "> {{ group.members }}</p>
+          </div> 
+       </div>
+      
       </div>
     </div>
-    <div></div>
-
   </div>
 </div>

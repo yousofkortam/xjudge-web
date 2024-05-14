@@ -1,46 +1,58 @@
+.card{
+    background-color: transparent !important;   
+    border: none;
+}
 
-.navbar {
-    display: flex;
+.group-details {
+    background-color: transparent;
+    margin-top: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.link {
+    color: #0275d8;
+}
+
+.link:hover {
+    color: #014c8c;
+}
+
+.link:focus,
+.link:active {
+    background-color: #fff;
+    border-color: #ddd #ddd transparent;
+    color: #55595c;
+}
+
+.all-link {
     justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 50px;
-
-    border-bottom: 2px solid #ddd;
 }
 
-.nav-container {
-    display: flex;
-    align-items: center;
+.right {
+    padding-bottom: 5px;
 }
 
-.nav-item {
-    margin-right: 50px;
+.btn {
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25;
+    padding: .5rem 1rem;
+    text-align: center;
 }
 
-.nav-link {
-    color: black;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s;
+.btn-secondary {
+    background-color: #fff;
+    border-color: #ccc;
+    color: #373a3c;
 }
 
-.nav-link:hover {
-    background-color: white;
-    color: blue;
-    padding: 10px;
-    width: 100px;
-    height: 45px;
-}
-
-.nav-link.active {
-    background-color: white;
-    color: blue;
-    padding: 10px;
-    width: 100px;
-    height: 40px;
-}
-
-.btn-primary {
-    background-color: blue;
-    /* Set button background color to blue */
+.btn-secondary:focus,
+.btn-secondary:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    color: #373a3c;
 }

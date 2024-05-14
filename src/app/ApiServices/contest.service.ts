@@ -7,6 +7,7 @@ import { GroupService } from './group.service';
   providedIn: 'root'
 })
 export class ContestService {
+ 
   private dataSubject = new Subject<any>();
   data$ = this.dataSubject.asObservable();
 
@@ -16,16 +17,16 @@ export class ContestService {
     private groupService: GroupService) { }
     
       // Fetch data from API and notify subscribers
-  fetchData(apiUrl: string) {
-    this._HttpClient.get(apiUrl, { headers: this.headers }).pipe(
-      catchError(error => {
-        console.error('Error fetching data:', error);
-        return [];
-      })
-    ).subscribe(data => {
-      this.dataSubject.next(data);
-    });
-  }
+  // fetchData(apiUrl: string) {
+  //   this._HttpClient.get(apiUrl, { headers: this.headers }).pipe(
+  //     catchError(error => {
+  //       console.error('Error fetching data:', error);
+  //       return [];
+  //     })
+  //   ).subscribe(data => {
+  //     this.dataSubject.next(data);
+  //   });
+  // }
 
 
   searchContestByTitle(title: String, pageSize: number, pageNo: number): Observable<any> {
@@ -48,7 +49,9 @@ export class ContestService {
   getAllContestProblems(id: number): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest?size=${id}/problems`,{ headers: this.headers });
   }
-
+getSpecificProblemDetailsByHashtag(id: number, hashtag:string): Observable<any> {
+  return this._HttpClient.get(`http://localhost:7070/contest/${id}/problem/${hashtag}`,{ headers: this.headers });
+}
   getSpecificContestById(id:number):Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
   }
