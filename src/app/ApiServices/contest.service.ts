@@ -49,6 +49,11 @@ export class ContestService {
     return this._HttpClient.get(`http://localhost:7070/contest?size=${id}/problems`,{ headers: this.headers });
   }
 
+  getContstRank(id: number): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/contest/${id}/rank`,{ headers: this.headers });
+  }
+
+
   getSpecificContestById(id:number):Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
   }
