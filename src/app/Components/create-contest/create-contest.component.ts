@@ -31,7 +31,7 @@ export class CreateContestComponent implements OnInit {
       new FormGroup({
         problemAlias: new FormControl(null, [Validators.required]),
         ojType: new FormControl("", [Validators.required]),
-        problemCode: new FormControl(null, [Validators.required]),
+        code: new FormControl(null, [Validators.required]),
         problemHashtag: new FormControl(null),
         problemWeight: new FormControl(null, [Validators.required]),
       })
@@ -121,7 +121,7 @@ export class CreateContestComponent implements OnInit {
     problems.push(new FormGroup({
       problemAlias: new FormControl(null, [Validators.required]),
       ojType: new FormControl("", [Validators.required]),
-      problemCode: new FormControl(null, [Validators.required]),
+      code: new FormControl(null, [Validators.required]),
       problemHashtag: new FormControl(null),
       problemWeight: new FormControl(null, [Validators.required]),
     }));

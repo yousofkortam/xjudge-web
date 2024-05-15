@@ -1,26 +1,31 @@
 <div>
-    <div *ngIf="groups" class="all" class="row">
-      <div *ngFor="let group of groups" class="group" class="col-sm-3">
-  
-        <div class="group-container card">
-          <div class="card-header group-name bg-custom text-white d-flex justify-content-between">
-            <a href="/group" class="name">{{ group.name }}</a>
-            <span [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}" class="tag">
-              {{ group.userGroupRole }}
-            </span>
-          </div>
-          <div class="card-body group-description">
-            <p>{{ group.description }}</p>
-          </div>
-          <div class="group-users">
-            <i class="fa fa-users ms-3"></i>
-            <i class="fa fa-times ms-2"></i>
-            <h4 > {{ group.members }}</h4>
+  <div class="container">
+    <div class="row">
+      <div *ngIf="groups" class="all">
+        <div *ngFor="let group of groups" class="group" class="col-sm-3">
+
+          <div class="group-container card">
+            <div class="card-header group-name bg-custom text-white d-flex justify-content-between">
+              <a href="/group" class="name">{{ group.name }}</a>
+              <span
+                [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}"
+                class="tag">
+                {{ group.userGroupRole }}
+              </span>
+            </div>
+            <div class="card-body group-description">
+              <p>{{ group.description }}</p>
+            </div>
+            <div class="group-users">
+              <i class="fa fa-users ms-3"></i>
+              <i class="fa fa-times ms-2"></i>
+              <h4> {{ group.members }}</h4>
+            </div>
           </div>
         </div>
       </div>
-      <div></div>
-     
     </div>
+    <div></div>
+
   </div>
-  
+</div>
