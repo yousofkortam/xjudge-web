@@ -90,7 +90,7 @@
                         <app-contest-status></app-contest-status>
                     </div>
                     <div *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-rank></app-contest-rank>
+                        <app-contest-rank [problemSet]="problemSet" [contestId] = "contestId"></app-contest-rank>
                     </div>
                 </div>
             </div>
