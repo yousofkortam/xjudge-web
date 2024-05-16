@@ -12,13 +12,13 @@
 .tag {
   border-radius: .25rem;
   color: #fff;
-  padding-right: 2px;
+  /* padding-right: 2px; */
   border-radius: 5px;
 }
 
 .card {
   margin: 20px;
-  width: 300px;
+  width: 370px;
   background-color: #fff;
   border-radius: .25rem;
   height: 10vh;

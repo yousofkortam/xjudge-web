@@ -26,33 +26,18 @@
 
 .all-link {
     justify-content: space-between;
+    display: flex;
 }
 
 .right {
     padding-bottom: 5px;
 }
-
-.btn {
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.25;
-    padding: .5rem 1rem;
-    text-align: center;
+.right button{
+    border-radius: 5px;
+    margin-left: 31vw;
 }
-
-.btn-secondary {
-    background-color: #fff;
-    border-color: #ccc;
-    color: #373a3c;
-}
-
-.btn-secondary:focus,
-.btn-secondary:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
-    color: #373a3c;
-}
+@media only screen and (max-width: 768px) { 
+    .right button{
+         margin-left: 0px !important;
+    }
+ }

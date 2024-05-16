@@ -2,11 +2,11 @@
 
 <div class="input-group mt-5 ms-4" >
   <div class="form-outline" data-mdb-input-init>
-    <input type="search" id="form1" [(ngModel)]="searchText" class="form-control" placeholder="Search" />
+    <input type="search" id="form1" [(ngModel)]="searchText" class="form-control" placeholder="Search" style="box-shadow: none;"/>
     <!-- <label class="form-label" for="form1">Search</label> -->
   
  </div>
-  <button type="button" class="btn btn-primary" (click)="searchGroups()" data-mdb-ripple-init>
+  <button type="button" class="btn btn-primary shadow-none" (click)="searchGroups()" data-mdb-ripple-init>
     <i class="fas fa-search"></i>
   </button>
 </div>
