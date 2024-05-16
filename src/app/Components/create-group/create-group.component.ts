@@ -1,48 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from '../../ApiServices/group.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-group',
   templateUrl: './create-group.component.html',
   styleUrls: ['./create-group.component.css']
 })
-export class CreateGroupComponent implements OnInit {
+export class CreateGroupComponent {
+  isLoading:boolean = false;
+  apiError:string = '';
   
-  createGroupForm!: FormGroup;
+  createGroupForm: FormGroup = new FormGroup({
+    name:new FormControl(null, [Validators.required]),
+    description:new FormControl(null, [Validators.required ]),
+    visibility:new FormControl("PUBLIC", [Validators.required ]),
+   });
+ 
+  constructor( private _GroupService: GroupService, private _Router: Router, private dialgo: MatDialog){}
 
-  constructor(private formBuilder: FormBuilder, private groupService: GroupService, private _Router: Router) {}
-
-  ngOnInit(): void {
-    this.createGroupForm = this.formBuilder.group({
-      name: [null, Validators.required],
-      description: [null, Validators.required],
-      visibility: ['PUBLIC', Validators.required] 
-    });
-  }
-
-  handleSubmitGroup() {
-    if (this.createGroupForm.valid) {
-      const groupData = {
-        name: this.createGroupForm.value.name,
-        description: this.createGroupForm.value.description,
-        visibility: this.createGroupForm.value.visibility
-      };
-  
-      this.groupService.createGroup(groupData).subscribe(
-        (response) => {
-          console.log('Group created successfully:', response);
+  handleCreateGroup() {
+    this.isLoading = true;
+    const formValue = this.createGroupForm.value;
+    this._GroupService.createGroup(formValue).subscribe({
+      next: (response)=> {
+        console.log(response);
+        if (response.success === true) {
+          this.isLoading= false;
+          this.dialgo.closeAll();
           this._Router.navigate(['/group']);
-        },
-        (error) => {
-          console.error('Error creating group:', error);
         }
-
-      );
-    } else {
-      console.log('Form is invalid!');
-    }
-   
+      },
+      error: (err)=> {
+        this.isLoading = false;
+        this.apiError = err.error.message;
+      }
+    });
   }
 }
