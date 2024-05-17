@@ -30,8 +30,8 @@ export class StatusComponent implements OnInit {
   language: string = '';
 
   buttons: any = [
-    { 'name': 'All', 'style': {'background-color': '#0275d8', 'color': 'white'}, click: () => this.getAllSubmissions() },
-    { 'name': 'Mine', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getMineSubmissions() },
+    { 'name': 'All', 'style': { 'background-color': '#0275d8', 'color': 'white' }, click: () => this.getAllSubmissions() },
+    { 'name': 'Mine', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getMineSubmissions() },
   ];
 
   constructor(
@@ -109,16 +109,14 @@ export class StatusComponent implements OnInit {
   }
 
   showSubmissionResult(index: number) {
-    if (this.submissions[index].isOpen === true || this.submissions[index].userHandle === this.authService.getUserHandle()) {
-      this.dialog.open(SubmitResultComponent, {
-        data: {
-          response: this.submissions[index],
-          submit: false
-        },
-        width: '70%',
-        height: 'auto'
-      });
-    }
+    this.dialog.open(SubmitResultComponent, {
+      data: {
+        contestId: index,
+        submit: false
+      },
+      width: '70%',
+      height: 'auto'
+    });
   }
 
   getOnlineJudges() {

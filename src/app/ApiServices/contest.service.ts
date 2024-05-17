@@ -49,6 +49,11 @@ export class ContestService {
     return this._HttpClient.get(`http://localhost:7070/contest?size=${id}/problems`,{ headers: this.headers });
   }
 
+  getContstRank(id: number): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/contest/${id}/rank`,{ headers: this.headers });
+  }
+
+
   getSpecificContestById(id:number):Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
   }
@@ -67,5 +72,12 @@ export class ContestService {
 
   filterContests(category: string, status: string, owner: string, title:string, pageNo: number, size: number) {
     return this._HttpClient.get(`http://localhost:7070/contest?category=${category}&status=${status}&owner=${owner}&title=${title}&pageNo=${pageNo}&size=${size}`,{ headers: this.headers });
+  }
+
+  filterSubmissionsInContest(contestId : number , userHandle: string, problemCode: string, result : string ,language: string, pageSize: number, pageNo: number): Observable<any> {
+    return this._HttpClient.get(
+      `http://localhost:7070/contest/${contestId}/submissions?userHandle=${userHandle}&problemCode=${problemCode}&result=${result}&language=${language}&size=${pageSize}&pageNo=${pageNo}`,
+      { headers: this.headers }
+    );
   }
 }

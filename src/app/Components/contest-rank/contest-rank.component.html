@@ -1,1 +1,59 @@
-<p>contest-rank works!</p>
+<div class="container">
+    <div class="row" id="contest-rank">
+        <table id="contest-rank-table" cellspacing="1" style="width: auto;" class="table-responsive">
+            <thead>
+                <tr>
+                    <th class="rank" rowspan="2">
+                        <div>Rank</div>
+                    </th>
+                    <th class="team" rowspan="2">
+                        <div>Team</div>
+                    </th>
+                    <th class="solve" rowspan="2">
+                        <div>Score</div>
+                    </th>
+                    <th class="penalty" rowspan="2">
+                        <div>Penalty</div>
+                    </th>
+                    <th *ngFor="let problem of problemSet" class="prob undefined">
+                        <div>
+                            <a href="problem/{{problem.problemHashtag}}">{{problem.problemHashtag}}</a>
+                            <br>
+                            <span>{{problem.numberOfAccepted}}/{{problem.numberOfSubmission}}</span>
+
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let userRank of contestRank; let i = index;">
+
+                    <td class="rank meta" [ngClass]="{'rank meta' : i === 0}">{{i+1}}</td>
+                    <td class="team meta" [ngClass]="{'team meta' : i === 0 , 'team' : i !==0}">
+                        <div>
+                            <img class="contestant-avatar" [src]="userRank.photoUrl"
+                                src="https://vj.csgrandeur.cn/user/avatar/705205?v=1674489701" alt="avatar"
+                                class="contestant-avatar"><a href="/profile/{{userRank.handle}}"
+                                title="{{userRank.handle}}" target="_blank">{{userRank.handle}} <span
+                                    style="color: gray;">({{userRank.firstName}} {{userRank.lastName}})</span></a>
+                        </div>
+                    </td>
+                    <td class="solved meta" [ngClass]="{'solved meta' : i === 0}">{{userRank.userContestScore}}</td>
+                    <td class="penalty meta" [ngClass]="{'penalty meta' : i === 0}">
+                        {{penaltyInMinute(userRank.userContestPenalty)}}
+                    </td>
+                    <td *ngFor="let s of userRank.submissionStatus"
+                        [ngClass]="{'prob accepted' : s.isAttempt && s.isAccepted , 'prob failed' : s.isAttempt && !s.isAccepted , 'prop' : !s.isAttempt}">
+                        {{s.time}}
+                        <br>
+                        <span *ngIf="s.isAttempt && s.attempted !== 0">
+                            (-{{s.attempted}})
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+  

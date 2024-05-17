@@ -1,0 +1,251 @@
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+  }
+
+  img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  #contest_rank {
+    min-height: 300px
+  }
+
+  #contest-rank-table {
+    border-collapse: inherit;
+    font-size: 12px;
+    table-layout: fixed;
+    width: 100%
+  }
+
+  #contest-rank-table tr:hover {
+    background-color: rgba(0, 0, 0, .05)
+  }
+
+  #contest-rank-table th {
+    background-color: hsla(0, 0%, 100%, .8);
+    text-align: center
+  }
+
+  #contest-rank-table th,
+  #contest-rank-table th div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  #contest-rank-table th.rank {
+    width: 40px
+  }
+
+  #contest-rank-table th.rank div {
+    width: 38px
+  }
+
+  #contest-rank-table th.team {
+    width: 180px
+  }
+
+  #contest-rank-table th.team div {
+    width: 178px
+  }
+
+  #contest-rank-table th.team div i {
+    margin-left: 6px
+  }
+
+  #contest-rank-table th.solve {
+    width: 60px
+  }
+
+  #contest-rank-table th.solve div {
+    width: 58px
+  }
+
+  #contest-rank-table th.penalty {
+    width: 80px
+  }
+
+  #contest-rank-table th.penalty div {
+    width: 78px
+  }
+
+  #contest-rank-table th.prob {
+    width: 80px
+  }
+
+  #contest-rank-table th.prob div {
+    width: 78px
+  }
+
+  #contest-rank-table.hide-timestamp th.prob {
+    width: 43px
+  }
+
+  #contest-rank-table.hide-timestamp th.prob div {
+    width: 41px
+  }
+
+  #contest-rank-table th.accepted {
+    background-color: rgba(169, 245, 175, .4)
+  }
+
+  #contest-rank-table th.failed {
+    background-color: hsla(0, 100%, 93%, .4)
+  }
+
+  #contest-rank-table th.pending {
+    background-color: #e2e4ff
+  }
+
+  #contest-rank-table tr.heading {
+    display: none
+  }
+
+  #contest-rank-table.show-heading tr.heading {
+    display: table-row
+  }
+
+  #img_find_me {
+    bottom: 140px;
+    right: 15px
+  }
+
+  #img_find_me,
+  #img_time_chart {
+    cursor: pointer;
+    position: fixed;
+    text-align: right;
+    z-index: 999999
+  }
+
+  #img_time_chart {
+    bottom: 70px;
+    height: 60px;
+    right: 10px
+  }
+
+  #contest-rank-table a {
+    color: #000
+  }
+
+  #contest-rank-table td {
+    height: 50px;
+    margin: 0 1px 1px 0;
+    text-align: center
+  }
+
+  #contest-rank-table td.meta {
+    background-color: #cdf
+  }
+
+  #contest-rank-table.hide-timestamp td {
+    height: 20px
+  }
+
+  table.hover_penalty span.minute,
+  table:not(.hover_penalty) span.hms {
+    display: none
+  }
+
+  #contest-rank-table td.same {
+    background-color: #ffb
+  }
+
+  ntest-rank-table tr.this.myself a {
+    color: #fff
+  }
+
+  #contest-rank-table td div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  #contest-rank-table td:hover div {
+    overflow: visible
+  }
+
+  #contest-rank-table td.accepted {
+    background-color: #a9f5af
+  }
+
+  #contest-rank-table td.failed {
+    background-color: #fdd
+  }
+
+  #contest-rank-table td.team {
+    width: 180px
+  }
+
+  #contest-rank-table td.team div {
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: left;
+    width: 175px
+  }
+
+  #contest-rank-table td div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  #contest-rank-table td:hover div {
+    overflow: visible
+  }
+
+  #contest-rank-table td.prob {
+    width: 80px
+  }
+
+  #contest-rank-table.hide-timestamp td.prob {
+    width: 43px
+  }
+
+  #contest-rank-table td.prob span {
+    color: grey
+  }
+
+  #contest-rank-table td {
+    height: 50px;
+    margin: 0 1px 1px 0;
+    text-align: center
+  }
+
+  #contest-rank-table td.prob.fb span {
+    color: #e3e3e3
+  }
+
+  img.contestant-avatar {
+    border-radius: 30%;
+    height: 20px;
+    margin-right: 5px
+  }
+
+  .popup {
+    display: none; /* Hide the popup by default */
+    position: fixed; /* Position the popup relative to the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  }
+  
+  .popup-content {
+    background-color: white;
+    width: 50%;
+    max-width: 400px;
+    margin: 100px auto; /* Center the popup vertically and horizontally */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .close {
+    float: right;
+    cursor: pointer;
+  }
