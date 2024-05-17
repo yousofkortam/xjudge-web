@@ -23,4 +23,19 @@ export class SubmissionService {
       { headers: this.headers }
     );
   }
+
+  getSubmissionById(submissionId: number): Observable<any> {
+    return this._HttpClient.get(
+      `http://localhost:7070/submission/${submissionId}`,
+      { headers: this.headers }
+    );
+  }
+
+  updateSubmissionOpen(contestId: number): Observable<any> {
+    return this._HttpClient.put(
+      `http://localhost:7070/submission/${contestId}/open`,
+      {},
+      { headers: this.headers }
+    );
+  }
 }
