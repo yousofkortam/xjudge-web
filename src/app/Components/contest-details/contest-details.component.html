@@ -45,9 +45,9 @@
                         </span>
                     </div>
                     <div class="col-4 text-end" id="info-remaining"></div>
-               
+
                     <!-- Problem Hashtag -->
-                  <!-- contest-details.component.html -->
+                    <!-- contest-details.component.html -->
 
 
                 </div>
@@ -78,7 +78,8 @@
                 </div>
 
                 <div class="content container-fluid">
-                    <div *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                    <div
+                        *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-overview [problemSet]="problemSet"
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
@@ -86,19 +87,20 @@
                         class="container-fluid w-100 ms-0">
                         <app-problem-details></app-problem-details>
                     </div>
-                    <div *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-status></app-contest-status>
+                    <div
+                        *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-status [problemSet]="problemSet" [contestId]="contestId"></app-contest-status>
                     </div>
-                    <div *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-rank [problemSet]="problemSet" [contestId] = "contestId"></app-contest-rank>
+                    <div
+                        *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-rank [problemSet]="problemSet" [contestId]="contestId"></app-contest-rank>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div align="end">
-        <p> <span
-                [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
+        <p> <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
             Prepared by <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a> </p>
     </div>
 </div>
