@@ -36,7 +36,29 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+connect.lock/
+coverage/
+libpeerconnection.log/
+typings/
+.angular/
 
 # System files
 .DS_Store
 Thumbs.db
+
+# compiled output
+dist/
+tmp/
+app/**/*.js
+app/**/*.js.map
+
+# dependencies
+node_modules/
+bower_components/
+
+# e2e
+e2e/*.js
+e2e/*.map
+
+# System Files
+.DS_Store/

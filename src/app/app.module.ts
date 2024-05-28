@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
@@ -48,6 +47,12 @@ import { ContestStatusComponent } from './Components/contest-status/contest-stat
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
 import { ProblemSelectorHashtagComponent } from './Components/problem-selector-hashtag/problem-selector-hashtag.component';
+import { GroupMembersTableComponent } from './Components/group-members-table/group-members-table.component';
+import { GroupDetailsComponent } from './Components/group-details/group-details.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { GroupContestTableComponent } from './Components/group-contest-table/group-contest-table.component';
+import {TableModule} from "primeng/table";
 
 @NgModule({
   declarations: [
@@ -85,27 +90,32 @@ import { ProblemSelectorHashtagComponent } from './Components/problem-selector-h
     ContestRankComponent,
     UpdateProfileComponent,
     ProblemSelectorHashtagComponent,
-   ],
-  imports: [
-    RouterModule,
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    SharedModule,
-    DataTablesModule,
-    NgxPaginationModule,
-    BrowserAnimationsModule,
-    MatPaginatorModule,
-    MatSnackBarModule,
-    NgOptimizedImage,
-    FormsModule,
-    MatDialogModule,
-    MatProgressSpinnerModule,
-    MatSliderModule,
-    HighlightJsModule ,
-  
+    GroupDetailsComponent,
+    GroupContestTableComponent
   ],
+    imports: [
+        RouterModule,
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        SharedModule,
+        DataTablesModule,
+        NgxPaginationModule,
+        BrowserAnimationsModule,
+        MatPaginatorModule,
+        MatSnackBarModule,
+        NgOptimizedImage,
+        FormsModule,
+        MatDialogModule,
+        MatProgressSpinnerModule,
+        MatSliderModule,
+        HighlightJsModule,
+        DropdownModule,
+        ButtonModule,
+        GroupMembersTableComponent,
+        TableModule
+    ],
   providers: [],
   bootstrap: [AppComponent],
 })

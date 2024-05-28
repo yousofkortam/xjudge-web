@@ -1,18 +1,14 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import {catchError, map, Observable, throwError} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-
 
 export class GroupService {
 
   headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
   constructor(private _HttpClient: HttpClient) { }
-
-
 
   getSpecificGroup(GroupId: number): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/group/${GroupId}`, { headers: this.headers }
@@ -38,6 +34,22 @@ export class GroupService {
 
   getGroupsAwnedByUser(): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/group/owned`, { headers: this.headers }
+    );
+  }
+
+  getGroupMembers(groupId: number, pageNo: number, size: number): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/group/${groupId}/members?pageNo=${pageNo}&size=${size}`, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getGroupContests(groupId: number): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/group/${groupId}/contests`, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
     );
   }
 
