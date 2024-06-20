@@ -36,4 +36,7 @@ export class ProblemService {
     return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`, { headers: this.headers });
   }
   
+  getSpecificProblemDetailsByHashtag(contestId: string, hashtag: string): Observable<any> {
+    return this._HttpClient.get<any>(`http://localhost:7070/contest/${contestId}/problem/${hashtag}`);
+  }
 }

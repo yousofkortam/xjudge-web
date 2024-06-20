@@ -8,7 +8,7 @@
 
                         <div class="col-xs-6 col-sm-12 d-flex" [class.d-none]="showButtons == false">
                            <div class="d-flex text-center justify-content-center ">
-                                <a type="button" (click)="getProblemDetailsFromContest(problem.problemHashtag)"  style="text-decoration: none; color:blue"  *ngFor=" let problem of problemSet; let i = index " >{{ problem.problemHashtag }}</a>
+                                <a type="button" (click)="getSpecificProblemDetailsByHashtag(contestId,problem.problemHashtag)"  style="text-decoration: none; color:blue"  *ngFor=" let problem of problemSet; let i = index " >{{ problem.problemHashtag }}</a>
                             </div>
                         </div>
 

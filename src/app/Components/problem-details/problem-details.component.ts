@@ -1,109 +1,61 @@
-import { Component, Inject, Injectable, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { ProblemService } from 'src/app/ApiServices/problem.service';
-import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
+import { DOCUMENT } from '@angular/common';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
-import { SubmissionService } from 'src/app/ApiServices/submission.service';
-import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
-import { ContestDetailsComponent } from '../contest-details/contest-details.component';
+import { AuthService } from 'src/app/ApiServices/auth.service';
+import { ProblemService } from 'src/app/ApiServices/problem.service';
+import { SubmissionService } from 'src/app/ApiServices/submission.service';
 
 @Component({
   selector: 'app-problem-details',
   templateUrl: './problem-details.component.html',
   styleUrls: ['./problem-details.component.css']
 })
-
-@Injectable({
-  providedIn: 'root'
-})
-
 export class ProblemDetailsComponent implements OnInit {
-
+  @Input() problemSet: any = [];
+  @Input() problemInfo: any = {};
+  @Input() shorOrigin: boolean = false;
+  @Input() contestId: any;
   source: any;
   problemCode: any;
-  problemInfo: any = Object;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
   samples: any = [];
-  isLoading: boolean = false;
-  apiError: string = '';
-  title: string = '';
-
   descriptionUrl: SafeResourceUrl = '';
- 
-  // contest problem
-  [x: string]: any;
-  @Input() problemSet: any = [];
-  @Input() shorOrigin: boolean = false;
-  contestId: any;
-  contests: any;
-
-  @ViewChild(ContestDetailsComponent) details!: ContestDetailsComponent;
-
   showButtons: boolean = true;
-
-  
-  
- 
-  submitProblemForm: FormGroup = new FormGroup({
-    language: new FormControl(null, [Validators.required]),
-    solution: new FormControl(null, [Validators.required]),
-  });
+  isLoading: boolean = false;
 
   constructor(
-    private _Router:Router,
-    private _ProblemService: ProblemService,
-    private _ActivatedRoute: ActivatedRoute,
+    private router: Router,
+    private problemService: ProblemService,
+    private route: ActivatedRoute,
     private submissionService: SubmissionService,
     private authService: AuthService,
-    private renderer: Renderer2,
+    private sanitizer: DomSanitizer,
     private titleService: Title,
     private dialog: MatDialog,
-    private sanitizer: DomSanitizer,
-    @Inject(DOCUMENT) private document: Document) {
-
-      this._Router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.checkUrl(event.url);
-        }
-      });
-     }
-
-     private checkUrl(url: string): void {
-      if (url.includes('/problem')) {
-        this.showButtons = false;
-      } else {
-        this.showButtons = true;
-      }
-    }
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   ngOnInit(): void {
-    
-   this._ActivatedRoute.paramMap.subscribe((param) => {
-      this.source = param.get('source');
-      this.problemCode = param.get('problemCode');
-      this.details.contestId = param.get('contestId')
+    this.route.paramMap.subscribe((param) => {
+      const source = param.get('source');
+      const problemCode = param.get('problemCode');
+      const contestId = param.get('contestId');
+      if (source && problemCode && contestId ) {
+        this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${source}-${problemCode}`);
+        this.getSpecificProblem(source, problemCode);
+        this.getProblemSubmissions(source, problemCode);
+        console.log(this.contestId)
+        this.contestId = contestId;
+      }
     });
-    this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${this.source}-${this.problemCode}`);
-    console.log(this.descriptionUrl);
-    
-    this.getSpecificProblem();
-    this.getProblemSubissions();
-    
-    // this.getProblemDetailsFromContest();
   }
- 
-getProblemDetailsFromContest(problemHashtag:string){
-  this.details.getProblemDetailsWithHashtag()
-console.log(this.details)
-// هو مش شايف اللينك اللي بيحصله ريندر ف الفريم عشان مش شايف السورس و الكود بتاع البروبليم اللي جايه من الكونتست
-}
- 
-openModal() {
+   
+  openModal() {
     this.dialog.open(SubmitProblemComponent, {
       data: {
         problemCode: this.problemCode,
@@ -114,35 +66,69 @@ openModal() {
       disableClose: true
     },
     );
+}
+
+  openSubmitProblemModal() {
+    this.dialog.open(SubmitProblemComponent, {
+      data: {
+        problemCode: this.problemCode,
+        source: this.source,
+      },
+      width: '60%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
-getSpecificProblem() {
-    this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
-      next: (response) => {
+  getProblemDetailsFromContest(problemHashtag: string){
+    if (this.contestId) {
+      this.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag);
+      console.log(this.contestId)
+    }
+  }
+ 
+  getSpecificProblemDetailsByHashtag(contestId: string, problemHashtag: string){ 
+    console.log("lol")
+    console.log(this.contestId)
+    this.problemService.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag).subscribe({     
+     next: (response) => {      
         if (response.success === true) {
-          this.problemInfo = response.data
-          this.titleService.setTitle(this.problemInfo.title);
+          this.problemInfo = response.data;
           this.samples = response.data.samples;
-        }        
+        }
       },
       error: (err) => {
-       if (err.error.success === false) {
-          this._Router.navigate(['/notFound']);
-       
-         }
+        console.error(err);
+      }
+   
+    }); 
+  }
+
+  getSpecificProblem(source: string, problemCode: string) {
+    this.problemService.getSpecificProblem(source, problemCode).subscribe({
+      next: (response) => {
+        if (response.success === true) {
+          this.problemInfo = response.data;
+          this.titleService.setTitle(this.problemInfo.title);
+          this.samples = response.data.samples;
+        }
+      },
+      error: (err) => {
+        if (err.error.success === false) {
+          this.router.navigate(['/notFound']);
+        }
       }
     });
   }
 
-getProblemSubissions() {
+  getProblemSubmissions(source: string, problemCode: string) {
     this.isLoading = true;
-    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
+    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', problemCode, '', 2, 0).subscribe({
       next: (response) => {
         if (response.success === true) {
           this.isLoading = false;
           this.problemSumbissions = response.data.content;
           this.totalSubmissions = response.data.totalElements;
-          console.log(this.problemSumbissions);         
         }
       },
       error: (error) => {
@@ -166,5 +152,4 @@ getProblemSubissions() {
   recrawl() {
     window.location.reload();
   }
- 
 }

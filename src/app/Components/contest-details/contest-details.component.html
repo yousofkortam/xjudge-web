@@ -70,7 +70,7 @@
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
                     <div *ngIf="selectedButton === 'problem' " >
-                        <app-problem-details [problemSet]="problemSet" class="container-fluid"></app-problem-details>
+                        <app-problem-details [problemSet]="problemSet" [problemInfo]="problemInfo" class="container-fluid"></app-problem-details>
                     </div>
                     <div *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-contest-status></app-contest-status>
