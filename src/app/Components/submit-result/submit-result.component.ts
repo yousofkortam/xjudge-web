@@ -50,6 +50,7 @@ export class SubmitResultComponent implements OnInit {
     };
   }
 
+
   updateSubmissioinOpen(event : Event , submissionId : any) {
    this.submissionService.updateSubmissionOpen(submissionId).subscribe(
     (rsp)=>{
@@ -62,22 +63,25 @@ export class SubmitResultComponent implements OnInit {
     
 
   getSubmissionById() {
-    this.submissionService.getSubmissionById(this.data.contestId).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.result = response.data;
-        this.isChecked = this.result.isOpen;
-      },
-      error: (err: any) => {
-        this.isLoading = false;
-        if (err.error.success === false) {
-          this.dialog.closeAll();
-          this._snackBar.open(err.error.error.message, 'close', {
-            verticalPosition: 'bottom',
-          });
-        }
-      }
-    })
+    this.result = this.data.response;
+    this.isLoading = false;
+    this.isChecked = this.result.isOpen;
+    // this.submissionService.getSubmissionById(this.data.contestId).subscribe({
+    //   next: (response: any) => {
+    //     this.isLoading = false;
+    //     this.result = response.data;
+    //     this.isChecked = this.result.isOpen;
+    //   },
+    //   error: (err: any) => {
+    //     this.isLoading = false;
+    //     if (err.error.success === false) {
+    //       this.dialog.closeAll();
+    //       this._snackBar.open(err.error.error.message, 'close', {
+    //         verticalPosition: 'bottom',
+    //       });
+    //     }
+    //   }
+    // })
   }
 
   isSubmissionOwner() {

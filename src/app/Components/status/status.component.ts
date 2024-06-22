@@ -53,7 +53,6 @@ export class StatusComponent implements OnInit {
   filterSubmissions() {
     this.submissionService.filterSubmissions(this.userHandle, this.oj, this.problemCode, this.language, this.pageSize, this.pageNo).subscribe({
       next: (response) => {
-        console.log(response);
         this.submissions = response.data.content;
         this.totalPages = response.data.totalPages;
         this.totalElements = response.data.totalElements;
@@ -111,6 +110,7 @@ export class StatusComponent implements OnInit {
   showSubmissionResult(index: number) {
     this.dialog.open(SubmitResultComponent, {
       data: {
+        response: this.submissions[index],
         contestId: index,
         submit: false
       },

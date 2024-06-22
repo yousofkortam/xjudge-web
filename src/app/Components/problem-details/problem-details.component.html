@@ -41,19 +41,18 @@
 
             <div id="prob-properties" class="ms-0 w-100">
                 <div class="card w-100">
-                    <div class="d-flex" *ngFor="let property of problemInfo.properties">
-                        <dt class="col-sm-4">{{property.title}}</dt>
-                        <dd class="col-sm-6 ms-5">{{property.content}}</dd>
+                    <div class="d-flex small-text" *ngFor="let property of problemInfo.properties">
+                        <dt class="col-sm-6">{{property.title}}</dt>
+                        <dd class="col-sm-6">{{property.content}}</dd>
                     </div>
                 </div>
             </div>
 
-            <div id="prob-statistics" class="text-center mt-3 ms-0 w-100">
+            <div *ngIf="problemSumbissions.length > 0" id="prob-statistics" class="text-center mt-3 ms-0 w-100">
                 <dl class="card">
                     <div class="d-flex">
                         <dt class="col-sm-4">Submissions</dt>
                         <dd class="col-sm-8"><span title="Remote">{{problemInfo.submissions}}</span></dd>
-
                     </div>
                 </dl>
             </div>
