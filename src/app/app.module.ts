@@ -46,7 +46,6 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
-import { ProblemSelectorHashtagComponent } from './Components/problem-selector-hashtag/problem-selector-hashtag.component';
 import { GroupMembersTableComponent } from './Components/group-members-table/group-members-table.component';
 import { GroupDetailsComponent } from './Components/group-details/group-details.component';
 import { DropdownModule } from 'primeng/dropdown';
@@ -90,7 +89,6 @@ import { ContestProblemComponent } from './Components/contest-problem/contest-pr
     ContestStatusComponent,
     ContestRankComponent,
     UpdateProfileComponent,
-    ProblemSelectorHashtagComponent,
     GroupDetailsComponent,
     GroupContestTableComponent,
     ContestProblemComponent
