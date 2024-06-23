@@ -37,7 +37,6 @@
                 width="100%">
                 <thead>
                     <tr>
-                        <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
                         <th class="oj">
                             OJ
                             <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%"
@@ -66,7 +65,6 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let problem of Problems; trackBy:trackByProblemCode; let i = index; ">
-                        <td><i class="fas fa-star"></i></td>
                         <td> {{ problem.onlineJudge }} </td>
                         <td><a [href]="problem.problemLink" target="_blank">{{ problem.code }}</a></td>
                         <td> <a href="problem/{{problem.onlineJudge}}/{{problem.code}}">{{ problem.title }}</a>

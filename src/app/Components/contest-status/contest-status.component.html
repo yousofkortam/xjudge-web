@@ -1,1 +1,79 @@
-<p>contest-status works!</p>
+<div class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
+    <div class="row">
+        <div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
+                        (pageChange)="onPageChange($event)"></app-pagination>
+                </div>
+                <div class="d-flex ">
+                    <div>
+                        <button mat-button (click)="filterSubmissions()" class="btn btn-secondary btn-md"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Filter</button>
+                    </div>
+                    <div>
+                        <button mat-button (click)="resetFilters()" class="btn btn-secondary btn-md"
+                            value="Create Contest" style="background-color:#ffffff; color:black">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <table id="listProblem" class="table table-striped table-bordered table-responsive dataTable no-footer"
+                cellspacing="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>RUN ID</th>
+                        <th>
+                            Username
+                            <input [(ngModel)]="userHandle" type="text" id="handle" name="handle" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+
+                        </th>
+                        <th>
+                            Prob
+                            <select class="form-select" id="ojType" name="problemCode" [(ngModel)]="problemCode">
+                                <option value="">All</option>
+                                <option *ngFor="let problem of problemSet" [value]="problem.problemCode">
+                                    {{problem.problemHashtag}}- {{problem.problemCode}}</option>
+                            </select>
+                        </th>
+                        <th>
+                            Result
+                            <input [(ngModel)]="result" type="text" id="result" name="result" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+                        </th>
+                        <th>Time(ms)</th>
+                        <th>Mem(MB)</th>
+                        <th>
+                            Language
+                            <input [(ngModel)]="language" type="text" id="language" name="language" class="search_text"
+                                style="width:95%" (keyup.enter)="filterSubmissions()" />
+                        </th>
+                        <th>Submit Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let submission of submissions; let i = index;">
+                        <td>{{submission.id}}</td>
+                        <td> <a href="profile/{{submission.userHandle}}">{{ submission.userHandle }}</a> </td>
+                        <td> <a href="">
+                                {{submission.problemHashtag}}</a> </td>
+                        <td>
+                            <button (click)="showSubmissionResult(submission.id)"
+                                style="background: none; border: none; cursor: pointer;"
+                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
+                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
+                                {{submission.verdict}}
+                            </button>
+                        </td>
+                        <td> {{ submission.timeUsage }} </td>
+                        <td> {{ submission.memoryUsage }} </td>
+                        <td> {{ submission.language }} </td>
+                        <td> {{ submission.submitTime * 1000 | timeAgo }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
+            <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter" style="display: none" />
+        </div>
+    </div>
+</div>

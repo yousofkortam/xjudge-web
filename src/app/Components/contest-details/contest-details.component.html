@@ -52,12 +52,20 @@
             <div class="row">
                 <div class="all-link d-flex">
                     <div class="left col-xl-6 col-lg-12">
-                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active"> Overview </button>
-                        <button class="link problem btn" (click)="onBtnClick('problem')"> Problem </button>
-                        <button class="link status btn" (click)="onBtnClick('status')"> Status </button>
-                        <button class="link rank btn" (click)="onBtnClick('rank')"> Rank </button>
+                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
+                            Overview
+                        </button>
+                        <!-- <button class="link problem btn" (click)="onBtnClick('problem')">
+                            Problem
+                        </button> -->
+                        <button class="link status btn" (click)="onBtnClick('status')">
+                            Status
+                        </button>
+                        <button class="link rank btn" (click)="onBtnClick('rank')">
+                            Rank
+                        </button>
                     </div>
-                    <div class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
+                    <div *ngIf="isLeaderOrManager" class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
                         <button type="button" class="btn btn-secondary">Setting</button>
                         <button type="button" class="btn btn-secondary">Update</button>
                         <button type="button" class="btn btn-secondary">Delete</button>
@@ -65,26 +73,30 @@
                 </div>
 
                 <div class="content container-fluid">
-                    <div *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                    <div
+                        *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-overview [problemSet]="problemSet"
+                            [contestId]="contest.id"
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
-                    <div *ngIf="selectedButton === 'problem' " >
-                        <app-problem-details [problemSet]="problemSet" [problemInfo]="problemInfo" class="container-fluid"></app-problem-details>
+                    <!-- <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
+                        class="container-fluid w-100 ms-0">
+                        <app-problem-details></app-problem-details>
+                    </div> -->
+                    <div
+                        *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-status [problemSet]="problemSet" [contestId]="contestId"></app-contest-status>
                     </div>
-                    <div *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-status></app-contest-status>
-                    </div>
-                    <div *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-rank></app-contest-rank>
+                    <div
+                        *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
+                        <app-contest-rank [problemSet]="problemSet" [contestId]="contestId"></app-contest-rank>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div align="end">
-        <p> <span
-                [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
+        <p> <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
             Prepared by <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a> </p>
     </div>
 </div>

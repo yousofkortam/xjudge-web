@@ -15,51 +15,62 @@ import { SubmissionService } from 'src/app/ApiServices/submission.service';
   styleUrls: ['./problem-details.component.css']
 })
 export class ProblemDetailsComponent implements OnInit {
-  @Input() problemSet: any = [];
-  @Input() problemInfo: any = {};
-  @Input() shorOrigin: boolean = false;
-  @Input() contestId: any;
+
+  @Input() inContest: boolean = false;
+
   source: any;
   problemCode: any;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
-  samples: any = [];
-  descriptionUrl: SafeResourceUrl = '';
-  showButtons: boolean = true;
   isLoading: boolean = false;
+  apiError: string = '';
+  title: string = '';
+
+  descriptionUrl: SafeResourceUrl = '';
+
+  // contest problem
+  contestId: any;
+  hashTag: any;
+  // showButtons: boolean = true;
+
+  submitProblemForm: FormGroup = new FormGroup({
+    language: new FormControl(null, [Validators.required]),
+    solution: new FormControl(null, [Validators.required]),
+  });
 
   constructor(
-    private router: Router,
-    private problemService: ProblemService,
-    private route: ActivatedRoute,
+    private _Router: Router,
+    private _ProblemService: ProblemService,
+    private _ActivatedRoute: ActivatedRoute,
     private submissionService: SubmissionService,
     private authService: AuthService,
-    private sanitizer: DomSanitizer,
     private titleService: Title,
     private dialog: MatDialog,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+    private sanitizer: DomSanitizer,
+    @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((param) => {
-      const source = param.get('source');
-      const problemCode = param.get('problemCode');
-      const contestId = param.get('contestId');
-      if (source && problemCode && contestId ) {
-        this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${source}-${problemCode}`);
-        this.getSpecificProblem(source, problemCode);
-        this.getProblemSubmissions(source, problemCode);
-        console.log(this.contestId)
-        this.contestId = contestId;
-      }
-    });
+    if (this.inContest) {
+      this._ActivatedRoute.paramMap.subscribe((param) => {
+        this.contestId = param.get('contestId');
+        this.hashTag = param.get('hashTag');
+      });
+    } else {
+      this._ActivatedRoute.paramMap.subscribe((param) => {
+        this.source = param.get('source');
+        this.problemCode = param.get('problemCode');
+      });
+    }
+    this.getSpecificProblem();
+    this.getProblemSubissions();
   }
-   
+
   openModal() {
     this.dialog.open(SubmitProblemComponent, {
       data: {
         problemCode: this.problemCode,
         source: this.source,
+        inContest: this.inContest
       },
       width: '60%',
       height: 'auto',
@@ -80,48 +91,30 @@ export class ProblemDetailsComponent implements OnInit {
     });
   }
 
-  getProblemDetailsFromContest(problemHashtag: string){
-    if (this.contestId) {
-      this.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag);
-      console.log(this.contestId)
-    }
-  }
- 
-  getSpecificProblemDetailsByHashtag(contestId: string, problemHashtag: string){ 
-    console.log("lol")
-    console.log(this.contestId)
-    this.problemService.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag).subscribe({     
-     next: (response) => {      
-        if (response.success === true) {
-          this.problemInfo = response.data;
-          this.samples = response.data.samples;
-        }
-      },
-      error: (err) => {
-        console.error(err);
-      }
-   
-    }); 
-  }
+  getSpecificProblem() {
+    const observable = this.inContest
+      ? this._ProblemService.getSpecificProblemByHashTagForContest(this.contestId, this.hashTag)
+      : this._ProblemService.getSpecificProblem(this.source, this.problemCode);
 
-  getSpecificProblem(source: string, problemCode: string) {
-    this.problemService.getSpecificProblem(source, problemCode).subscribe({
+    observable.subscribe({
       next: (response) => {
         if (response.success === true) {
           this.problemInfo = response.data;
+          console.log(this.problemInfo);
+          this.source = this.problemInfo.onlineJudge;
           this.titleService.setTitle(this.problemInfo.title);
-          this.samples = response.data.samples;
+          this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070${this.problemInfo.discriptionRoute}`);
         }
       },
       error: (err) => {
         if (err.error.success === false) {
-          this.router.navigate(['/notFound']);
+          this._Router.navigate(['/notFound']);
         }
       }
     });
   }
 
-  getProblemSubmissions(source: string, problemCode: string) {
+  getProblemSubissions() {
     this.isLoading = true;
     this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', problemCode, '', 2, 0).subscribe({
       next: (response) => {
@@ -140,7 +133,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   showSubmissionResult(index: number) {
     this.dialog.open(SubmitResultComponent, {
-      data: { 
+      data: {
         response: this.problemSumbissions[index],
         submit: false
       },
@@ -148,8 +141,9 @@ export class ProblemDetailsComponent implements OnInit {
       height: 'auto'
     });
   }
- 
+
   recrawl() {
     window.location.reload();
   }
+  
 }

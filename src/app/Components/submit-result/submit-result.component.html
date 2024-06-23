@@ -9,7 +9,7 @@
           <th scope="col">Memory</th>
           <th scope="col">Lang</th>
           <th scope="col">Submitted</th>
-          <th scope="col">Open</th>
+          <th *ngIf="isSubmissionOwner()" scope="col">Open</th>
           <th scope="col">RemoteRunId</th>
         </tr>
       </thead>
@@ -26,18 +26,26 @@
           <td class="status">{{result.language}}</td>
           <td *ngIf="data.submit === true" class="status">{{result.submitTime * 1000 | date:'medium'}}</td>
           <td *ngIf="data.submit === false" class="status">{{result.submitTime * 1000 | timeAgo}}</td>
-          <td class="status">{{result.isOpen}}</td>
+          <td class="status" *ngIf="isSubmissionOwner()">
+            <input type="checkbox" (change)="updateSubmissioinOpen($event , result.id)" [(ngModel)]="isChecked"
+              name="isChecked">
+          </td>
           <td class="status">{{result.remoteRunId}}</td>
         </tr>
       </tbody>
     </table>
 
     <div id="code-solution">
-      <h3 class="code-title">Solution:</h3>
-      <pre class="code-block">
+      <div id="code" *ngIf="isSubmissionOwner() || result.isOpen">
+        <h3 class="code-title">Solution:</h3>
+        <pre class="code-block">
         <code class="language-cpp">{{result.solution}}
         </code>
       </pre>
+      </div>
+      <div class="alert alert-danger" role="alert" *ngIf="!isSubmissionOwner() && !result.isOpen">
+        The code is not shared
+      </div>
     </div>
 
   </div>

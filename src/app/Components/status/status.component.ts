@@ -30,8 +30,8 @@ export class StatusComponent implements OnInit {
   language: string = '';
 
   buttons: any = [
-    { 'name': 'All', 'style': {'background-color': '#0275d8', 'color': 'white'}, click: () => this.getAllSubmissions() },
-    { 'name': 'Mine', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getMineSubmissions() },
+    { 'name': 'All', 'style': { 'background-color': '#0275d8', 'color': 'white' }, click: () => this.getAllSubmissions() },
+    { 'name': 'Mine', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getMineSubmissions() },
   ];
 
   constructor(
@@ -53,7 +53,6 @@ export class StatusComponent implements OnInit {
   filterSubmissions() {
     this.submissionService.filterSubmissions(this.userHandle, this.oj, this.problemCode, this.language, this.pageSize, this.pageNo).subscribe({
       next: (response) => {
-        console.log(response);
         this.submissions = response.data.content;
         this.totalPages = response.data.totalPages;
         this.totalElements = response.data.totalElements;
@@ -109,16 +108,15 @@ export class StatusComponent implements OnInit {
   }
 
   showSubmissionResult(index: number) {
-    if (this.submissions[index].isOpen === true || this.submissions[index].userHandle === this.authService.getUserHandle()) {
-      this.dialog.open(SubmitResultComponent, {
-        data: {
-          response: this.submissions[index],
-          submit: false
-        },
-        width: '70%',
-        height: 'auto'
-      });
-    }
+    this.dialog.open(SubmitResultComponent, {
+      data: {
+        response: this.submissions[index],
+        contestId: index,
+        submit: false
+      },
+      width: '70%',
+      height: 'auto'
+    });
   }
 
   getOnlineJudges() {

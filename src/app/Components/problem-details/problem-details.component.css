@@ -131,3 +131,7 @@ td {
 pre {
     margin-bottom: 0;
 }
+
+.small-text {
+    font-size: 0.8rem; /* Adjust the size as needed */
+}

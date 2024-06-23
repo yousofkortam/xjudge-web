@@ -10,8 +10,7 @@ export class OverviewComponent implements OnInit {
   [x: string]: any;
   @Input() problemSet: any = [];
   @Input() shorOrigin: boolean = false;
-  contestId: any;
-  contests: any;
+  @Input() contestId: any;
 
   constructor(
     private titleService: Title,

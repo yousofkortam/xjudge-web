@@ -21,8 +21,7 @@
                         <a [href]="problem.problemLink" target="_blank">{{ problem.source }} {{ problem.problemCode}}</a>
                     </td>
                     <td class="text-lg-start">
-                        <a *ngIf="shorOrigin" href="problem/{{problem.source}}/{{problem.problemCode}}">{{ problem.problemAlias }}</a>
-                        <a *ngIf="!shorOrigin">{{ problem.problemAlias }}</a>
+                        <a routerLink="problem/{{problem.problemHashtag}}">{{ problem.problemAlias }}</a>
                     </td>
                 </tr>
             </tbody>

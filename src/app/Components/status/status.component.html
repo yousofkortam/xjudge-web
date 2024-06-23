@@ -38,7 +38,8 @@
                             <select [(ngModel)]="oj" id="OJ_s_Id" name="OJ_s_Id" class="search_text" style="width:100%"
                                 (change)="filterSubmissions()">
                                 <option value="">All</option>
-                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}</option>
+                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}
+                                </option>
                             </select>
                         </th>
                         <th class="title">
