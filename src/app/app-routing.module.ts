@@ -47,6 +47,7 @@ const routes: Routes = [
   { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
   { path: 'profile/:handle', component:ProfileComponent },
   { path: 'notFound', component:NotFoundComponent },
+  { path: 'group_details',component:GroupDetailsComponent},
   { path: '**', component:NotFoundComponent }
 ];
 
