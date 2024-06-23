@@ -15,9 +15,7 @@
                     <td></td>
                     <td>{{ problem.numberOfAccepted }} / {{ problem.numberOfSubmission }}</td>
                     <td>
-                        <a  target="_blank">{{
-                            problem.problemHashtag
-                            }}</a>
+                        <a  target="_blank">{{ problem.problemHashtag }}</a>
                     </td>
                     <td *ngIf="shorOrigin">
                         <a [href]="problem.problemLink" target="_blank">{{ problem.source }} {{ problem.problemCode}}</a>

@@ -1,16 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, Input, OnInit } from '@angular/core';
 import { GroupService } from '../../ApiServices/group.service';
+
 
 @Component({
   selector: 'app-explore-groups',
   templateUrl: './explore-groups.component.html',
   styleUrls: ['./explore-groups.component.css']
 })
+
+
 export class ExploreGroupsComponent implements OnInit {
   groups: any[] = []; 
   filteredGroups: any[] = []; 
   searchText = '';
  
+
+
 
   constructor(private groupService: GroupService) {}
 

@@ -1,10 +1,11 @@
+// contest-details.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
-
 import { ContestService } from 'src/app/ApiServices/contest.service';
+import { ProblemService } from 'src/app/ApiServices/problem.service';
 
 @Component({
   selector: 'app-contest-details',
@@ -16,20 +17,19 @@ export class ContestDetailsComponent implements OnInit {
   problemSet: any = [];   
   contestId: any;
   contest: any;
-
   selectedButton: string = 'overview';
+  problemInfo: any = {};
+  problemHashtag: any;
 
   progressBarValue: number = 0;
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
 
-  problemHashtag: any;
-
-
   constructor(
     private titleService: Title, 
     private _ActivatedRoute: ActivatedRoute, 
     private contestService: ContestService ,
+    private _ProblemService: ProblemService,
     private authService: AuthService
   ){}
 
@@ -48,12 +48,10 @@ export class ContestDetailsComponent implements OnInit {
     this.contestService.getSpecificContestById(this.contestId).subscribe({
       next: (response) => {
         this.contest = response.data;
-        console.log(this.contest);
         this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
         this.titleService.setTitle(this.contest.title);
         this.problemSet = response.data.problemSet;
         this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
-        this.problemHashtag= this.problemSet.problemHashtag
         this.updateProgressBar();
         this.updateCountdownTimer();
       },
@@ -63,8 +61,21 @@ export class ContestDetailsComponent implements OnInit {
     });
   }
 
+  getProblemDetailsWithHashtag(problemHashtag: string) {
+    this._ProblemService.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag).subscribe({
+      next: (response) => {
+        this.problemInfo = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
   onBtnClick(button: string) {
     this.selectedButton = button;
+    if (button === 'problem' && this.problemSet.length > 0) {
+      this.getProblemDetailsWithHashtag(this.problemSet[0].problemHashtag);
+    }
   }
 
   updateProgressBar() {
@@ -84,7 +95,7 @@ export class ContestDetailsComponent implements OnInit {
       const beginTime = this.contest.beginTime * 1000;
       const endTime = this.contest.endTime * 1000;
       let remainingTime;
-  
+
       if (currentTime < beginTime) {
         this.contest.contestStatus = 'SCHEDULED';
         remainingTime = beginTime - currentTime;
@@ -95,7 +106,7 @@ export class ContestDetailsComponent implements OnInit {
         this.contest.contestStatus = 'ENDED';
         return;
       }
-  
+
       const seconds = Math.floor(remainingTime / 1000) % 60;
       const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
       const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;

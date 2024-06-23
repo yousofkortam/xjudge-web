@@ -12,9 +12,7 @@ export class AuthService implements OnInit {
 
   userData = new BehaviorSubject(null);
 
-  headers: any = {
-    token: localStorage.getItem("userToken")
-  };
+  headers: any = {token: localStorage.getItem("userToken")};
 
   constructor(
     private _HttpClient: HttpClient,

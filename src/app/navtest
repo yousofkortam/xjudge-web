@@ -108,7 +108,7 @@
   height: 100%;
   transform: skewY(12deg);   
   transform-origin: 100%;
-  background: -o-linear-gradient(240deg, #222222 15%, #373737 70%, #3c4859 94%);
+  background: linear-gradient(240deg, #222222 15%, #373737 70%, #3c4859 94%);
   background: linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%);
 
 

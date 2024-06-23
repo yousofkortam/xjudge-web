@@ -1,32 +1,25 @@
-import { Component, Inject, Injectable, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { ProblemService } from 'src/app/ApiServices/problem.service';
-import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
+import { DOCUMENT } from '@angular/common';
 import { SubmitProblemComponent } from '../submit-problem/submit-problem.component';
-import { SubmissionService } from 'src/app/ApiServices/submission.service';
-import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
+import { AuthService } from 'src/app/ApiServices/auth.service';
+import { ProblemService } from 'src/app/ApiServices/problem.service';
+import { SubmissionService } from 'src/app/ApiServices/submission.service';
 
 @Component({
   selector: 'app-problem-details',
   templateUrl: './problem-details.component.html',
   styleUrls: ['./problem-details.component.css']
 })
-
-@Injectable({
-  providedIn: 'root'
-})
-
 export class ProblemDetailsComponent implements OnInit {
 
   @Input() inContest: boolean = false;
 
   source: any;
   problemCode: any;
-  problemInfo: any = Object;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
   isLoading: boolean = false;
@@ -84,6 +77,18 @@ export class ProblemDetailsComponent implements OnInit {
       disableClose: true
     },
     );
+}
+
+  openSubmitProblemModal() {
+    this.dialog.open(SubmitProblemComponent, {
+      data: {
+        problemCode: this.problemCode,
+        source: this.source,
+      },
+      width: '60%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
   getSpecificProblem() {
@@ -102,7 +107,6 @@ export class ProblemDetailsComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.log(err.error);
         if (err.error.success === false) {
           this._Router.navigate(['/notFound']);
         }
@@ -112,7 +116,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   getProblemSubissions() {
     this.isLoading = true;
-    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
+    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', problemCode, '', 2, 0).subscribe({
       next: (response) => {
         if (response.success === true) {
           this.isLoading = false;
@@ -141,6 +145,5 @@ export class ProblemDetailsComponent implements OnInit {
   recrawl() {
     window.location.reload();
   }
-
+  
 }
-

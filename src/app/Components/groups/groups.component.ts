@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./groups.component.css']
 })
 export class GroupsComponent {
-  @Input() groups: any[] = []; // Declare the groups property as an input
+  @Input() groups: any = []; 
 }

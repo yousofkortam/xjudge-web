@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 
@@ -30,6 +31,7 @@ export class ProblemComponent implements OnInit {
   constructor(
     private _problemService: ProblemService,
     private onlineJudgeService: OnlineJudgeService,
+   private _Router: Router,
     private titleService: Title) { }
 
   ngOnInit(): void {
@@ -69,6 +71,10 @@ export class ProblemComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.log(error);
+        if (error.error.success === false) {
+          this._Router.navigate(['/notFound']);
+       
+         }
       }
     });
   }
