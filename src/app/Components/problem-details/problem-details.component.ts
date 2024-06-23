@@ -8,6 +8,7 @@ import { SubmitResultComponent } from '../submit-result/submit-result.component'
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-problem-details',
@@ -20,6 +21,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   source: any;
   problemCode: any;
+  problemInfo: any = Object;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
   isLoading: boolean = false;
@@ -116,7 +118,7 @@ export class ProblemDetailsComponent implements OnInit {
 
   getProblemSubissions() {
     this.isLoading = true;
-    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', problemCode, '', 2, 0).subscribe({
+    this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
       next: (response) => {
         if (response.success === true) {
           this.isLoading = false;
