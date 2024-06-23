@@ -9,16 +9,12 @@
             <button class="link problem btn" (click)="showExploreGroups()" [class.active]="currentTab === 'exploreGroups'"> Explore </button>
           </div>
           
-          <!-- <div class="right col-xl-6 col-md-6 btn-primary btn-sm">
+          <div class="right col-xl-6 col-md-6 btn-primary btn-sm">
             <button type="submit" class="btn mb-0 border-none shadow-none " data-bs-toggle="modal"
               data-bs-target="#exampleModal2" value="Create Contest" style="background-color: #0275d8; color: #fff; ">
               Create Group</button>
-         </div> -->
-         <div>
-          <button mat-button (click)="openCreateGrouptDialog()"
-              class="right btn ms-2 mb-0 border-none shadow-none" value="Create Contest"
-              style="background-color:#0275d8; color:#fff">Create Group</button>
-      </div>
+            <app-create-group></app-create-group>
+          </div>
         </div>
       </div>
 

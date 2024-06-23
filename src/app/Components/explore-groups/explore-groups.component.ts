@@ -1,8 +1,8 @@
-import { initMDB , Ripple} from 'mdb-ui-kit';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { GroupService } from '../../ApiServices/group.service';
 
-initMDB({ Input, Ripple });
+
 @Component({
   selector: 'app-explore-groups',
   templateUrl: './explore-groups.component.html',
