@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ContestService } from './contest.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,9 @@ import { Observable } from 'rxjs';
 export class ProblemService {
 
   headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
-  constructor(private _HttpClient: HttpClient) { }
+  constructor(private _HttpClient: HttpClient,
+    private contestService: ContestService
+  ) { }
 
   getAllProblems(pageSize: number, pageNo: number): Observable<any> {
     return this._HttpClient.get(
@@ -34,6 +37,10 @@ export class ProblemService {
 
   getCompilersForSubmitProblem(onlineJudge: string): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/compiler?onlineJudge=${onlineJudge}`, { headers: this.headers });
+  }
+
+  getSpecificProblemByHashTagForContest(contestId: number, hashTag: string): Observable<any> {
+    return this.contestService.getContestProblemByHashTag(contestId, hashTag);
   }
   
 }

@@ -53,6 +53,9 @@ export class ContestService {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}/rank`,{ headers: this.headers });
   }
 
+  getContestProblemByHashTag(contestId: number, hashTag: string): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/contest/${contestId}/problem/${hashTag}`,{ headers: this.headers });
+  }
 
   getSpecificContestById(id:number):Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });

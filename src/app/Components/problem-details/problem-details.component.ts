@@ -22,74 +22,62 @@ import { SubmitResultComponent } from '../submit-result/submit-result.component'
 
 export class ProblemDetailsComponent implements OnInit {
 
+  @Input() inContest: boolean = false;
+
   source: any;
   problemCode: any;
   problemInfo: any = Object;
   problemSumbissions: any = [];
   totalSubmissions: number = 0;
-  samples: any = [];
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
 
   descriptionUrl: SafeResourceUrl = '';
- 
+
   // contest problem
-  contestId:any
-  showButtons: boolean = true;
-  
- 
+  contestId: any;
+  hashTag: any;
+  // showButtons: boolean = true;
+
   submitProblemForm: FormGroup = new FormGroup({
     language: new FormControl(null, [Validators.required]),
     solution: new FormControl(null, [Validators.required]),
   });
 
   constructor(
-    private _Router:Router,
+    private _Router: Router,
     private _ProblemService: ProblemService,
     private _ActivatedRoute: ActivatedRoute,
     private submissionService: SubmissionService,
     private authService: AuthService,
-    private renderer: Renderer2,
     private titleService: Title,
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
-    @Inject(DOCUMENT) private document: Document) {
-
-      this._Router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.checkUrl(event.url);
-        }
-      });
-     }
-  
-     private checkUrl(url: string): void {
-      if (url.includes('/problem')) {
-        this.showButtons = false;
-      } else {
-        this.showButtons = true;
-      }
-    }
+    @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
-    
-   this._ActivatedRoute.paramMap.subscribe((param) => {
-      this.source = param.get('source');
-      this.problemCode = param.get('problemCode');
-
-    });
-    this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070/description/${this.source}-${this.problemCode}`);
-    console.log(this.descriptionUrl);
-    
+    if (this.inContest) {
+      this._ActivatedRoute.paramMap.subscribe((param) => {
+        this.contestId = param.get('contestId');
+        this.hashTag = param.get('hashTag');
+      });
+    } else {
+      this._ActivatedRoute.paramMap.subscribe((param) => {
+        this.source = param.get('source');
+        this.problemCode = param.get('problemCode');
+      });
+    }
     this.getSpecificProblem();
     this.getProblemSubissions();
   }
- 
-openModal() {
+
+  openModal() {
     this.dialog.open(SubmitProblemComponent, {
       data: {
         problemCode: this.problemCode,
         source: this.source,
+        inContest: this.inContest
       },
       width: '60%',
       height: 'auto',
@@ -98,29 +86,31 @@ openModal() {
     );
   }
 
-getSpecificProblem() {
-    this._ProblemService.getSpecificProblem(this.source, this.problemCode).subscribe({
+  getSpecificProblem() {
+    const observable = this.inContest
+      ? this._ProblemService.getSpecificProblemByHashTagForContest(this.contestId, this.hashTag)
+      : this._ProblemService.getSpecificProblem(this.source, this.problemCode);
+
+    observable.subscribe({
       next: (response) => {
         if (response.success === true) {
-          this.problemInfo = response.data
+          this.problemInfo = response.data;
+          console.log(this.problemInfo);
+          this.source = this.problemInfo.onlineJudge;
           this.titleService.setTitle(this.problemInfo.title);
-          this.samples = response.data.samples;
+          this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070${this.problemInfo.discriptionRoute}`);
         }
-       
-      
-        
       },
       error: (err) => {
         console.log(err.error);
         if (err.error.success === false) {
           this._Router.navigate(['/notFound']);
-       
-         }
+        }
       }
     });
   }
 
-getProblemSubissions() {
+  getProblemSubissions() {
     this.isLoading = true;
     this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
       next: (response) => {
@@ -128,8 +118,6 @@ getProblemSubissions() {
           this.isLoading = false;
           this.problemSumbissions = response.data.content;
           this.totalSubmissions = response.data.totalElements;
-          console.log(this.problemSumbissions);
-          
         }
       },
       error: (error) => {
@@ -141,7 +129,7 @@ getProblemSubissions() {
 
   showSubmissionResult(index: number) {
     this.dialog.open(SubmitResultComponent, {
-      data: { 
+      data: {
         response: this.problemSumbissions[index],
         submit: false
       },
@@ -149,10 +137,10 @@ getProblemSubissions() {
       height: 'auto'
     });
   }
- 
+
   recrawl() {
     window.location.reload();
   }
- 
+
 }
 

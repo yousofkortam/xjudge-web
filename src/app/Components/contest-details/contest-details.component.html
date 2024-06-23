@@ -60,9 +60,9 @@
                         <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
                             Overview
                         </button>
-                        <button class="link problem btn" (click)="onBtnClick('problem')">
+                        <!-- <button class="link problem btn" (click)="onBtnClick('problem')">
                             Problem
-                        </button>
+                        </button> -->
                         <button class="link status btn" (click)="onBtnClick('status')">
                             Status
                         </button>
@@ -70,7 +70,7 @@
                             Rank
                         </button>
                     </div>
-                    <div class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
+                    <div *ngIf="isLeaderOrManager" class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
                         <button type="button" class="btn btn-secondary">Setting</button>
                         <button type="button" class="btn btn-secondary">Update</button>
                         <button type="button" class="btn btn-secondary">Delete</button>
@@ -81,12 +81,13 @@
                     <div
                         *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-overview [problemSet]="problemSet"
+                            [contestId]="contest.id"
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
-                    <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
+                    <!-- <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
                         class="container-fluid w-100 ms-0">
                         <app-problem-details></app-problem-details>
-                    </div>
+                    </div> -->
                     <div
                         *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
                         <app-contest-status [problemSet]="problemSet" [contestId]="contestId"></app-contest-status>

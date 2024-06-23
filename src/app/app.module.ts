@@ -53,6 +53,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { GroupContestTableComponent } from './Components/group-contest-table/group-contest-table.component';
 import {TableModule} from "primeng/table";
+import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import {TableModule} from "primeng/table";
     UpdateProfileComponent,
     ProblemSelectorHashtagComponent,
     GroupDetailsComponent,
-    GroupContestTableComponent
+    GroupContestTableComponent,
+    ContestProblemComponent
   ],
     imports: [
         RouterModule,

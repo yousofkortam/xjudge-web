@@ -20,6 +20,7 @@ import { ContestDetailsComponent } from './Components/contest-details/contest-de
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import {GroupDetailsComponent} from "./Components/group-details/group-details.component";
+import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'status', canActivate:[ProtectedAuthGuard], component:StatusComponent},
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
   { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
+  { path: 'contest/:contestId/problem/:hashTag', canActivate:[ProtectedAuthGuard], component:ContestProblemComponent },
   { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
   { path: 'group/:groupId', canActivate:[ProtectedAuthGuard], component:GroupDetailsComponent},
   { path: 'resetPassword', component:ResetPasswordComponent },

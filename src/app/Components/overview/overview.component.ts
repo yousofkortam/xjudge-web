@@ -12,8 +12,7 @@ export class OverviewComponent implements OnInit {
   loading: boolean = false;
   @Input() problemSet: any = [];
   @Input() shorOrigin: boolean = false;
-  contestId: any;
-  contests: any;
+  @Input() contestId: any;
 
   constructor(
     private titleService: Title,
