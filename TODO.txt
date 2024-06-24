@@ -1,0 +1,10 @@
+- Forms Validations. (1)
+- Problem Description (Hight). (1)
+- Crud Operation for contest (Implement 3 Buttons [Sittings, Update, Delete]). (2)
+- Search in explore group. (2)
+- Group Details. (3)
+- Submit in contest. (4)
+- Status & Rank in contest (Check if it work, based on previous task 6). (4)
+- Join and Leave group. (5)
+- Invite user to group && Accept and decline this invitation by user. (5)
+-------------------------------------------------------------------------------------
