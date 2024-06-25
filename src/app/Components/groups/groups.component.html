@@ -3,7 +3,7 @@
     <div class="all d-flex col-xl-4 col-md-6  col-sm-12" *ngFor="let group of groups">
       <div class="card" style="height: fit-content;">
         <div class="card-header bg-custom d-flex "style="padding-left: unset !important;">
-          <a href="/group" class="name col-xl-8 col-sm-8 ps-3 pt-1 justify-content-center"  >{{ group.name }}</a>
+          <a href="/group/{{group.id}}" class="name col-xl-8 col-sm-8 ps-3 pt-1 justify-content-center"  >{{ group.name }}</a>
           <p [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}" class="tag text-center col-xl-4 col-sm-4 "> {{ group.userGroupRole }} </p>
         </div>
         <div class="card-body" style="padding: unset !important;">
