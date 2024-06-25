@@ -76,7 +76,8 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   leaveGroup() {
-    // Not Working (Frontend Error)
+    let conferm = confirm('Are you sure you want to leave this group?');
+    if (!conferm) return;
     this.groupService.leaveGroup(this.groupId).subscribe({
       next: (response: any) => {
         window.location.reload();
