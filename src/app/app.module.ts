@@ -46,13 +46,12 @@ import { TimeAgoPipe } from './pipes/time-ago/time-ago.pipe';
 import { ContestStatusComponent } from './Components/contest-status/contest-status.component';
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
-import { GroupMembersTableComponent } from './Components/group-members-table/group-members-table.component';
 import { GroupDetailsComponent } from './Components/group-details/group-details.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
-import { GroupContestTableComponent } from './Components/group-contest-table/group-contest-table.component';
 import {TableModule} from "primeng/table";
 import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
+import { InviteUserComponent } from './Components/invite-user/invite-user.component';
 
 @NgModule({
   declarations: [
@@ -90,8 +89,8 @@ import { ContestProblemComponent } from './Components/contest-problem/contest-pr
     ContestRankComponent,
     UpdateProfileComponent,
     GroupDetailsComponent,
-    GroupContestTableComponent,
-    ContestProblemComponent
+    ContestProblemComponent,
+    InviteUserComponent
   ],
     imports: [
         RouterModule,
@@ -113,7 +112,6 @@ import { ContestProblemComponent } from './Components/contest-problem/contest-pr
         HighlightJsModule,
         DropdownModule,
         ButtonModule,
-        GroupMembersTableComponent,
         TableModule
     ],
   providers: [],

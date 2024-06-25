@@ -53,4 +53,27 @@ export class GroupService {
     );
   }
 
+  joinGroup(groupId: number): Observable<any> {
+    return this._HttpClient.post(`http://localhost:7070/group/${groupId}/join`, null, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  leaveGroup(groupId: number): Observable<any> {
+    return this._HttpClient.post(`http://localhost:7070/group/${groupId}/leave`, null, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
+  }
+  inviteUser(request: any): Observable<any> {
+    return this._HttpClient.post(`http://localhost:7070/group/invite`, request, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
+  }
+
 }

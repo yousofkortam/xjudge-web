@@ -23,4 +23,8 @@ export class GroupComponent implements OnInit {
     this.currentTab = 'exploreGroups';
   }
 
+  showInvitations() {
+    this.currentTab = 'invitations';
+  }
+
 }

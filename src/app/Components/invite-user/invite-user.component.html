@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row">
+        <mat-dialog-content>
+            <div class="dialog-container ">
+                <h2 class="dialog-title pb-3">Invite user</h2>
+                <form [formGroup]="inviteUserForm">
+                    <div class="mt-3 mb-3 d-flex ">
+                        <label for="handle" class="col-md-2 mt-2 me-3 col-4">Handle</label>
+                        <input type="text" required id="user-handle" class="form-control ms-lg-2"
+                            placeholder="User handle" formControlName="handle" />
+                        <div class="m-0 validation"
+                            *ngIf="inviteUserForm.get('handle')?.errors && inviteUserForm.get('handle')?.touched ">
+                            <span *ngIf="inviteUserForm.get('handle')?.getError('required')"
+                                style="color:red">Required</span>
+                        </div>
+                        <div *ngIf="validationsErrors['handle']" class="text-danger" role="alert">
+                            {{ validationsErrors.handle }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="dialog-actions">
+            <div class="dialog-actions"
+                style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
+                <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
+                <button type="submit" class="btn btn-primary" (click)="handleInviteUser()">
+                    <span *ngIf="!isLoading"> Invite </span>
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+            </div>
+        </mat-dialog-actions>
+    </div>
+</div>

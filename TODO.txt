@@ -1,0 +1,11 @@
+- Forms Validations. (1) Sondos
+- Crud Operation for contest (Implement 3 Buttons [Update, Delete]). (2) Sondos
+- Search in explore group. (2) Done (wink wink).
+- Group Details. (3) Yousof
+- Submit in contest. (4) Abdo
+- Status & Rank in contest (Check if it work, based on previous task 6). (4) Abdo
+- Join and Leave group. (5) Esraa
+- Invite user to group (leader) && Accept and decline this invitation by user. (5) Esraa
+-------------------------------------------------------------------------------------
+- Cheating
+- Problem Description (Hight).
