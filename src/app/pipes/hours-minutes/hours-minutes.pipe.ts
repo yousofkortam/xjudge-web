@@ -6,9 +6,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class HoursMinutesPipe implements PipeTransform {
 
   transform(value: number): string {
-    const hours: number = Math.floor(value);
-    const minutes: number = Math.round((value - hours) * 60);
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    const days: number = Math.floor(value / 24);
+    const remainingHours: number = Math.floor(value % 24);
+    const minutes: number = Math.round((value - Math.floor(value)) * 60);
+    let result = '';
+
+    if (days > 0) {
+      result += `${days} day${days > 1 ? 's' : ''} `;
+    } else {
+      result += `${remainingHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    }
+
+    return result;
   }
 
 }
