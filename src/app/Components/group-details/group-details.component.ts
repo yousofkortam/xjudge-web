@@ -6,6 +6,8 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { GroupService } from 'src/app/ApiServices/group.service';
 import { InviteUserComponent } from '../invite-user/invite-user.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CreateGroupComponent } from '../create-group/create-group.component';
+import { CreateContestComponent } from '../create-contest/create-contest.component';
 
 @Component({
   selector: 'app-group-details',
@@ -27,6 +29,7 @@ export class GroupDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute, 
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -80,6 +83,9 @@ export class GroupDetailsComponent implements OnInit {
     if (!conferm) return;
     this.groupService.leaveGroup(this.groupId).subscribe({
       next: (response: any) => {
+        if (this.group.leader == true) {
+          this.router.navigate(['/group']);
+        }
         window.location.reload();
       },
       error: (error: any) => {
@@ -118,10 +124,30 @@ export class GroupDetailsComponent implements OnInit {
 
   UpdateGroup() {
     // TODO: Implement UpdateGroup method
+    this.dialog.open(CreateGroupComponent, {
+      data: {
+        groupId: this.groupId
+      },
+      width: '50%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
   addContest() {
-    // TODO: Implement addContest method
+    this.openCreateContestDialog();
+  }
+
+  openCreateContestDialog() {
+    this.dialog.open(CreateContestComponent, {
+      data: {
+        inGroup: true,
+        groupId: this.groupId
+      },
+      width: '65%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
 }

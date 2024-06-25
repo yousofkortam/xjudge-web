@@ -27,8 +27,8 @@
                     <button *ngIf="isLeader" class="btn me-2 mb-2 mb-lg-0"
                         style="background-color:#ffffff; color:black" (click)="openInviteUserDialog()">Invite</button>
                     <button *ngIf="isLeader" class="btn me-2 mb-2 mb-lg-0"
-                        style="background-color:#ffffff; color:black">Update</button>
-                    <button *ngIf="isLeader" class="btn" style="background-color:#ffffff; color:black">Add
+                        style="background-color:#ffffff; color:black" (click)="UpdateGroup()">Update</button>
+                    <button *ngIf="isLeader" class="btn" style="background-color:#ffffff; color:black" (click)="addContest()">Add
                         Contest</button>
                 </div>
             </div>
