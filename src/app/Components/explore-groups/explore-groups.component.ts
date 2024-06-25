@@ -1,50 +1,47 @@
-
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GroupService } from '../../ApiServices/group.service';
-
 
 @Component({
   selector: 'app-explore-groups',
   templateUrl: './explore-groups.component.html',
   styleUrls: ['./explore-groups.component.css']
 })
-
-
 export class ExploreGroupsComponent implements OnInit {
-  groups: any[] = []; 
-  filteredGroups: any[] = []; 
-  searchText = '';
- 
-
-
+  groups: any[] = [];
+  searchName: string = '';
+  loading: boolean = false;
+  pageNo: number = 0;
+  size: number = 25;
+  totalPages: number = 0;
 
   constructor(private groupService: GroupService) {}
 
   ngOnInit(): void {
-    this.loadGroups();
+    this.searchGroups();
   }
 
-  loadGroups() {
-    this.groupService.getAllGroups(0, 25).subscribe(
-      (response) => {
-        this.groups = response.data.content; 
-        console.log(this.groups);
+  searchGroups(): void {
+    this.loading = true;
+    this.groupService.searchGroupByName(this.searchName, this.pageNo, this.size).subscribe({
+      next: (response) => {
+        this.groups = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.loading = false;
       },
-      (error) => {
-        console.error('Error fetching groups:', error);
+      error: (error) => {
+        console.error('Error fetching groups', error);
+        this.loading = false;
       }
-    );
-  }
-  searchGroups() {
-    const searchTerm = this.searchText.toLowerCase();
-    this.filteredGroups = this.groups.filter(group =>
-      group.name.toLowerCase().includes(searchTerm) ||
-      group.description.toLowerCase().includes(searchTerm)
-    );
-     console.log(this.filteredGroups);
-     this.groups=this.filteredGroups;
+    });
   }
 
- 
+  onSearch(): void {
+    this.pageNo = 0; // Reset to first page on new search
+    this.searchGroups();
   }
 
+  onPageChange(pageNo: number): void {
+    this.pageNo = pageNo;
+    this.searchGroups();
+  }
+}

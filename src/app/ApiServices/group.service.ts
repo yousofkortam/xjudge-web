@@ -76,4 +76,16 @@ export class GroupService {
     );
   }
 
+  searchGroupByName(name: string, pageNo: number = 0, size: number = 25): Observable<any> {
+    const params = {
+      name,
+      pageNo: pageNo.toString(),
+      size: size.toString()
+    };
+    return this._HttpClient.get(`http://localhost:7070/group/search`, { headers: this.headers, params }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );}
+
 }

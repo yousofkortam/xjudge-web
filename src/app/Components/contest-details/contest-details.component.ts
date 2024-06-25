@@ -1,5 +1,4 @@
-// contest-details.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
@@ -31,7 +30,7 @@ export class ContestDetailsComponent implements OnInit {
     private contestService: ContestService ,
     private _ProblemService: ProblemService,
     private authService: AuthService
-  ){}
+  ) {}
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe((param) => {
@@ -41,7 +40,15 @@ export class ContestDetailsComponent implements OnInit {
     interval(1000).subscribe(() => {
       this.updateProgressBar();
       this.updateCountdownTimer();
+      if (this.contest.contestStatus === 'RUNNING') {
+        this.checkActiveTabAndPrintUrl();
+      }
     });
+    document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   getContestDetails() {
@@ -71,6 +78,7 @@ export class ContestDetailsComponent implements OnInit {
       }
     });
   }
+
   onBtnClick(button: string) {
     this.selectedButton = button;
     if (button === 'problem' && this.problemSet.length > 0) {
@@ -120,5 +128,26 @@ export class ContestDetailsComponent implements OnInit {
         this.countdownTimer = `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
       }
     }
+  }
+
+  onVisibilityChange() {
+    if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
+      this.printCurrentUrl();
+    }
+  }
+
+  checkActiveTabAndPrintUrl() {
+    if (document.visibilityState === 'visible') {
+      console.log('Tab is active');
+      this.printCurrentUrl();
+    } else {
+      this.printCurrentUrl();
+      console.log('Tab is inactive');
+       this.printCurrentUrl();
+    }
+  }
+
+  printCurrentUrl() {
+    console.log('Current URL:', window.location.href);
   }
 }
