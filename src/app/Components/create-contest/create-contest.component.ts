@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, FormArray } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
@@ -19,6 +19,7 @@ export class CreateContestComponent implements OnInit {
   onlineJudges: any = [];
 
   isGroupSelected:boolean = false;
+  isGroupSelectorDisabled:boolean = false;
   enableDeleteProblem:boolean = false;
   
   createContestForm: FormGroup = new FormGroup({
@@ -45,9 +46,16 @@ export class CreateContestComponent implements OnInit {
     private _ContestService: ContestService,
     private onlineJudgeService: OnlineJudgeService,
     private _Router: Router,
-    private dialgo: MatDialog) {}
+    private dialgo: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
+    if (this.data.inGroup) {
+      this.isGroupSelectorDisabled = true;
+      this.isGroupSelected = true;
+      this.createContestForm.controls['type'].setValue('GROUP');
+      this.createContestForm.controls['groupId'].setValue(this.data.groupId);
+    }
     this.getOnlineJudges();
     this.getGroupsAwnedByUser();
   }
@@ -109,6 +117,9 @@ export class CreateContestComponent implements OnInit {
   onGroupClick() {
     this.isGroupSelected = true;
     this.createContestForm.controls['type'].setValue('GROUP');
+    if (this.data.inGroup) {
+      this.createContestForm.controls['groupId'].setValue(this.data.groupId);
+    }
   }
 
   getFormProblems() {

@@ -83,6 +83,10 @@ export class ContestComponent implements OnInit {
 
   openCreateContestDialog() {
     this.dialog.open(CreateContestComponent, {
+      data: {
+        inGroup: false,
+        groupId: 0
+      },
       width: '65%',
       height: 'auto',
       disableClose: true
