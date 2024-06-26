@@ -19,6 +19,8 @@ export class UpdateContestComponent implements OnInit {
   isGroupSelected:boolean = false;
   isGroupSelectorDisabled:boolean = false;
   enableDeleteProblem:boolean = false;
+
+  updateContestForm: FormGroup = new FormGroup({});
  
   constructor(
     private _ContestService: ContestService,
@@ -27,49 +29,66 @@ export class UpdateContestComponent implements OnInit {
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
 
-  updateContestForm: FormGroup = new FormGroup({
-    title:new FormControl(this.data.contest.title, [Validators.required]),
-    durationSeconds:new FormControl(this.data.contest.durationSeconds, [Validators.required ]),
-    type:new FormControl(this.data.contest.type, [Validators.required ]),
-    visibility:new FormControl(this.data.contest.visibility, [Validators.required ]),
-    beginTime:new FormControl(this.data.contest.beginTime, [Validators.required ]),
-    problems:new FormArray([
-      new FormGroup({
-        problemAlias: new FormControl(this.data.contest.problems[0].problemAlias, [Validators.required]),
-        ojType: new FormControl(this.data.contest.problems[0].ojType, [Validators.required]),
-        code: new FormControl(this.data.contest.problems[0].code, [Validators.required]),
-        problemHashtag: new FormControl(this.data.contest.problems[0].problemHashtag),
-        problemWeight: new FormControl(this.data.contest.problems[0].problemWeight, [Validators.required]),
-      })
-    ]),
-    groupId :new FormControl(0),
-    password :new FormControl(this.data.contest.password),
-    description :new FormControl(this.data.contest.description, [Validators.required ]),
-  }, { validators: this.groupIdValidator });
 
   ngOnInit(): void {
-
+   // Ensure data is loaded before initializing the form
+   if (this.data && this.data.contest) {
+    this.initializeForm();
+  } else {
+    console.error('Contest data is not available');
   }
+  }
+
+  initializeForm() {
+    const contest = this.data.contest;
+    const problems = contest.problems && contest.problems.length > 0 ? contest.problems : [{
+      problemAlias: '',
+      ojType: '',
+      code: '',
+      problemHashtag: '',
+      problemWeight: ''
+    }];
+
+    this.updateContestForm = new FormGroup({
+      title: new FormControl(contest.title, [Validators.required]),
+      durationSeconds: new FormControl(contest.durationSeconds, [Validators.required]),
+      type: new FormControl(contest.type, [Validators.required]),
+      visibility: new FormControl(contest.visibility, [Validators.required]),
+      beginTime: new FormControl(contest.beginTime, [Validators.required]),
+      problems: new FormArray(problems.map(problem => new FormGroup({
+        problemAlias: new FormControl(problem.problemAlias, [Validators.required]),
+        ojType: new FormControl(problem.ojType, [Validators.required]),
+        code: new FormControl(problem.code, [Validators.required]),
+        problemHashtag: new FormControl(problem.problemHashtag),
+        problemWeight: new FormControl(problem.problemWeight, [Validators.required]),
+      }))),
+      groupId: new FormControl(0),
+      password: new FormControl(contest.password),
+      description: new FormControl(contest.description, [Validators.required]),
+    }, { validators: this.groupIdValidator });
+  }
+
 
   handleUpdateContest() {
     this.isLoading = true;
     console.log(this.updateContestForm.value);
-    this._ContestService.updateSpecificContestById(this.data.contest.id).subscribe({
+    this._ContestService.updateSpecificContestById(this.data.contest.id, this.updateContestForm.value).subscribe({
       next: (res) => {
         console.log(res);
         this.isLoading = false;
         this.dialog.closeAll();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate(['/contest', this.data.contest.id]);
-        }); 
+        });
       },
       error: (err) => {
         console.log(err);
-        this.validationsErrors = err.error.errors;
+        this.validationsErrors = err.error?.errors || {};
         this.isLoading = false;
       }
     });
   }
+  
   groupIdValidator(control: AbstractControl): ValidationErrors | null {
     const typeControl = control.get('type');
     const groupIdControl = control.get('groupId');

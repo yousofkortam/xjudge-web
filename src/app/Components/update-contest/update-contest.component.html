@@ -167,8 +167,8 @@
         <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
         <button type="submit" class="btn btn-primary" [disabled]="updateContestForm.invalid"
             (click)="handleUpdateContest()">
-            <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Creating</span>
-            <span *ngIf="!isLoading"> Create</span>
+            <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Updating</span>
+            <span *ngIf="!isLoading"> Update</span>
         </button>
     </div>
 </mat-dialog-actions>
