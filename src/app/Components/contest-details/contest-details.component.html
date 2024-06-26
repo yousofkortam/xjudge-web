@@ -44,7 +44,7 @@
                             <span class="countdown-time  fw-bold fs-1">{{contest.contestStatus}}</span>
                         </span>
                     </div>
-                    <div class="col-4 text-end" id="info-remaining"></div>                 
+                    <div class="col-4 text-end" id="info-remaining"></div>
                 </div>
             </div>
         </div>
@@ -75,8 +75,7 @@
                 <div class="content container-fluid">
                     <div
                         *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-overview [problemSet]="problemSet"
-                            [contestId]="contest.id"
+                        <app-overview [problemSet]="problemSet" [contestId]="contest.id"
                             [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
                     </div>
                     <!-- <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
@@ -96,7 +95,16 @@
         </div>
     </div>
     <div align="end">
-        <p> <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">{{contest.visibility}}</span>.
-            Prepared by <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a> </p>
+        <p>
+            <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">
+                {{contest.visibility}}
+            </span>.
+            Prepared by
+            <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a>
+            <span *ngIf="contest.groupName != null && contest.groupName != ''">
+                @
+                <a href="/group/{{contest.groupId}}">{{contest.groupName}}</a>
+            </span>
+        </p>
     </div>
 </div>
