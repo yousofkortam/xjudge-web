@@ -157,8 +157,7 @@ export class ContestDetailsComponent implements OnInit {
   openUpdateContestDialog() {
     this.dialog.open(UpdateContestComponent, {
       data: {
-        inGroup: false,
-        groupId: 0
+        contest: this.contest
       },
       width: '65%',
       height: 'auto',
