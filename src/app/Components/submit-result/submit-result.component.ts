@@ -37,8 +37,11 @@ export class SubmitResultComponent implements OnInit {
   submitProblem() {
     this.data.response.subscribe({
       next: (response: any) => {
+        console.log(response);
+        
         this.isLoading = false;
         this.result = response.data;
+        this.result.solution = this.data.dummy.solution;
         this.isChecked = this.result.isOpen;
       },
       error: (err: any) => {

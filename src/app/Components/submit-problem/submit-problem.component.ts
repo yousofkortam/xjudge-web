@@ -59,7 +59,7 @@ export class SubmitProblemComponent implements OnInit {
           dummy: {
             verdict: "In Queue",
             language: submitionRequest.compiler.name,
-            submitTime: "Now",
+            submitTime: Date.now() / 1000,
             timeUsage: "0 ms",
             memoryUsage: "0 KB",
             isOpen: submitionRequest.isOpen,
