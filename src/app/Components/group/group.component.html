@@ -14,9 +14,8 @@
 
           <div class="right col-xl-6 col-md-6 btn-primary btn-sm">
             <button type="submit" class="btn mb-0 border-none shadow-none " data-bs-toggle="modal"
-              data-bs-target="#exampleModal2" value="Create Contest" style="background-color: #0275d8; color: #fff; ">
+              data-bs-target="#exampleModal2" value="Create Contest" style="background-color: #0275d8; color: #fff;" (click)="openCreateGroupForm()">
               Create Group</button>
-            <app-create-group></app-create-group>
           </div>
         </div>
       </div>
@@ -29,7 +28,7 @@
           <app-explore-groups></app-explore-groups>
         </div>
         <div *ngIf="currentTab === 'invitations'">
-           TODO: Add Invitations Component
+          TODO: Add Invitations Component
         </div>
       </div>
     </div>

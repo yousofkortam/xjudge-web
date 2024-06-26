@@ -123,10 +123,12 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   UpdateGroup() {
-    // TODO: Implement UpdateGroup method
     this.dialog.open(CreateGroupComponent, {
       data: {
-        groupId: this.groupId
+        groupId: this.groupId,
+        name: this.group.name,
+        description: this.group.description,
+        visibility: this.group.visibility,
       },
       width: '50%',
       height: 'auto',
