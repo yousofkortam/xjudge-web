@@ -66,8 +66,7 @@
                         </button>
                     </div>
                     <div *ngIf="isLeaderOrManager" class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
-                        <button type="button" class="btn btn-secondary">Setting</button>
-                        <button type="button" class="btn btn-secondary">Update</button>
+                        <button type="button" class="btn btn-secondary" mat-button (click)="openUpdateContestDialog()">Update</button>
                         <button type="button" class="btn btn-secondary">Delete</button>
                     </div>
                 </div>

@@ -5,6 +5,8 @@ import { interval } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
+import { UpdateContestComponent } from '../update-contest/update-contest.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contest-details',
@@ -29,7 +31,8 @@ export class ContestDetailsComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute, 
     private contestService: ContestService ,
     private _ProblemService: ProblemService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -149,5 +152,17 @@ export class ContestDetailsComponent implements OnInit {
 
   printCurrentUrl() {
     console.log('Current URL:', window.location.href);
+  }
+
+  openUpdateContestDialog() {
+    this.dialog.open(UpdateContestComponent, {
+      data: {
+        inGroup: false,
+        groupId: 0
+      },
+      width: '65%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 }
