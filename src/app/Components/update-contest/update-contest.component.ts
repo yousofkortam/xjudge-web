@@ -89,7 +89,6 @@ export class UpdateContestComponent implements OnInit {
   handleUpdateContest() {
      this.isLoading = true;
     console.log("updateContestForm");
-
     console.log(this.updateContestForm.value);
     this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, this.updateContestForm.value).subscribe({
       next: (res) => {
