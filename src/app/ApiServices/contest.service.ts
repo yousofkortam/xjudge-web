@@ -39,9 +39,10 @@ export class ContestService {
     return this._HttpClient.post(`http://localhost:7070/contest`, request, { headers: this.headers });
   }
 
-  AddContestSubmission(id: number):Observable<any> {
-    return this._HttpClient.post(`http://localhost:7070/contest/${id}/submit`,{ headers: this.headers });
+  submitToContest(id: number , submitData : any):Observable<any> {
+    return this._HttpClient.post(`http://localhost:7070/contest/${id}/submit`,submitData ,{ headers: this.headers });
   }
+  
   getAllContests(pageSize: number): Observable<any> {
     return this._HttpClient.get(`http://localhost:7070/contest?size=${pageSize}`,{ headers: this.headers });
   }
