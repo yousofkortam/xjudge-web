@@ -10,3 +10,51 @@ position: relative;
 width: 50%;
 z-index: 2;
 }
+
+.user-role-leader,
+.user-role-manager {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.user-role-member {
+  background-color: transparent;
+}
+
+.tag {
+  border-radius: .25rem;
+  color: #fff;
+  /* padding-right: 2px; */
+  border-radius: 5px;
+}
+
+.card {
+  margin: 20px;
+  width: 370px;
+  background-color: #fff;
+  border-radius: .25rem;
+  height: 10vh;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px #888;
+}
+
+.name {
+  font-size: 18px;
+
+  text-decoration: none;
+  color: white;
+}
+
+.bg-custom {
+  background-color: #ec1971d8;
+}
+
+.card-title{
+  color: #bbb;
+  overflow: hidden;
+  padding: 5px 5px 5px 0px;
+  
+}
+.card-text p{
+  margin-top: -3px;
+}
