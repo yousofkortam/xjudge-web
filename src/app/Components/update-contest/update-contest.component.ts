@@ -16,38 +16,32 @@ export class UpdateContestComponent implements OnInit {
   validationsErrors: any = {};
   userGroups: any = [];
   onlineJudges: any = [];
-  isGroupSelected:boolean = false;
-  isGroupSelectorDisabled:boolean = false;
-  enableDeleteProblem:boolean = false;
+  isGroupSelected: boolean = false;
+  isGroupSelectorDisabled: boolean = false;
+  enableDeleteProblem: boolean = false;
 
-  updateContestForm: FormGroup = new FormGroup({});
- 
+  updateContestForm: any;
+
   constructor(
     private _ContestService: ContestService,
     private _OnlineJudgeService: OnlineJudgeService,
     private router: Router,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
-
+    @Inject(MAT_DIALOG_DATA) public Contestdata: any = {}
+  ) {}
 
   ngOnInit(): void {
-   // Ensure data is loaded before initializing the form
-   if (this.data && this.data.contest) {
-    this.initializeForm();
-  } else {
-    console.error('Contest data is not available');
-  }
+    // Ensure data is loaded before initializing the form
+    if (this.Contestdata && this.Contestdata.contest) {
+      this.initializeForm();
+    } else {
+      console.error('Contest data is not available');
+    }
   }
 
   initializeForm() {
-    const contest = this.data.contest;
-    const problems = contest.problems && contest.problems.length > 0 ? contest.problems : [{
-      problemAlias: '',
-      ojType: '',
-      code: '',
-      problemHashtag: '',
-      problemWeight: ''
-    }];
+    const contest = this.Contestdata.contest;
+    const problems = contest.problems || [];
 
     this.updateContestForm = new FormGroup({
       title: new FormControl(contest.title, [Validators.required]),
@@ -62,33 +56,33 @@ export class UpdateContestComponent implements OnInit {
         problemHashtag: new FormControl(problem.problemHashtag),
         problemWeight: new FormControl(problem.problemWeight, [Validators.required]),
       }))),
-      groupId: new FormControl(0),
-      password: new FormControl(contest.password),
+      groupId: new FormControl(contest.groupId || 0),
+      password: new FormControl(contest.password || ''),
       description: new FormControl(contest.description, [Validators.required]),
     }, { validators: this.groupIdValidator });
   }
 
-
   handleUpdateContest() {
-    this.isLoading = true;
+     this.isLoading = true;
     console.log(this.updateContestForm.value);
-    this._ContestService.updateSpecificContestById(this.data.contest.id, this.updateContestForm.value).subscribe({
+    this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, this.updateContestForm.value).subscribe({
       next: (res) => {
+        console.log("update ya hambozo please");    
         console.log(res);
         this.isLoading = false;
         this.dialog.closeAll();
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/contest', this.data.contest.id]);
+        this.router.navigate(['/contest', this.Contestdata.contest.id]);
         });
       },
       error: (err) => {
         console.log(err);
-        this.validationsErrors = err.error?.errors || {};
+        this.validationsErrors = err.error.errors ;
         this.isLoading = false;
       }
     });
   }
-  
+
   groupIdValidator(control: AbstractControl): ValidationErrors | null {
     const typeControl = control.get('type');
     const groupIdControl = control.get('groupId');
@@ -96,7 +90,7 @@ export class UpdateContestComponent implements OnInit {
     if (typeControl?.value === 'GROUP' && groupIdControl?.value === 0) {
       return { "GroupRequired": true };
     }
-  
+
     return null;
   }
 
@@ -109,8 +103,8 @@ export class UpdateContestComponent implements OnInit {
   onGroupClick() {
     this.isGroupSelected = true;
     this.updateContestForm.controls['type'].setValue('GROUP');
-    if (this.data.inGroup) {
-      this.updateContestForm.controls['groupId'].setValue(this.data.groupId);
+    if (this.Contestdata.inGroup) {
+      this.updateContestForm.controls['groupId'].setValue(this.Contestdata.groupId);
     }
   }
 
@@ -130,7 +124,7 @@ export class UpdateContestComponent implements OnInit {
     }));
   }
 
-  removeProblemForm(index:number) {
+  removeProblemForm(index: number) {
     const problems = this.updateContestForm.get('problems') as FormArray;
     if (problems.length > 1)
       problems.removeAt(index);
@@ -151,13 +145,12 @@ export class UpdateContestComponent implements OnInit {
 
   getOnlineJudges() {
     return this._OnlineJudgeService.getOnlineJudges().subscribe({
-      next: (response)=> {
+      next: (response) => {
         this.onlineJudges = response.data;
       },
-      error: (err)=> {
+      error: (err) => {
         console.log(err);
       }
     });
   }
-
 }

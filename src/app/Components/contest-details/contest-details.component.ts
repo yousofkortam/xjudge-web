@@ -44,14 +44,14 @@ export class ContestDetailsComponent implements OnInit {
       this.updateProgressBar();
       this.updateCountdownTimer();
       if (this.contest.contestStatus === 'RUNNING') {
-        this.checkActiveTabAndPrintUrl();
+        // this.checkActiveTabAndPrintUrl();
       }
     });
-    document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+    // document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   ngOnDestroy(): void {
-    document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+    // document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   getContestDetails() {
@@ -133,26 +133,26 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
-  onVisibilityChange() {
-    if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
-      this.printCurrentUrl();
-    }
-  }
+  // onVisibilityChange() {
+  //   if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
+  //     this.printCurrentUrl();
+  //   }
+  // }
 
-  checkActiveTabAndPrintUrl() {
-    if (document.visibilityState === 'visible') {
-      console.log('Tab is active');
-      this.printCurrentUrl();
-    } else {
-      this.printCurrentUrl();
-      console.log('Tab is inactive');
-       this.printCurrentUrl();
-    }
-  }
+  // checkActiveTabAndPrintUrl() {
+  //   if (document.visibilityState === 'visible') {
+  //     console.log('Tab is active');
+  //     this.printCurrentUrl();
+  //   } else {
+  //     this.printCurrentUrl();
+  //     console.log('Tab is inactive');
+  //      this.printCurrentUrl();
+  //   }
+  // }
 
-  printCurrentUrl() {
-    console.log('Current URL:', window.location.href);
-  }
+  // printCurrentUrl() {
+  //   console.log('Current URL:', window.location.href);
+  // }
 
   openUpdateContestDialog() {
     this.dialog.open(UpdateContestComponent, {
