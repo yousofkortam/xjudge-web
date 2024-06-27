@@ -4,7 +4,7 @@
 - Group Details. (3) Yousof
 - Submit in contest. (4) Abdo
 - Status & Rank in contest (Check if it work, based on previous task 6). (4) Abdo
-- Join and Leave group. (5) Esraa
+- Join and Leave group. (5) Esraa(done )
 - Invite user to group (leader) && Accept and decline this invitation by user. (5) Esraa
 -------------------------------------------------------------------------------------
 - Cheating
