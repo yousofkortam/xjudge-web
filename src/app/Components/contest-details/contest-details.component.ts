@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { interval } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ContestService } from 'src/app/ApiServices/contest.service';
@@ -31,7 +31,8 @@ export class ContestDetailsComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute, 
     private contestService: ContestService ,
     private _ProblemService: ProblemService,
-    private authService: AuthService,
+    private authService: AuthService, 
+    private router: Router,
     private dialog: MatDialog ) {}
 
   ngOnInit(): void {
@@ -168,4 +169,21 @@ export class ContestDetailsComponent implements OnInit {
        console.log(this.problemSet);   
   }
   
+  handleDeleteContest() {
+    if (confirm('Are you sure you want to delete this contest?')) {
+      // this.isLoading = true;
+      this.contestService.deleteSpecificContestById(this.contest.id).subscribe({
+        next: (res) => {
+          console.log('Contest deleted successfully');
+          // this.isLoading = false;
+          this.dialog.closeAll();
+          this.router.navigate(['/contest']); 
+        },
+        error: (err) => {
+          console.log(err);
+          // this.isLoading = false;
+        }
+      });
+    }
+  }
 }

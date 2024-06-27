@@ -8,7 +8,8 @@ import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 @Component({
   selector: 'app-update-contest',
   templateUrl: './update-contest.component.html',
-  styleUrls: ['./update-contest.component.css']
+  styleUrls: ['./update-contest.component.css'],
+  
 })
 export class UpdateContestComponent implements OnInit {
 
@@ -19,7 +20,6 @@ export class UpdateContestComponent implements OnInit {
   isGroupSelected: boolean = false;
   isGroupSelectorDisabled: boolean = false;
   enableDeleteProblem: boolean = false;
-
   updateContestForm: any;
 
   constructor(
@@ -33,6 +33,7 @@ export class UpdateContestComponent implements OnInit {
   ngOnInit(): void {
     // Ensure data is loaded before initializing the form
     if (this.Contestdata && this.Contestdata.contest && this.Contestdata.problemSet) {
+      this.getOnlineJudges();
       this.initializeForm();
     } else {
       console.error('Contest data is not available');
@@ -43,17 +44,17 @@ export class UpdateContestComponent implements OnInit {
     const contest = this.Contestdata.contest;
     const problems = this.Contestdata.problemSet ;
  
-    console.log("initializeForm : ")    
+    console.log("initialize form : ")    
     console.log(problems)
     console.log(contest)
     
     
     this.updateContestForm = new FormGroup({
       title: new FormControl(contest.title, [Validators.required]),
-      durationSeconds: new FormControl(contest.durationSeconds, [Validators.required]),
+      durationSeconds: new FormControl(contest.duration, [Validators.required]),
       type: new FormControl(contest.type, [Validators.required]),
       visibility: new FormControl(contest.visibility, [Validators.required]),
-      beginTime: new FormControl(contest.beginTime, [Validators.required]),
+      beginTime: new FormControl(this.formatUnixTimestamp(contest.beginTime), [Validators.required]),
       problems: new FormArray(problems.map(problem => new FormGroup({
         problemAlias: new FormControl(problem.problemAlias, [Validators.required]),
         ojType: new FormControl(problem.source, [Validators.required]),
@@ -67,8 +68,28 @@ export class UpdateContestComponent implements OnInit {
     }, { validators: this.groupIdValidator });
   }
 
+  formatUnixTimestamp(timestamp: number): string {
+    const date = new Date(timestamp * 1000); // Convert to milliseconds
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true
+    };
+    console.log("time")
+    console.log(date.toLocaleString('en-US', options))
+    return date.toLocaleString('en-US', options);
+    
+  }
+
+
   handleUpdateContest() {
      this.isLoading = true;
+    console.log("updateContestForm");
+
     console.log(this.updateContestForm.value);
     this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, this.updateContestForm.value).subscribe({
       next: (res) => {
@@ -87,6 +108,7 @@ export class UpdateContestComponent implements OnInit {
       }
     });
   }
+
 
   groupIdValidator(control: AbstractControl): ValidationErrors | null {
     const typeControl = control.get('type');
