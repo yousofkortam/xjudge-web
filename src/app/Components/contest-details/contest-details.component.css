@@ -99,3 +99,71 @@
     font-size: 1.6em;
     font-weight: bold;
 }
+
+.dialog-content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dialog-title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.error-message {
+    margin-top: 5px;
+    color: red;
+    font-size: 14px;
+    display: none; /* Hide by default, show via JavaScript if needed */
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.btn-outline-danger {
+    background-color: #fff;
+    color: #d9534f;
+    border: 1px solid #d9534f;
+}
+
+.btn-primary {
+    background-color: #0275d8;
+    color: #fff;
+}
+
+.btn-primary:disabled {
+    background-color: #5bc0de;
+    color: #fff;
+}

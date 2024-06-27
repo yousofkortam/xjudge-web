@@ -59,8 +59,8 @@ export class ContestService {
     return this._HttpClient.get(`http://localhost:7070/contest/${contestId}/problem/${hashTag}`,{ headers: this.headers });
   }
 
-  getSpecificContestById(id:number):Observable<any> {
-    return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
+  getSpecificContestById(id:number, password: string):Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/contest/${id}?password=${password}`,{ headers: this.headers });
   }
 
   updateSpecificContestById(id:number):Observable<any> {
