@@ -32,7 +32,7 @@ export class UpdateContestComponent implements OnInit {
 
   ngOnInit(): void {
     // Ensure data is loaded before initializing the form
-    if (this.Contestdata && this.Contestdata.contest) {
+    if (this.Contestdata && this.Contestdata.contest && this.Contestdata.problemSet) {
       this.initializeForm();
     } else {
       console.error('Contest data is not available');
@@ -41,8 +41,13 @@ export class UpdateContestComponent implements OnInit {
 
   initializeForm() {
     const contest = this.Contestdata.contest;
-    const problems = contest.problems || [];
-
+    const problems = this.Contestdata.problemSet ;
+ 
+    console.log("initializeForm : ")    
+    console.log(problems)
+    console.log(contest)
+    
+    
     this.updateContestForm = new FormGroup({
       title: new FormControl(contest.title, [Validators.required]),
       durationSeconds: new FormControl(contest.durationSeconds, [Validators.required]),
@@ -51,8 +56,8 @@ export class UpdateContestComponent implements OnInit {
       beginTime: new FormControl(contest.beginTime, [Validators.required]),
       problems: new FormArray(problems.map(problem => new FormGroup({
         problemAlias: new FormControl(problem.problemAlias, [Validators.required]),
-        ojType: new FormControl(problem.ojType, [Validators.required]),
-        code: new FormControl(problem.code, [Validators.required]),
+        ojType: new FormControl(problem.source, [Validators.required]),
+        code: new FormControl(problem.problemCode, [Validators.required]),
         problemHashtag: new FormControl(problem.problemHashtag),
         problemWeight: new FormControl(problem.problemWeight, [Validators.required]),
       }))),

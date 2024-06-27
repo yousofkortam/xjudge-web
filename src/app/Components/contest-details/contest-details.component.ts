@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { UpdateContestComponent } from '../update-contest/update-contest.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contest-details',
@@ -32,8 +32,7 @@ export class ContestDetailsComponent implements OnInit {
     private contestService: ContestService ,
     private _ProblemService: ProblemService,
     private authService: AuthService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog ) {}
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe((param) => {
@@ -157,11 +156,16 @@ export class ContestDetailsComponent implements OnInit {
   openUpdateContestDialog() {
     this.dialog.open(UpdateContestComponent, {
       data: {
-        contest: this.contest
+        contest: this.contest,
+        problemSet: this.problemSet
+       
       },
       width: '65%',
       height: 'auto',
       disableClose: true
-    });
+    }); 
+       console.log(this.contest);   
+       console.log(this.problemSet);   
   }
+  
 }
