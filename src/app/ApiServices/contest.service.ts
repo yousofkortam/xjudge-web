@@ -62,8 +62,8 @@ export class ContestService {
     return this._HttpClient.get(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
   }
 
-  updateSpecificContestById(id:number):Observable<any> {
-    return this._HttpClient.put(`http://localhost:7070/contest/${id}`,{ headers: this.headers });
+  updateSpecificContestById(id:number,data: any):Observable<any> {
+    return this._HttpClient.put(`http://localhost:7070/contest/${id}`,data,{ headers: this.headers });
   }
 
   deleteSpecificContestById(id:number):Observable<any> {

@@ -52,6 +52,7 @@ import { ButtonModule } from 'primeng/button';
 import {TableModule} from "primeng/table";
 import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
+import { UpdateContestComponent } from './Components/update-contest/update-contest.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { InviteUserComponent } from './Components/invite-user/invite-user.compon
     UpdateProfileComponent,
     GroupDetailsComponent,
     ContestProblemComponent,
-    InviteUserComponent
+    InviteUserComponent,
+    UpdateContestComponent
   ],
     imports: [
         RouterModule,
