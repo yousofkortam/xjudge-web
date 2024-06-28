@@ -14,10 +14,8 @@ export class LoginComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
-  validations: any;
 
-
-  loginForm = new FormGroup({
+  loginForm: FormGroup = new FormGroup({
     userHandle:new FormControl(null, [Validators.required]),
     userPassword:new FormControl(null, [Validators.required ]),
   });
@@ -38,43 +36,27 @@ export class LoginComponent implements OnInit {
     this.titleService.setTitle('Login');
   }
 
-  handleLogin() {
+  handleLogin(loginForm:FormGroup) {
     this.isLoading = true;
-    if(this.loginForm.valid){
-      this._AuthService.login(this.loginForm.value).subscribe({
-        next: (response )=> {
+    if(loginForm.valid){
+      this._AuthService.login(loginForm.value).subscribe({
+        next: (response)=> { // use any right now
           if(response.success === true){
             localStorage.setItem('userToken', response.data.token);
             this._AuthService.decodeUserData();
-            this.isLoading= false;
+            this.isLoading = false;
             this._Router.navigate(['/home']).then(r => r);
           }
         },
         error: (response)=> {
           this.isLoading = false;
           this.apiError = response.error.error.message;
-          
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
           });
-        //   if (response && response.error.error.validations && response.error.error.message) {
-        //     Object.keys(response.error.error.validations).forEach(key => {
-        //         // Assuming errors are returned in a format where key is the form control name
-        //         const control = this.loginForm.get(key);
-        //         if (control) {
-        //             // Set backend error
-        //             control.setErrors({ backend: response.error.error.validations[key] });
-        //             console.log(control.errors);
-        //         }
-        //       });
-        // }
-      }
-    });
-    }
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-
+        }
+      });
     }
   }
 

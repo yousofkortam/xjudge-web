@@ -8,13 +8,13 @@ import { FormControl, ValidationErrors } from '@angular/forms';
   styleUrls: ['./form-input.component.css']
 })
 export class FormInputComponent {
-  @Input() controller!: FormControl;
-  @Input() span!: string;
-  @Input() inputType: string = 'text'; // default to text
-  @Input() apiError!: ValidationErrors;// New input for validation error messages
+//   @Input() controller!: FormControl;
+//   @Input() span!: string;
+//   @Input() inputType: string = 'text'; // default to text
+//   @Input() apiError!: ValidationErrors;// New input for validation error messages
 
   
-  ngOnInit() {
-    console.log(this.controller);
-  }
+//   ngOnInit() {
+//     console.log(this.controller);
+//   }
 }
