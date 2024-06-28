@@ -46,4 +46,8 @@ export class ProblemService {
   getSpecificProblemDetailsByHashtag(contestId: string, hashtag: string): Observable<any> {
     return this._HttpClient.get<any>(`http://localhost:7070/contest/${contestId}/problem/${hashtag}`);
   }
+
+  getUserStatistics(): Observable<any> {
+    return this._HttpClient.get(`http://localhost:7070/problem/user-statistics`, { headers: this.headers });
+  }
 }

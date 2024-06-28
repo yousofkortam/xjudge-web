@@ -178,8 +178,6 @@ export class ContestDetailsComponent implements OnInit {
       height: 'auto',
       disableClose: true
     }); 
-       console.log(this.contest);   
-       console.log(this.problemSet);   
   }
   
   handleDeleteContest() {
@@ -187,7 +185,6 @@ export class ContestDetailsComponent implements OnInit {
       // this.isLoading = true;
       this.contestService.deleteSpecificContestById(this.contest.id).subscribe({
         next: (res) => {
-          console.log('Contest deleted successfully');
           // this.isLoading = false;
           this.dialog.closeAll();
           this.router.navigate(['/contest']); 

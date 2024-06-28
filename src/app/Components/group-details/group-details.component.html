@@ -49,7 +49,7 @@
                         <tbody>
                             <tr *ngFor="let contest of contests">
                                 <td>
-                                    <a *ngIf="group.member; else showTitleOnly" href="/contest/{{contest.id}}">{{contest.title}}</a>
+                                    <a *ngIf="group.member; else showTitleOnly" href="/contest/{{contest.id}}" target="_blank">{{contest.title}}</a>
                                     <ng-template #showTitleOnly>{{contest.title}}</ng-template>
                                 </td>
                                 <td>{{contest.beginTime * 1000 | date:'medium'}}</td>
