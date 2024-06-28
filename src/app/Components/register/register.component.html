@@ -1,17 +1,67 @@
-<div class="container backgroundAuth">
+<div class="container">
 	<div class="row justify-content-center">
-		  <div class="box col-md-6 col-lg-4">
-		<form [formGroup]="registerForm" (ngSubmit)="handleRegister()" class="form">
-		  <h2>Sign Up</h2>
-		  <app-form-input [controller]="registerForm.controls.userFirstName" [span]="'First Name'"  ></app-form-input>
-		  <app-form-input [controller]="registerForm.controls.userLastName" [span]="'Last Name'"  ></app-form-input>
-		  <app-form-input [controller]="registerForm.controls.userHandle" [span]="'User Handle'" ></app-form-input>
-		  <app-form-input [controller]="registerForm.controls.userEmail" [span]="'Email'" ></app-form-input>
-		  <app-form-input [controller]="registerForm.controls.userPassword" [span]="'Password'" [inputType]="'password'" ></app-form-input>      
-		  <button type="submit" [disabled]="registerForm.invalid"><i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
-			<span *ngIf="!isLoading">Sign up</span>
-		  </button>
-		</form>
-	  </div>
+		<div class="box col-md-6 col-lg-4">
+			<form (ngSubmit)=" handleRegister(registerForm)" [formGroup]="registerForm"  >
+				<h2>Sign Up</h2>
+				<span *ngIf="apiError" style="color:red">{{apiError}}</span>
+				<div class="inputBox form-group">
+					<span for="userFirstName">First Name</span>
+					<input id="userFirstName" formControlName="userFirstName" type="text" required />
+					<div *ngIf="registerForm.get('userFirstName')?.errors && registerForm.get('userFirstName')?.touched "	class="">
+						<span *ngIf="registerForm.get('userFirstName')?.getError('required')" class="  m-0" style="color:red"> User first name is mandatory</span>
+						<span *ngIf="registerForm.get('userFirstName')?.getError('pattern')" class="m-0" style="color:red">First name must contain only letters</span>
+						<span *ngIf="registerForm.get('userFirstName')?.getError('minLength')" class="m-0" style="color:red">User password must be at least 2 characters</span>
+						<span *ngIf="registerForm.get('userFirstName')?.getError('maxLength')" class="m-0" style="color:red">User password must be at most 30 characters</span>
+					</div>
+					<i></i>
+				</div>
+				<div class="inputBox form-group" >
+					<span for="userLastName">Last Name</span>
+					<input id="userLastName" formControlName="userLastName" type="text" required />
+					<div *ngIf="registerForm.get('userLastName')?.errors && registerForm.get('userLastName')?.touched">
+						<span *ngIf="registerForm.get('userLastName')?.getError('required')" class=" m-0" style="color:red">User last name is mandatory</span>
+						<span *ngIf="registerForm.get('userLastName')?.getError('pattern')" class="m-0" style="color:red">Last name must contain only letters</span>
+						<span *ngIf="registerForm.get('userLastName')?.getError('minLength')" class="m-0" style="color:red">User password must be at least 2 characters</span>
+						<span *ngIf="registerForm.get('userLastName')?.getError('maxLength')" class="m-0" style="color:red">User password must be at most 30 characters</span>
+					</div>
+					<i></i>
+				</div>
+				<div class="inputBox form-group">
+					<span for="userHandle">Handle</span>
+					<input id="userHandle" formControlName="userHandle" type="text" required/>
+					<div *ngIf="registerForm.get('userHandle')?.errors && registerForm.get('userHandle')?.touched ">
+						<span *ngIf="registerForm.get('userHandle')?.getError('required')" class="m-0" style="color:red">User handle is mandatory</span>
+						<span *ngIf="registerForm.get('userHandle')?.getError('maxLength')" class="m-0" style="color:red">User handle length must be less than 20</span>
+					</div>
+					<i></i>
+				</div>
+				<div class="inputBox form-group">
+					<span for="userEmail">Email</span>
+					<input id="userEmail" formControlName="userEmail" type="text" required />
+					<div *ngIf="registerForm.get('userEmail')?.errors && registerForm.get('userEmail')?.touched ">
+						<span *ngIf="registerForm.get('userEmail')?.getError('required')" class="m-0" style="color:red">User email is mandatory</span>
+						<span *ngIf="registerForm.get('userEmail')?.getError('email')" class="m-0" style="color:red">Enter valid email</span>
+					</div>
+					<i></i>
+				</div>
+				<div class="inputBox form-group">
+					<span for="userPassword">Password</span>
+					<input id="userPassword" formControlName="userPassword" type="password" required />
+					<div *ngIf="registerForm.get('userPassword')?.errors && registerForm.get('userPassword')?.touched ">
+						<span *ngIf="registerForm.get('userPassword')?.getError('required')" class="m-0" style="color:red">User password is mandatory</span>
+						<span *ngIf="registerForm.get('userPassword')?.getError('pattern')" class="m-0" style="color:red">User password is invalid</span>
+						<span *ngIf="registerForm.get('userPassword')?.getError('minLength')" class="m-0" style="color:red">User password must be at least 6 characters</span>
+						<span *ngIf="registerForm.get('userPassword')?.getError('maxLength')" class="m-0" style="color:red">User password must be at most 20 characters</span>
+					</div>
+					<i></i>
+				</div>
+				<div class="form-group">
+					<button  [disabled]="registerForm.invalid" type="submit" >
+							<i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
+							<span *ngIf="!isLoading">Sign Up</span>
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
-  </div>
+</div>
