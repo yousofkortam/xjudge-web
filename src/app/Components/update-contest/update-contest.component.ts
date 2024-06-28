@@ -43,11 +43,6 @@ export class UpdateContestComponent implements OnInit {
   initializeForm() {
     const contest = this.Contestdata.contest;
     const problems = this.Contestdata.problemSet ;
- 
-    console.log("initialize form : ")    
-    console.log(problems)
-    console.log(contest)
-    
     
     this.updateContestForm = new FormGroup({
       title: new FormControl(contest.title, [Validators.required]),
@@ -69,22 +64,17 @@ export class UpdateContestComponent implements OnInit {
   }
 
   handleUpdateContest() {
-     this.isLoading = true;
-    console.log("updateContestForm");
-    
-   
+    this.isLoading = true;
     const formValue = this.updateContestForm.value;
     const date = new Date(formValue.beginTime);
     const epochTime = Math.floor(date.getTime() / 1000);
-    this.updateContestForm.controls['beginTime'].setValue(epochTime);
+    formValue.beginTime = epochTime;
     formValue.problems.forEach((problem: any, i: number) => {
         problem.problemHashtag = this.getLetter(i);
     });
-    console.log(formValue);
+    
     this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, formValue).subscribe({
       next: (res) => {
-        console.log("update ya hambozo please");    
-        console.log(res);
         this.isLoading = false;
         this.dialog.closeAll();
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
