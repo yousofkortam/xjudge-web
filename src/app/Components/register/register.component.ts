@@ -80,8 +80,8 @@ export class RegisterComponent implements OnInit {
         error: (response) => {
           console.log(response);
           this.isLoading = false;
-          this.apiError = response.error.error.message;
-          this.validations = response.error.error.validations || {};
+          this.apiError = response.error.message;
+          this.validations = response.error.validations;
           
         },
       });

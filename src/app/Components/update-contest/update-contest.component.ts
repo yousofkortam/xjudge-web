@@ -54,7 +54,7 @@ export class UpdateContestComponent implements OnInit {
       durationSeconds: new FormControl(contest.duration, [Validators.required]),
       type: new FormControl(contest.type, [Validators.required]),
       visibility: new FormControl(contest.visibility, [Validators.required]),
-      beginTime: new FormControl(this.formatUnixTimestamp(contest.beginTime), [Validators.required]),
+      beginTime: new FormControl(new Date(contest.beginTime * 1000).toISOString().slice(0, 19), [Validators.required]),
       problems: new FormArray(problems.map(problem => new FormGroup({
         problemAlias: new FormControl(problem.problemAlias, [Validators.required]),
         ojType: new FormControl(problem.source, [Validators.required]),
@@ -68,29 +68,20 @@ export class UpdateContestComponent implements OnInit {
     }, { validators: this.groupIdValidator });
   }
 
-  formatUnixTimestamp(timestamp: number): string {
-    const date = new Date(timestamp * 1000); // Convert to milliseconds
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true
-    };
-    console.log("time")
-    console.log(date.toLocaleString('en-US', options))
-    return date.toLocaleString('en-US', options);
-    
-  }
-
-
   handleUpdateContest() {
      this.isLoading = true;
     console.log("updateContestForm");
-    console.log(this.updateContestForm.value);
-    this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, this.updateContestForm.value).subscribe({
+    
+   
+    const formValue = this.updateContestForm.value;
+    const date = new Date(formValue.beginTime);
+    const epochTime = Math.floor(date.getTime() / 1000);
+    this.updateContestForm.controls['beginTime'].setValue(epochTime);
+    formValue.problems.forEach((problem: any, i: number) => {
+        problem.problemHashtag = this.getLetter(i);
+    });
+    console.log(formValue);
+    this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, formValue).subscribe({
       next: (res) => {
         console.log("update ya hambozo please");    
         console.log(res);
