@@ -1,11 +1,13 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { interval } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
+import { UpdateContestComponent } from '../update-contest/update-contest.component';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contest-details',
@@ -31,11 +33,12 @@ export class ContestDetailsComponent implements OnInit {
   constructor(
     private titleService: Title, 
     private _ActivatedRoute: ActivatedRoute, 
-    private contestService: ContestService ,
+    private contestService: ContestService,
     private _ProblemService: ProblemService,
-    private authService: AuthService,
-    private _snackBar: MatSnackBar,
-  ) {}
+    private authService: AuthService, 
+    private router: Router,
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe((param) => {
@@ -46,14 +49,14 @@ export class ContestDetailsComponent implements OnInit {
       this.updateProgressBar();
       this.updateCountdownTimer();
       if (this.contest.contestStatus === 'RUNNING') {
-        this.checkActiveTabAndPrintUrl();
+        // this.checkActiveTabAndPrintUrl();
       }
     });
-    document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+    // document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   ngOnDestroy(): void {
-    document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+    // document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   getContestDetails() {
@@ -143,24 +146,57 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
-  onVisibilityChange() {
-    if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
-      this.printCurrentUrl();
-    }
-  }
+  // onVisibilityChange() {
+  //   if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
+  //     this.printCurrentUrl();
+  //   }
+  // }
 
-  checkActiveTabAndPrintUrl() {
-    if (document.visibilityState === 'visible') {
-      console.log('Tab is active');
-      this.printCurrentUrl();
-    } else {
-      this.printCurrentUrl();
-      console.log('Tab is inactive');
-       this.printCurrentUrl();
-    }
-  }
+  // checkActiveTabAndPrintUrl() {
+  //   if (document.visibilityState === 'visible') {
+  //     console.log('Tab is active');
+  //     this.printCurrentUrl();
+  //   } else {
+  //     this.printCurrentUrl();
+  //     console.log('Tab is inactive');
+  //      this.printCurrentUrl();
+  //   }
+  // }
 
-  printCurrentUrl() {
-    console.log('Current URL:', window.location.href);
+  // printCurrentUrl() {
+  //   console.log('Current URL:', window.location.href);
+  // }
+
+  openUpdateContestDialog() {
+    this.dialog.open(UpdateContestComponent, {
+      data: {
+        contest: this.contest,
+        problemSet: this.problemSet
+       
+      },
+      width: '65%',
+      height: 'auto',
+      disableClose: true
+    }); 
+       console.log(this.contest);   
+       console.log(this.problemSet);   
+  }
+  
+  handleDeleteContest() {
+    if (confirm('Are you sure you want to delete this contest?')) {
+      // this.isLoading = true;
+      this.contestService.deleteSpecificContestById(this.contest.id).subscribe({
+        next: (res) => {
+          console.log('Contest deleted successfully');
+          // this.isLoading = false;
+          this.dialog.closeAll();
+          this.router.navigate(['/contest']); 
+        },
+        error: (err) => {
+          console.log(err);
+          // this.isLoading = false;
+        }
+      });
+    }
   }
 }

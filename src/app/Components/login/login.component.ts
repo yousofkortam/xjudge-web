@@ -53,18 +53,28 @@ export class LoginComponent implements OnInit {
         error: (response)=> {
           this.isLoading = false;
           this.apiError = response.error.error.message;
-          this.validations = response.error.error.validations;
-         
+          
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
           });
-         
-        }
-      });
+        //   if (response && response.error.error.validations && response.error.error.message) {
+        //     Object.keys(response.error.error.validations).forEach(key => {
+        //         // Assuming errors are returned in a format where key is the form control name
+        //         const control = this.loginForm.get(key);
+        //         if (control) {
+        //             // Set backend error
+        //             control.setErrors({ backend: response.error.error.validations[key] });
+        //             console.log(control.errors);
+        //         }
+        //       });
+        // }
+      }
+    });
     }
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+
     }
   }
 

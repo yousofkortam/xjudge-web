@@ -60,7 +60,6 @@ export class CreateContestComponent implements OnInit {
     this.getGroupsAwnedByUser();
   }
 
-
   handleCreateContest() {
     this.isLoading = true;
     const formValue = this.createContestForm.value;
