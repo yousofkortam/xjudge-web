@@ -107,12 +107,11 @@ export class StatusComponent implements OnInit {
     this.filterSubmissions();
   }
 
-  showSubmissionResult(index: number) {
+  showSubmissionResult(id: number) {
     this.dialog.open(SubmitResultComponent, {
       data: {
-        response: this.submissions[index],
-        contestId: index,
-        submit: false
+        submit: false,
+        submissionId: id
       },
       width: '70%',
       height: 'auto'

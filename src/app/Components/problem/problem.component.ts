@@ -52,6 +52,7 @@ export class ProblemComponent implements OnInit {
   }
 
   onEnterPress() {
+    this.pageNo = 0;
     this.filterProblems();
   }
 

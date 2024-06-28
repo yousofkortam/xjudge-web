@@ -1,0 +1,12 @@
+<div class="invitations-container">
+  <div *ngFor="let invitation of invitations" class="invitation-card">
+    <p>Hello <a href="profile/{{invitation.receiverHandle}}">{{ invitation.receiverHandle }}</a> ,
+         you are invited to join the group <strong>{{invitation.groupName }}</strong>  by <a href="profile/{{invitation.senderHandle}}">{{ invitation.senderHandle }}</a></p>
+    <p><strong>Status:</strong> {{ invitation.status }}</p>
+    <p><strong>Date:</strong> {{ invitation.date }}</p>
+    <div *ngIf="invitation.status === 'PENDING'" class="action-buttons">
+      <button (click)="acceptInvitation(invitation.id)">Accept</button>
+      <button (click)="declineInvitation(invitation.id)">Decline</button>
+    </div>
+  </div>
+</div>

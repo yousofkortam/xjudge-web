@@ -18,11 +18,10 @@ export class SubmitResultComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Inject(MAT_DIALOG_DATA) public submit: any,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private submissionService: SubmissionService,
-    private authService : AuthService) { }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -31,57 +30,59 @@ export class SubmitResultComponent implements OnInit {
       this.getSubmissionById();
     }
     else {
-      this.data.response.subscribe({
-        next: (response: any) => {
-          this.isLoading = false;
-          this.result = response.data;
-          this.isChecked = this.result.isOpen;
-        },
-        error: (err: any) => {
-          this.isLoading = false;
-          if (err.error.success === false) {
-            this.dialog.closeAll();
-            this._snackBar.open(err.error.error.message, 'close', {
-              verticalPosition: 'bottom',
-            });
-          }
-        }
-      })
-    };
+      this.submitProblem();
+    }
   }
 
+  submitProblem() {
+    this.data.response.subscribe({
+      next: (response: any) => {
+        console.log(response);
+        
+        this.isLoading = false;
+        this.result = response.data;
+        this.result.solution = this.data.dummy.solution;
+        this.isChecked = this.result.isOpen;
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        if (err.error.success === false) {
+          this.dialog.closeAll();
+          this._snackBar.open(err.error.error.message, 'close', {
+            verticalPosition: 'bottom',
+          });
+        }
+      }
+    });
+  }
 
-  updateSubmissioinOpen(event : Event , submissionId : any) {
-   this.submissionService.updateSubmissionOpen(submissionId).subscribe(
-    (rsp)=>{
-      const inputElement = event.target as HTMLInputElement;
-      console.log('Checkbox is checked:', inputElement.checked)
-      console.log(rsp);
-    }
-   )
-  }    
-    
+  updateSubmissioinOpen(event: Event, submissionId: any) {
+    this.submissionService.updateSubmissionOpen(submissionId).subscribe(
+      (rsp) => {
+        const inputElement = event.target as HTMLInputElement;
+        console.log('Checkbox is checked:', inputElement.checked)
+        console.log(rsp);
+      }
+    )
+  }
 
   getSubmissionById() {
-    this.result = this.data.response;
-    this.isLoading = false;
-    this.isChecked = this.result.isOpen;
-    // this.submissionService.getSubmissionById(this.data.contestId).subscribe({
-    //   next: (response: any) => {
-    //     this.isLoading = false;
-    //     this.result = response.data;
-    //     this.isChecked = this.result.isOpen;
-    //   },
-    //   error: (err: any) => {
-    //     this.isLoading = false;
-    //     if (err.error.success === false) {
-    //       this.dialog.closeAll();
-    //       this._snackBar.open(err.error.error.message, 'close', {
-    //         verticalPosition: 'bottom',
-    //       });
-    //     }
-    //   }
-    // })
+    this.submissionService.getSubmissionById(this.data.submissionId).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        this.result = response.data;
+        this.isChecked = this.result.isOpen;
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        if (err.error.success === false) {
+          this.dialog.closeAll();
+          this._snackBar.open(err.error.error.message, 'close', {
+            verticalPosition: 'bottom',
+          });
+        }
+      }
+    });
   }
 
   isSubmissionOwner() {
