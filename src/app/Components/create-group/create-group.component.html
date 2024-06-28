@@ -1,42 +1,48 @@
-<div class="modal fade modal-lg mt-5 center" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModal2Label">Create Group </h5>
-                <button type="button" class="btn-close ps-0 pe-3 border-none shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+<mat-dialog-content>
+    <h2 class="dialog-title">
+        <ng-container *ngIf="data; else CreateGroupTitle">
+            Update Group
+        </ng-container>
+        <ng-template #CreateGroupTitle>
+            Create Group
+        </ng-template>
+    </h2>
+    <form [formGroup]="createGroupForm">
+        <div class="mt-3 mb-3 d-flex">
+            <label for="name" class="col-md-2 mt-2 me-3">Name :</label>
+            <input type="text" required id="name" class="form-control" formControlName="name" />
+            <div *ngIf="createGroupForm.get('name')?.errors && createGroupForm.get('name')?.touched">
+                <span *ngIf="createGroupForm.get('name')?.getError('required')" class="m-0" style="color:red">required.</span>
             </div>
-            <div class="modal-body">
-                <form (ngSubmit)="handleSubmitGroup()" [formGroup]="createGroupForm">
-                    <div class="mt-3 mb-3 d-flex">
-                        <label for="name" class="col-md-2 mt-2 me-3">Name :</label>
-                        <input type="text" required id="name" class="form-control" formControlName="name" />
-                        <div *ngIf="createGroupForm.get('name')?.errors && createGroupForm.get('name')?.touched">
-                            <span *ngIf="createGroupForm.get('name')?.getError('required')" class="m-0" style="color:red">Group Name can't be empty.</span>
-                        </div>
-                        <i></i>
-                    </div>
-                    <div class="mt-3 mb-3 d-flex">
-                        <label for="description" class="col-md-2 mt-3 me-3">Description : </label>
-                        <input type="text" required id="description" class="form-control" formControlName="description" />
-                        <div *ngIf="createGroupForm.get('description')?.errors && createGroupForm.get('description')?.touched">
-                            <span *ngIf="createGroupForm.get('description')?.getError('required')" class="m-0" style="color:red">Group Description can't be empty.</span>
-                        </div>
-                        <i></i>
-                    </div>
-                    <div class="mt-3 mb-3 d-flex">
-                        <label for="visibility" class="col-md-2 mt-2 me-3">Visibility</label>
-                        <select class="form-select" formControlName="visibility">
-                            <option value="PUBLIC">Public</option>
-                            <option value="PRIVATE">Private</option>
-                        </select>
-                        
-                    </div>
-                    <div class="modal-footer d-flex">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="createGroupForm.invalid">Confirm</button>
-                    </div>
-                </form>
-            </div>
+            <i></i>
         </div>
-    </div>
-</div>
+        <div class="mt-3 mb-3 d-flex">
+            <label for="description" class="col-md-2 mt-3 me-3">Description : </label>
+            <input type="text" required id="description" class="form-control" formControlName="description" />
+            <div *ngIf="createGroupForm.get('description')?.errors && createGroupForm.get('description')?.touched">
+                <span *ngIf="createGroupForm.get('description')?.getError('required')" class="m-0"
+                    style="color:red">required.</span>
+            </div>
+            <i></i>
+        </div>
+        <div class="mt-3 mb-3 d-flex">
+            <label for="visibility" class="col-md-2 mt-2 me-3">Visibility</label>
+            <select class="form-select" formControlName="visibility">
+                <option value="PUBLIC">Public</option>
+                <option value="PRIVATE">Private</option>
+            </select>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions  class="dialog-actions" align="end">
+    <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="createGroupForm.invalid" (click)="handleSubmitGroup()">
+        <ng-container *ngIf="data; else CreateGroupCancel">
+            Update
+        </ng-container>
+        <ng-template #CreateGroupCancel>
+            Create
+        </ng-template>
+    </button>
+</mat-dialog-actions>

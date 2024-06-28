@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { CreateGroupComponent } from '../create-group/create-group.component';
 
 @Component({
   selector: 'app-group',
@@ -8,7 +10,10 @@ import { Title } from '@angular/platform-browser';
 })
 export class GroupComponent implements OnInit {
 
-  constructor(private titleService: Title) {}
+  constructor(
+    private titleService: Title,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.titleService.setTitle('Group');
@@ -25,6 +30,14 @@ export class GroupComponent implements OnInit {
 
   showInvitations() {
     this.currentTab = 'invitations';
+  }
+
+  openCreateGroupForm() {
+    this.dialog.open(CreateGroupComponent, {
+      width: '50%',
+      height: 'auto',
+      disableClose: true
+    });
   }
 
 }

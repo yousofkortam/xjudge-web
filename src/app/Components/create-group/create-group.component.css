@@ -1,0 +1,9 @@
+
+.dialog-actions {
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+.dialog-actions .btn {
+    margin-left: 10px;
+}

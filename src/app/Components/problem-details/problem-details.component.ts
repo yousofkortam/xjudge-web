@@ -72,7 +72,8 @@ export class ProblemDetailsComponent implements OnInit {
       data: {
         problemCode: this.problemCode,
         source: this.source,
-        inContest: this.inContest
+        inContest: this.inContest ,
+        contestId : this.contestId ,
       },
       width: '60%',
       height: 'auto',
@@ -101,6 +102,7 @@ export class ProblemDetailsComponent implements OnInit {
     observable.subscribe({
       next: (response) => {
         if (response.success === true) {
+          this.problemCode = response.data.code;
           this.problemInfo = response.data;
           console.log(this.problemInfo);
           this.source = this.problemInfo.onlineJudge;
@@ -133,11 +135,11 @@ export class ProblemDetailsComponent implements OnInit {
     });
   }
 
-  showSubmissionResult(index: number) {
+  showSubmissionResult(id: number) {
     this.dialog.open(SubmitResultComponent, {
       data: {
-        response: this.problemSumbissions[index],
-        submit: false
+        submit: false,
+        submissionId: id
       },
       width: '70%',
       height: 'auto'

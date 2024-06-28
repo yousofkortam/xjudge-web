@@ -74,7 +74,7 @@ export class ContestStatusComponent implements OnInit {
   showSubmissionResult(index: number) {
     this.dialog.open(SubmitResultComponent, {
       data: {
-        contestId: index,
+        submissionId: index,
         submit: false
       },
       width: '70%',

@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { SubmitResultComponent } from '../submit-result/submit-result.component';
+import { ContestService } from 'src/app/ApiServices/contest.service';
 
 @Component({
   selector: 'app-submit-problem',
@@ -17,6 +18,8 @@ export class SubmitProblemComponent implements OnInit {
   apiError:string = '';
   apiResponse:any;
   languages:any = [];
+  contestId: any;
+
   
   submitProblemForm: FormGroup = new FormGroup({
     problemCode: new FormControl(this.data.problemCode),
@@ -27,11 +30,15 @@ export class SubmitProblemComponent implements OnInit {
   });
 
   constructor(
+    private _contestService: ContestService ,
     private _ProblemService: ProblemService,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
+    if (this.data.inContest){
+      this.contestId = this.data.contestId;
+    }
     this.getCompilers();
   }
 
@@ -39,6 +46,7 @@ export class SubmitProblemComponent implements OnInit {
   handleSubmitProblem(){
     this.isLoading = true;
     if(this.submitProblemForm.valid){
+      console.log(this.data.problemCode)
       let submitionRequest = {
         code: this.data.problemCode,
         ojType: this.data.source,
@@ -50,7 +58,8 @@ export class SubmitProblemComponent implements OnInit {
         }
       }
       console.log(submitionRequest);
-      let submitProblem$ = this._ProblemService.submitProblem(submitionRequest);
+      console.log("incontest " +this.data.inContest);
+      let submitProblem$ = (this.data.inContest)? this.submitToContest(this.contestId , submitionRequest) : this.submitGeneral(submitionRequest);
       this.dialog.closeAll();
       this.dialog.open(SubmitResultComponent, {
         data: { 
@@ -59,7 +68,7 @@ export class SubmitProblemComponent implements OnInit {
           dummy: {
             verdict: "In Queue",
             language: submitionRequest.compiler.name,
-            submitTime: "Now",
+            submitTime: Date.now() / 1000,
             timeUsage: "0 ms",
             memoryUsage: "0 KB",
             isOpen: submitionRequest.isOpen,
@@ -84,5 +93,12 @@ export class SubmitProblemComponent implements OnInit {
     });
   }
 
+  submitToContest(contestId , data){
+    return this._contestService.submitToContest(contestId , data);
+  }
+
+  submitGeneral(data){
+    return this._ProblemService.submitProblem(data);
+  }
  
 }

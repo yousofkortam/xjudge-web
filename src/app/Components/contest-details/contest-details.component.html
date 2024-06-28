@@ -1,5 +1,5 @@
 <div class="container p-4">
-    <div class="card p-4">
+    <div *ngIf="!showPasswordForm" class="card p-4">
         <div class="row">
             <div class="col-4 text-start">
                 <b>Begin: </b>
@@ -93,7 +93,24 @@
             </div>
         </div>
     </div>
-    <div align="end">
+    <!-- Password form -->
+    <div *ngIf="showPasswordForm">
+        <div class="dialog-content">
+            <h2 class="dialog-title">Enter contest passowrd</h2>
+            <form id="groupForm">
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input [(ngModel)]="password" type="password" required id="password" class="form-control" name="password" />
+                    <span *ngIf="" class="error-message m-0">required.</span>
+                </div>
+                <div class="dialog-actions">
+                    <button type="submit" class="btn btn-primary" (click)="getContestDetails()">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Password form -->
+    <div *ngIf="!showPasswordForm" align="end">
         <p>
             <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">
                 {{contest.visibility}}

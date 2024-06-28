@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval } from 'rxjs';
@@ -25,15 +26,19 @@ export class ContestDetailsComponent implements OnInit {
   progressBarValue: number = 0;
   countdownTimer: string = '';
   isLeaderOrManager: boolean = false;
+  showPasswordForm: boolean = false;
+
+  password: string = '';
 
   constructor(
     private titleService: Title, 
     private _ActivatedRoute: ActivatedRoute, 
-    private contestService: ContestService ,
+    private contestService: ContestService,
     private _ProblemService: ProblemService,
     private authService: AuthService, 
     private router: Router,
-    private dialog: MatDialog ) {}
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this._ActivatedRoute.paramMap.subscribe((param) => {
@@ -55,8 +60,9 @@ export class ContestDetailsComponent implements OnInit {
   }
 
   getContestDetails() {
-    this.contestService.getSpecificContestById(this.contestId).subscribe({
+    this.contestService.getSpecificContestById(this.contestId, this.password).subscribe({
       next: (response) => {
+        this.showPasswordForm = false;
         this.contest = response.data;
         this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
         this.titleService.setTitle(this.contest.title);
@@ -66,6 +72,13 @@ export class ContestDetailsComponent implements OnInit {
         this.updateCountdownTimer();
       },
       error: (err) => {
+        this._snackBar.open(err.error.error.message, 'close', {
+          duration: 2000,
+          verticalPosition: 'bottom',
+        });
+        if (err.error.error.statusCode === 403) {
+          this.showPasswordForm = true;
+        }
         console.log(err);
       }
     });
