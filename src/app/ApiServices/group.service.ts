@@ -24,7 +24,7 @@ export class GroupService {
   };
 
   createGroup(groupData: any): Observable<any> {
-    return this._HttpClient.post('${this.baseUrl}', groupData, { headers: this.headers });
+    return this._HttpClient.post(`${this.baseUrl}`, groupData, { headers: this.headers });
   }
 
   updateGroup(groupId: number, groupData: any): Observable<any> {
