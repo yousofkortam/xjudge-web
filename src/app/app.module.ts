@@ -27,7 +27,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SubmitProblemComponent } from './Components/submit-problem/submit-problem.component';
 import { NgOptimizedImage } from '@angular/common';
 import { CreateContestComponent } from './Components/create-contest/create-contest.component';
-import { SharedModule } from './shared/shared.module';
 import { HoursMinutesPipe } from './pipes/hours-minutes/hours-minutes.pipe';
 import { CreateGroupComponent } from './Components/create-group/create-group.component';
 import { MyGroupsComponent } from './Components/my-groups/my-groups.component';
@@ -38,7 +37,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContestDetailsComponent } from './Components/contest-details/contest-details.component';
 import { MatSliderModule } from '@angular/material/slider';
-import { HighlightJsModule } from 'ngx-highlight-js';
 import { OverviewComponent } from './Components/overview/overview.component';
 import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
@@ -47,9 +45,6 @@ import { ContestStatusComponent } from './Components/contest-status/contest-stat
 import { ContestRankComponent } from './Components/contest-rank/contest-rank.component';
 import { UpdateProfileComponent } from './Components/update-profile/update-profile.component';
 import { GroupDetailsComponent } from './Components/group-details/group-details.component';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
-import {TableModule} from "primeng/table";
 import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
 import { UpdateContestComponent } from './Components/update-contest/update-contest.component';
@@ -94,29 +89,24 @@ import { UpdateContestComponent } from './Components/update-contest/update-conte
     InviteUserComponent,
     UpdateContestComponent
   ],
-    imports: [
-        RouterModule,
-        BrowserModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        SharedModule,
-        DataTablesModule,
-        NgxPaginationModule,
-        BrowserAnimationsModule,
-        MatPaginatorModule,
-        MatSnackBarModule,
-        NgOptimizedImage,
-        FormsModule,
-        MatDialogModule,
-        MatProgressSpinnerModule,
-        MatSliderModule,
-        HighlightJsModule,
-        DropdownModule,
-        ButtonModule,
-        TableModule
-    ],
+  imports: [
+    RouterModule,
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    DataTablesModule,
+    NgxPaginationModule,
+    BrowserAnimationsModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    NgOptimizedImage,
+    FormsModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatSliderModule
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
