@@ -1,8 +1,49 @@
-.img{
-    
-        border-radius: 10px; 
-        width: 80%;
-        height: 100%;
-        margin-left: 31px;
-    
+
+
+.profile-image img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #ffffff;
+        transition: transform 0.3s ease;
+}
+
+.profile-image img:hover {
+        transform: scale(1.1);
+}
+
+.profile-details {
+        flex-grow: 1;
+}
+
+.stat-item {
+        flex: 1;
+}
+
+.profile-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 30px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.profile-btn:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+}
+
+h2 {
+        font-size: 2.5rem;
+        color: #333333;
+        font-weight: bold;
+}
+
+p {
+        font-size: 1.25rem;
+        color: #555555;
+}
+
+.text-muted {
+        color: #888888;
 }
