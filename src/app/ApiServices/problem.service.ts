@@ -35,7 +35,7 @@ export class ProblemService {
   }
 
   submitProblem(userData: object): Observable<any> {
-    return this._HttpClient.post('${this.baseUrl}/problem/submit', userData, { headers: this.headers });
+    return this._HttpClient.post(`${this.baseUrl}/problem/submit`, userData, { headers: this.headers });
   }
 
   getCompilersForSubmitProblem(onlineJudge: string): Observable<any> {
@@ -45,7 +45,7 @@ export class ProblemService {
   getSpecificProblemByHashTagForContest(contestId: number, hashTag: string): Observable<any> {
     return this.contestService.getContestProblemByHashTag(contestId, hashTag);
   }
-  
+
   getSpecificProblemDetailsByHashtag(contestId: string, hashtag: string): Observable<any> {
     return this._HttpClient.get<any>(`${this.baseUrl}/contest/${contestId}/problem/${hashtag}`);
   }
