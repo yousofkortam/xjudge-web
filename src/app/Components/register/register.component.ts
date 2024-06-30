@@ -14,16 +14,17 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  isLoading:boolean = false;
+  isLoading: boolean = false;
+  validationErrors: any = {};
   apiError:string = '';
-  validations: any;
+  
 
   registerForm: FormGroup = new FormGroup({
-    userFirstName:new FormControl(null, [Validators.required ,Validators.minLength(2), Validators.maxLength(30), Validators.pattern('^[a-zA-Z]+$')]),
-    userLastName:new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern('^[a-zA-Z]+$')]),
-    userHandle:new FormControl(null, [Validators.required,  Validators.maxLength(20)]),
-    userEmail:new FormControl(null, [Validators.required, Validators.email]),
-    userPassword:new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
+    userFirstName:new FormControl('', [Validators.required]),
+    userLastName:new FormControl('', [Validators.required]),
+    userHandle:new FormControl('', [Validators.required]),
+    userEmail:new FormControl('', [Validators.required]),
+    userPassword:new FormControl('', [Validators.required]),
   });
 
   constructor (
@@ -55,11 +56,14 @@ export class RegisterComponent implements OnInit {
             });
           }
         },
-        error: (response)=> {
-          console.log(response);
+        error: (err)=> {
+          console.log(err);
+          this.validationErrors = err.error.error.validations || {};
+          console.log(this.validationErrors.userHandle); // Log the validationErrors object
+          this.apiError = err.error.error.message;
+          console.log(this.apiError)
           this.isLoading = false;
-          this.apiError = response.error.error.message;
-          this.validations = response.error.error.validations;
+          
         }
       });
     }

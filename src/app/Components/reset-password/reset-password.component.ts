@@ -17,6 +17,7 @@ export class ResetPasswordComponent implements OnInit {
 
   isLoading: boolean = false;
   apiError: string = '';
+  validationErrors: any = {}
   token: string = '';
 
   constructor(
@@ -36,8 +37,8 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPasswordForm: FormGroup = new FormGroup({
-    password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
-    confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
+    password: new FormControl(null, [Validators.required]),
+    confirmPassword: new FormControl(null, [Validators.required]),
   }, { validators: this.rePasswordMatch });
 
 
@@ -73,13 +74,15 @@ export class ResetPasswordComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this.isLoading = false;
-        this.apiError = err.error.error.message;
-
-        this._snackBar.open(this.apiError, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
+          this.validationErrors = err.error.error.message
+          // this.apiError = err.error.error.message;
+          // console.log(this.apiError)
+          this.isLoading = false;
+          
+        // this._snackBar.open(this.apiError, 'close', {
+        //   duration: 2000,
+        //   verticalPosition: 'top',
+        // });
       }
     });
   }

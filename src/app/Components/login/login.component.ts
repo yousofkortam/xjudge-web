@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
+  validationErrors:any ={}
 
   loginForm: FormGroup = new FormGroup({
     userHandle:new FormControl(null, [Validators.required]),
@@ -48,9 +49,13 @@ export class LoginComponent implements OnInit {
             this._Router.navigate(['/home']).then(r => r);
           }
         },
-        error: (response)=> {
+        error: (err)=> {
+          console.log(err);
+          this.validationErrors = err.error.error.validations || {};
+          console.log(this.validationErrors.userHandle); // Log the validationErrors object
+          this.apiError = err.error.error.message;
+          console.log(this.apiError)
           this.isLoading = false;
-          this.apiError = response.error.error.message;
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
