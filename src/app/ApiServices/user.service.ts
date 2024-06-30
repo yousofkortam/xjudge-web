@@ -27,5 +27,28 @@ export class UserService {
       { headers: this.headers }
     );
   }
+
+  getUserInvitations(): Observable<any> {
+    return this._HttpClient.get(
+      `http://localhost:7070/user/invitations`,
+      { headers: this.headers }
+    );
+  }
+
+  acceptInvitation(invitationId: number): Observable<any> {
+    return this._HttpClient.post(
+      `http://localhost:7070/group/accept-invitation/${invitationId}`,
+      {},
+      { headers: this.headers }
+    );
+  }
+
+  declineInvitation(invitationId: number): Observable<any> {
+    return this._HttpClient.post(
+      `http://localhost:7070/group/decline-invitation/${invitationId}`,
+      {},
+      { headers: this.headers }
+    );
+  }
   
 }
