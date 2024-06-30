@@ -48,7 +48,7 @@ To use XJudge, you can register an account and start creating groups and contest
 
 ![Database](/images/xJudge_DBD.png)
 
-- Frontend
+## Frontend
 
   - Login Page
 
