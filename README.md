@@ -76,40 +76,40 @@ To use XJudge, you can register an account and start creating groups and contest
 
   - Contest upcoming
 
-![Contest Page](/images/contest details upcoming..jpg)
+  ![Contest Page](/images/contest details upcoming..jpg)
 
   - Contest running
 
-![Contest Page](/images/contest details running.jpg)
+  ![Contest Page](/images/contest details running.jpg)
 
   - Contest ended
 
-![Contest Page](/images/contest ended.jpg)
+  ![Contest Page](/images/contest ended.jpg)
 
   - Contest Status
 
-![Contest Page](/images/contest status.jpg)
+  ![Contest Page](/images/contest status.jpg)
 
   - Contest Rank
 
-![Contest Page](/images/contest rank.jpg)
+  ![Contest Page](/images/contest rank.jpg)
 
   - Problem in contest
 
-![Contest Page](/images/problem conetst 1.jpg)
-![Contest Page](/images/problem contest 2.jpg)
+  ![Contest Page](/images/problem conetst 1.jpg)
+  ![Contest Page](/images/problem contest 2.jpg)
 
   - Submission Status
 
-![Submission Page](/images/submission status.jpg)
+  ![Submission Page](/images/submission status.jpg)
 
   - Submission details
 
-![Submission Page](/images/submissoin details.jpg)
+  ![Submission Page](/images/submissoin details.jpg)
 
   - Profile
 
-![Problem Page](/images/profile.jpg)
+  ![Problem Page](/images/profile.jpg)
 
 ## Contributing
 
