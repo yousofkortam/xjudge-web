@@ -74,9 +74,10 @@ To use XJudge, you can register an account and start creating groups and contest
 
   ![Problem Page](/images/problem details.jpg)
 
-  - Contest List
+[//]: # (  - Contest List)
 
-  ![Contest Page](/images/contest list.jpg)
+[//]: # ()
+[//]: # (  ![Contest Page]&#40;/images/contest list.jpg&#41;)
 
   - Contest upcoming
 
