@@ -9,7 +9,6 @@ XJudge is a competitive programming platform built with Angular. It allows users
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
-- [Contributing](#contributing)
 - [Tests](#tests)
 - [License](#license)
 
@@ -111,15 +110,6 @@ To use XJudge, you can register an account and start creating groups and contest
 
   ![Problem Page](/images/profile.jpg)
 
-## Contributing
-
-We welcome contributions from the community. To contribute:
-
-1. Fork the project.
-2. Create a new branch.
-3. Make your changes and write tests when practical.
-4. Commit your changes to the new branch.
-5. Send a pull request.
 
 ## Tests
 
