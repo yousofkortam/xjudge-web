@@ -43,17 +43,6 @@ body {
 	animation-delay: -3s;
 }
 
-@keyframes animate {
-
-	0% {
-		transform: rotate(0deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
 form {
 	position: absolute;
 	inset: 2px;
@@ -94,25 +83,6 @@ h2 {
 	letter-spacing: 0.05em;
 	z-index: 10;
 	background: transparent !important;
-
-}
-
-button[type="submit"] {
-	font-size: 20px;
-	border: none;
-	outline: none;
-	background: #45f3ff;
-	padding: 5px;
-	margin-top: 73px;
-	border-radius: 90px;
-	font-weight: 900;
-	cursor: pointer;
-	width: 100%;
-}
-
-button[type="submit"]:active {
-	background: linear-gradient(90deg, #45f3ff, #d9138a);
-	opacity: 0.8;
 
 }
 
@@ -168,3 +138,36 @@ button[type="submit"]:active {
 
 	height: 44px;
 }
+
+button[type="submit"] {
+	font-size: 20px;
+	border: none;
+	outline: none;
+	background: #45f3ff;
+	padding: 5px;
+	margin-top: 73px;
+	border-radius: 90px;
+	font-weight: 900;
+	cursor: pointer;
+	width: 100%;
+}
+
+button[type="submit"]:active {
+	background: linear-gradient(90deg, #45f3ff, #d9138a);
+	opacity: 0.8;
+
+}
+
+@keyframes animate {
+
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+
+
