@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
-  validations: any;
+  validations: any={};
 
   registerForm: FormGroup = new FormGroup({
     userFirstName:new FormControl(null, [Validators.required ,Validators.minLength(2), Validators.maxLength(30), Validators.pattern('^[a-zA-Z]+$')]),
