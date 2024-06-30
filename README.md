@@ -115,8 +115,6 @@ To use XJudge, you can register an account and start creating groups and contest
 
   ![Problem Page](/images/profile.jpg)
 
-- Backend
-
 ## Contributing
 
 We welcome contributions from the community. To contribute:
