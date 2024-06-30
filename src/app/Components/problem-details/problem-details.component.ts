@@ -72,7 +72,8 @@ export class ProblemDetailsComponent implements OnInit {
       data: {
         problemCode: this.problemCode,
         source: this.source,
-        inContest: this.inContest
+        inContest: this.inContest ,
+        contestId : this.contestId ,
       },
       width: '60%',
       height: 'auto',
@@ -101,6 +102,7 @@ export class ProblemDetailsComponent implements OnInit {
     observable.subscribe({
       next: (response) => {
         if (response.success === true) {
+          this.problemCode = response.data.code;
           this.problemInfo = response.data;
           console.log(this.problemInfo);
           this.source = this.problemInfo.onlineJudge;

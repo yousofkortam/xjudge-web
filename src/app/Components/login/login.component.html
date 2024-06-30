@@ -1,17 +1,35 @@
-<div class="container backgroundAuth">
+<div class="container">
 	<div class="row justify-content-center">
 		<div class="box col-md-6 col-lg-4">
-			<form (ngSubmit)="handleLogin()"[formGroup]="loginForm" class="form">
+			<form (ngSubmit)="handleLogin(loginForm)"[formGroup]="loginForm" >
 				<h2>Sign In</h2>
-				<app-form-input [controller]="loginForm.controls.userHandle" [span]="'User Handle'"  ></app-form-input>
-				<app-form-input [controller]="loginForm.controls.userPassword" [span]="'Password'" [inputType]="'password'" ></app-form-input>   
-				<button type="submit" [disabled]="loginForm.invalid" >
-					<i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
-					<span *ngIf="!isLoading">Login</span>
-				  </button>
-				 
-
-				  <div class="links form-group">
+				<!-- <span *ngIf="apiError" style="color:red">{{apiError}}</span> -->
+				<div class="inputBox form-group">
+					<span for="userHandle">Handle</span>
+					<input id="userHandle" formControlName="userHandle" type="text" required/>
+					<div *ngIf="loginForm.get('userHandle')?.errors && loginForm.get('userHandle')?.touched ">
+						<span *ngIf="loginForm.get('userHandle')?.getError('required')" class="m-0"style="color:red">User handle is mandatory</span>
+						<!-- <span *ngIf="loginForm.get('userHandle')?.invalid" class="m-0" style="color:red">Please enter a valid handle</span>					 -->
+					</div>
+					<i></i>
+				</div>
+				<div class="inputBox form-group">
+					<span for="userPassword">Password</span>
+					<input id="userPassword" formControlName="userPassword" type="password" required />
+					<div *ngIf="loginForm.get('userPassword')?.errors && loginForm.get('userPassword')?.touched ">
+						<span *ngIf="loginForm.get('userPassword')?.getError('required')" class="m-0" style="color:red">User password is mandatory</span>
+						<!-- <span *ngIf="loginForm.get('userPassword')?.invalid" class="m-0" style="color:red">Please enter a valid password</span> -->
+					</div>
+					<i></i>
+				</div>
+				<div class="form-group">
+					<button  [disabled]="loginForm.invalid" type="submit" >
+						<i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
+						<span *ngIf="!isLoading">Login</span>
+				</button>
+				<!-- <input type="submit" value="Login"> -->
+				</div>
+				<div class="links form-group">
 					<div class="w-50 ">
 						<a routerLink="/forgetPassword">Forget Password</a>
 					</div>

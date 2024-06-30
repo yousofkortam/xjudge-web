@@ -1,40 +1,47 @@
-<div class="container">
-  <div class="row d-flex justify-content-center align-items-center pt-4">
-    <div class="col-12">
-      <div class="card" style="border-radius: 15px;">
-        <div class="card-body p-4">
-          <div class="d-flex text-black">
-            <!-- user image -->
-            <div class="flex-shrink-0 " style="height: 100%;">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-lg-5 p-md-4 p-3">
+          <div class="d-md-flex align-items-center">
+            <!-- User image -->
+            <div class="profile-image mb-3 mb-md-0 me-md-4">
               <img [src]="user.photoUrl ?? defaultProfileImage" [alt]="user.firstName + ' ' + user.lastName"
-                [title]="user.firstName + ' ' + user.lastName"  class="img-fluid mt-2 img">
+                [title]="user.firstName + ' ' + user.lastName" class="img-fluid rounded-circle">
             </div>
-            <!-- user information -->
-            <div class="flex-grow-1 ms-3 me-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <p class="mb-1"> <strong>Full Name: </strong> {{user.firstName}} {{user.lastName}}</p>
-
-                <button *ngIf="isTheRightUser" class="btn btn-primary mt-2 me-2" (click)="openUpdateProfileDialog()">Update</button>
-                <!-- TODO: Handle update button implementation -->
-              </div>
-              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Handle: </strong> {{user.handle}}</p>
-              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>School:</strong> {{user.school ?? 'None'}}</p>
-              <p class="mb-2 pb-1" style="color: #2b2a2a;"> <strong>Email:</strong> {{user.email}} <i *ngIf="user.isVerified" class="fas fa-check" style="color: green;"></i></p>
-              <div class="d-flex justify-content-between rounded-3 p-4 mb-2 " style="background-color: #efefef;">
-                <div >
-                  <p class="small text-muted mb-1">Overall</p>
-                  <p class="ps-2">{{user.solvedCount + user.attemptedCount}}</p>
+            <!-- User information -->
+            <div class="profile-details">
+              <h2 class="mb-3">{{user.firstName}} {{user.lastName}}</h2>
+              <p><strong>Handle:</strong> {{user.handle}}</p>
+              <p><strong>School:</strong> {{user.school ?? 'None'}}</p>
+              <p><strong>Email:</strong> {{user.email}} <i *ngIf="user.isVerified"
+                  class="fas fa-check text-success"></i></p>
+              <hr>
+              <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                  <div class="stat-item text-center">
+                    <p class="text-muted mb-1">Overall</p>
+                    <h4>{{user.solvedCount + user.attemptedCount}}</h4>
+                  </div>
                 </div>
-                <div class="px-3 ">
-                  <p class="small text-muted mb-1">Solved</p>
-                  <p class="mb-0 ps-3">{{user.solvedCount}}</p>
+                <div class="col-md-4 mb-3 mb-md-0">
+                  <div class="stat-item text-center">
+                    <p class="text-muted mb-1">Solved</p>
+                    <h4>{{user.solvedCount}}</h4>
+                  </div>
                 </div>
-                <div >
-                  <p class="small text-muted mb-1">Attempted</p>
-                  <p class="mb-0 ps-4">{{user.attemptedCount}}</p>
+                <div class="col-md-4">
+                  <div class="stat-item text-center">
+                    <p class="text-muted mb-1">Attempted</p>
+                    <h4>{{user.attemptedCount}}</h4>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="text-center mt-4">
+            <button *ngIf="isTheRightUser" class="btn btn-primary btn-lg profile-btn fw-bold"
+              (click)="openUpdateProfileDialog()">Update Profile</button>
           </div>
         </div>
       </div>

@@ -14,10 +14,8 @@ export class LoginComponent implements OnInit {
 
   isLoading:boolean = false;
   apiError:string = '';
-  validations: any;
 
-
-  loginForm = new FormGroup({
+  loginForm: FormGroup = new FormGroup({
     userHandle:new FormControl(null, [Validators.required]),
     userPassword:new FormControl(null, [Validators.required ]),
   });
@@ -38,33 +36,27 @@ export class LoginComponent implements OnInit {
     this.titleService.setTitle('Login');
   }
 
-  handleLogin() {
+  handleLogin(loginForm:FormGroup) {
     this.isLoading = true;
-    if(this.loginForm.valid){
-      this._AuthService.login(this.loginForm.value).subscribe({
-        next: (response )=> {
+    if(loginForm.valid){
+      this._AuthService.login(loginForm.value).subscribe({
+        next: (response)=> { // use any right now
           if(response.success === true){
             localStorage.setItem('userToken', response.data.token);
             this._AuthService.decodeUserData();
-            this.isLoading= false;
+            this.isLoading = false;
             this._Router.navigate(['/home']).then(r => r);
           }
         },
         error: (response)=> {
           this.isLoading = false;
           this.apiError = response.error.error.message;
-          this.validations = response.error.error.validations;
-         
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
           });
-         
         }
       });
-    }
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
     }
   }
 

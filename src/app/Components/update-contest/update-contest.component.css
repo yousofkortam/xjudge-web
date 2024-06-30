@@ -1,0 +1,15 @@
+.active {
+    background-color: #adadad;
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.dialog-actions {
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+.dialog-actions .btn {
+    margin-left: 10px;
+}

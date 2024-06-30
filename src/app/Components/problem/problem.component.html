@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-md-2 mt-5 pt-2" id="left-panel">
             <div class="list-group bg-dark" id="prob-category">
-                <a href="javascript:void(0)" class="list-group-item" data-category="all">All</a>
-                <a href="javascript:void(0)" class="list-group-item" data-category="solved">
+                <!-- <a href="javascript:void(0)" class="list-group-item" data-category="all">All</a> -->
+                <a href="javascript:void(0)" class="list-group-item" style="color: darkgreen;" data-category="solved">
                     Solved
-                    <span class="tag tag-success tag-pill float-sm-right">{{SolvedAttemptedProblemsCount.solved}}</span>
+                    <span class="tag tag-success tag-pill float-sm-right">{{statistics.solvedProblems}}</span>
                 </a>
-                <a href="javascript:void(0)" class="list-group-item" data-category="attempted">
+                <a href="javascript:void(0)" class="list-group-item" style="color: orange;" data-category="attempted">
                     Attempted
-                    <span class="tag tag-default tag-pill float-sm-right">{{SolvedAttemptedProblemsCount.attempted}}</span>
+                    <span class="tag tag-default tag-pill float-sm-right">{{statistics.attemptedProblems}}</span>
                 </a>
                 <input type="hidden" name="category" value="" />
             </div>

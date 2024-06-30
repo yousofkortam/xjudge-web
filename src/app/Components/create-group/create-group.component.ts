@@ -62,6 +62,8 @@ export class CreateGroupComponent {
         },
         error: (response) => {
           this.isLoading = false;
+          console.log(response);
+          
           this.apiError = response.error.error.message;
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,

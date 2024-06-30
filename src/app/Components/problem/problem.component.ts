@@ -21,7 +21,7 @@ export class ProblemComponent implements OnInit {
 
   onlineJudges: any = [];
 
-  SolvedAttemptedProblemsCount: any = { solved: 0, attempted: 0 };
+  statistics: any;
 
   oj: string = '';
   problemCode: string = '';
@@ -38,7 +38,7 @@ export class ProblemComponent implements OnInit {
     this.getOnlineJudges();
     this.titleService.setTitle('Problems');
     this.filterProblems();
-    this.SolvedAttemptedProblemsCount = this.getSolvedAttemptedProblemsCount();
+    this.getUserStatistics();
   }
 
   trackByProblemCode(index: number, problem: any): string {
@@ -101,6 +101,20 @@ export class ProblemComponent implements OnInit {
         console.log(response);
         if (response.success === true) {
           this.onlineJudges = response.data;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  getUserStatistics() {
+    this._problemService.getUserStatistics().subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response.success === true) {
+          this.statistics = response.data;
         }
       },
       error: (error) => {

@@ -1,11 +1,18 @@
 - Forms Validations. (1) Sondos
-- Crud Operation for contest (Implement 3 Buttons [Update, Delete]). (2) Sondos
-- Search in explore group. (2) Done (done).
+- Crud Operation for contest (Implement 2 Buttons [Update, Delete]). (2) Sondos (Done ✅).
+- Search in explore group. (2) (Done ✅).
 - Group Details. (3) Yousof (Done ✅).
+<<<<<<< HEAD
 - Submit in contest. (4) Abdo
 - Status & Rank in contest (Check if it work, based on previous task 6). (4) Abdo
 - Join and Leave group. (5) Esraa(done )
 - Invite user to group (leader) && Accept and decline this invitation by user. (5) Esraa
+=======
+- Submit in contest. (4) Abdo (Done ✅).
+- Status & Rank in contest (Check if it work, based on previous task 6). (4) Abdo (Done ✅).
+- Join and Leave group. (5) Esraa (Done ✅).
+- Invite user to group (leader) && Accept and decline this invitation by user. (5) Esraa (Done ✅).
+>>>>>>> e0dbe9716b396005a07ad194ec04106c6c1cb55f
 -------------------------------------------------------------------------------------
 - Cheating
 - Problem Description (Hight).
