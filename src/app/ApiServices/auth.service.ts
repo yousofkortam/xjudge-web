@@ -4,15 +4,18 @@ import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements OnInit {
 
+  baseUrl: string = environment.apiUrl + '/auth';
+
   userData = new BehaviorSubject(null);
 
-  headers: any = {token: localStorage.getItem("userToken")};
+  headers: any = { token: localStorage.getItem("userToken") };
 
   constructor(
     private _HttpClient: HttpClient,
@@ -51,18 +54,18 @@ export class AuthService implements OnInit {
 
   register(userData: object): Observable<any> {
     return this._HttpClient.post(
-      'http://localhost:7070/auth/register',
+      `${this.baseUrl}/register`,
       userData
     );
   }
 
   login(userData: object): Observable<any> {
-    return this._HttpClient.post('http://localhost:7070/auth/login', userData);
+    return this._HttpClient.post(`${this.baseUrl}/login`, userData);
   }
 
   forgetPassword(email: string): Observable<any> {
     return this._HttpClient.post(
-      'http://localhost:7070/auth/forget-password',
+      `${this.baseUrl}/forget-password`,
       email
     );
 
@@ -70,14 +73,14 @@ export class AuthService implements OnInit {
 
   resetPassword(requestBody: any): Observable<any> {
     return this._HttpClient.post(
-      'http://localhost:7070/auth/reset-password',
+      `${this.baseUrl}/reset-password`,
       requestBody
     );
   }
 
   changePassword(userData: object): Observable<any> {
     return this._HttpClient.post(
-      'http://localhost:7070',
+      `${this.baseUrl}/change-password`,
       userData,
       { headers: this.headers }
     );
