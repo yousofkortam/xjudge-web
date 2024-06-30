@@ -1,6 +1,6 @@
 # XJudge
 
-![Project Image](/images/home page.jpg)
+![Project Image](/images/home_page.jpg)
 
 XJudge is a competitive programming platform built with Angular. It allows users to create groups, contests, and problems, and to submit solutions for these problems.
 
@@ -46,66 +46,66 @@ To use XJudge, you can register an account and start creating groups and contest
 
 - Database
 
-![Database](/images/xJudge DBD.png)
+![Database](/images/xJudge_DBD.png)
 
 - Frontend
 
   - Login Page
 
-![Login Page](/images/login page.jpg)
+![Login Page](/images/login_page.jpg)
 
   - Register Page
 
-![Register Page](/images/register page.jpg)
+![Register Page](/images/register_page.jpg)
 
   - Group List
 
-![Group Page](/images/group list page.jpg)
+![Group Page](/images/group_list_page.jpg)
 
   - Group Details
 
-![Group Page](/images/group details.jpg)
+![Group Page](/images/group_details.jpg)
 
   - Problem List
 
-![Problem Page](/images/problem list page.jpg)
+![Problem Page](/images/problem_list_page.jpg)
 
   - Problem Details
 
-![Problem Page](/images/problem details.jpg)
+![Problem Page](/images/problem_details.jpg)
 
   - Contest upcoming
 
-  ![Contest Page](/images/contest details upcoming..jpg)
+  ![Contest Page](/images/contest_details_upcoming.jpg)
 
   - Contest running
 
-  ![Contest Page](/images/contest details running.jpg)
+  ![Contest Page](/images/contest_details_running.jpg)
 
   - Contest ended
 
-  ![Contest Page](/images/contest ended.jpg)
+  ![Contest Page](/images/contest_ended.jpg)
 
   - Contest Status
 
-  ![Contest Page](/images/contest status.jpg)
+  ![Contest Page](/images/contest_status.jpg)
 
   - Contest Rank
 
-  ![Contest Page](/images/contest rank.jpg)
+  ![Contest Page](/images/contest_rank.jpg)
 
   - Problem in contest
 
-  ![Contest Page](/images/problem conetst 1.jpg)
-  ![Contest Page](/images/problem contest 2.jpg)
+  ![Contest Page](/images/problem_conetst1.jpg)
+  ![Contest Page](/images/problem_contest2.jpg)
 
   - Submission Status
 
-  ![Submission Page](/images/submission status.jpg)
+  ![Submission Page](/images/submission_status.jpg)
 
   - Submission details
 
-  ![Submission Page](/images/submissoin details.jpg)
+  ![Submission Page](/images/submissoin_details.jpg)
 
   - Profile
 
