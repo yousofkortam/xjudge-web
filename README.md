@@ -44,7 +44,7 @@ To use XJudge, you can register an account and start creating groups and contest
 
 ## Screenshots
 
-- Database Digram
+- Database Diagram
 
 ![xJudge_DBD](https://github.com/yousofkortam/xjudge-web/assets/115800563/faf5d382-bbfb-498f-8f84-a38da5b98067)
 
