@@ -42,7 +42,8 @@ export class UpdateContestComponent implements OnInit {
 
   initializeForm() {
     const contest = this.Contestdata.contest;
-    const problems = this.Contestdata.problemSet ;
+    const problems = this.Contestdata.problemSet;
+    this.enableDeleteProblem = problems.length > 1;
     
     this.updateContestForm = new FormGroup({
       title: new FormControl(contest.title, [Validators.required]),

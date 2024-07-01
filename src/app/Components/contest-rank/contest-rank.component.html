@@ -30,7 +30,7 @@
 
                     <td class="rank meta" [ngClass]="{'rank meta' : i === 0}">{{i+1}}</td>
                     <td class="team meta" [ngClass]="{'team meta' : i === 0 , 'team' : i !==0}">
-                        <div>
+                        <div style="text-align: left;">
                             <img class="contestant-avatar" [src]="userRank.photoUrl"
                                 src="https://vj.csgrandeur.cn/user/avatar/705205?v=1674489701" alt="avatar"
                                 class="contestant-avatar"><a href="/profile/{{userRank.handle}}"
@@ -55,5 +55,3 @@
         </table>
     </div>
 </div>
-
-  
