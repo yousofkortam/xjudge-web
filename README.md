@@ -2,8 +2,7 @@
 
 ![home_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/e47f73c2-22e4-4244-bd86-8e6db3b83e7e)
 
-
-XJudge is a competitive programming platform built with Angular. It allows users to create groups, contests, and problems, and to submit solutions for these problems.
+XJudge is an online platform designed for competitive programming enthusiasts and professionals. It provides a unified interface to participate in programming contests, practice problems, and track performance across various online judges. XJudge aggregates problems from multiple sources and allows users to submit solutions and receive real-time feedback.
 
 ## Table of Contents
 
@@ -36,6 +35,7 @@ To use XJudge, you can register an account and start creating groups and contest
 - Group creation and management
 - Contest creation and management
 - Problem creation and submission
+- Accessing problems from various popular online judges 
 - Invite users to groups
 - Join and leave groups
 - Update group details
@@ -44,7 +44,7 @@ To use XJudge, you can register an account and start creating groups and contest
 
 ## Screenshots
 
-- Database
+- Database Digram
 
 ![xJudge_DBD](https://github.com/yousofkortam/xjudge-web/assets/115800563/faf5d382-bbfb-498f-8f84-a38da5b98067)
 
