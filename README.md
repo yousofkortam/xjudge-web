@@ -65,7 +65,7 @@ To use XJudge, you can register an account and start creating groups and contest
 
   - Group Details
 
-  ![group_details](https://github.com/yousofkortam/xjudge-web/assets/115800563/6827af63-2d4c-4040-aa69-326ad964fec2)
+  ![group_details](https://github.com/yousofkortam/xjudge-web/assets/115800563/70bd998c-b38b-4b01-a9b7-59b00c8a68b2)
 
   - Problem List
 
