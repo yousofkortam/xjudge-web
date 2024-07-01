@@ -47,8 +47,10 @@ import { UpdateProfileComponent } from './Components/update-profile/update-profi
 import { GroupDetailsComponent } from './Components/group-details/group-details.component';
 import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
-import { InvitationComponent } from './Components/invitation/invitation.component';
 import { UpdateContestComponent } from './Components/update-contest/update-contest.component';
+import { InvitationComponent } from './Components/invitation/invitation.component';
+
+
 
 @NgModule({
   declarations: [

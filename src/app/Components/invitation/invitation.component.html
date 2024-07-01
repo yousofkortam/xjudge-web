@@ -1,4 +1,4 @@
-<div class="invitations-container">
+<!-- <div class="invitations-container">
   <div *ngFor="let invitation of invitations" class="invitation-card">
     <p>Hello <a href="profile/{{invitation.receiverHandle}}">{{ invitation.receiverHandle }}</a> ,
          you are invited to join the group <strong>{{invitation.groupName }}</strong>  by <a href="profile/{{invitation.senderHandle}}">{{ invitation.senderHandle }}</a></p>
@@ -7,6 +7,23 @@
     <div *ngIf="invitation.status === 'PENDING'" class="action-buttons">
       <button (click)="acceptInvitation(invitation.id)">Accept</button>
       <button (click)="declineInvitation(invitation.id)">Decline</button>
+    </div>
+  </div>
+</div> -->
+<div class="container mt-4">
+  <div *ngFor="let invitation of invitations" class="card mb-3">
+    <div class="card-body">
+      <p class="card-text">
+        Hello <a [routerLink]="['/profile', invitation.receiverHandle]">{{ invitation.receiverHandle }}</a>,
+        you are invited to join the group <strong>{{ invitation.groupName }}</strong> by 
+        <a [routerLink]="['/profile', invitation.senderHandle]">{{ invitation.senderHandle }}</a>
+      </p>
+      <p class="card-text"><strong>Status:</strong> {{ invitation.status }}</p>
+      <p class="card-text"><strong>Date:</strong> {{ invitation.date }}</p>
+      <div *ngIf="invitation.status === 'PENDING'" class="btn-group" role="group">
+        <button class="btn btn-success" (click)="acceptInvitation(invitation.id)">Accept</button>
+        <button class="btn btn-danger" (click)="declineInvitation(invitation.id)">Decline</button>
+      </div>
     </div>
   </div>
 </div>
