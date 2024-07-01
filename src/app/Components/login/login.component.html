@@ -11,6 +11,7 @@
 						<span *ngIf="loginForm.get('userHandle')?.getError('required')" class="m-0"style="color:red">User handle is mandatory</span>
 						<!-- <span *ngIf="loginForm.get('userHandle')?.invalid" class="m-0" style="color:red">Please enter a valid handle</span>					 -->
 					</div>
+					<span *ngIf="validationErrors['userHandle']"  style="color:red; margin-top:80px;">{{validationErrors.userHandle}}</span>
 					<i></i>
 				</div>
 				<div class="inputBox form-group">
@@ -20,6 +21,7 @@
 						<span *ngIf="loginForm.get('userPassword')?.getError('required')" class="m-0" style="color:red">User password is mandatory</span>
 						<!-- <span *ngIf="loginForm.get('userPassword')?.invalid" class="m-0" style="color:red">Please enter a valid password</span> -->
 					</div>
+					<span *ngIf="validationErrors['userPassword']"  style="color:red; margin-top:80px;">{{validationErrors.userPassword}}</span>
 					<i></i>
 				</div>
 				<div class="form-group">

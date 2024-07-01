@@ -66,7 +66,7 @@ export class AuthService implements OnInit {
   forgetPassword(email: string): Observable<any> {
     return this._HttpClient.post(
       `${this.baseUrl}/forget-password`,
-      { email: email }
+      email
     );
 
   };

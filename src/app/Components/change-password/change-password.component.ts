@@ -12,13 +12,14 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 export class ChangePasswordComponent implements OnInit {
 
   isLoading:boolean = false;
+  validationErrors: any = {};
   apiError:string = '';
   token: string = '';
 
   changePasswordForm: FormGroup = new FormGroup({
-    oldPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
-    password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
-    confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]*$')]),
+    oldPassword: new FormControl(null, [Validators.required]),
+    password: new FormControl(null, [Validators.required]),
+    confirmPassword: new FormControl(null, [Validators.required]),
   }, { validators: this.rePasswordMatch });
 
   constructor (
@@ -62,10 +63,15 @@ export class ChangePasswordComponent implements OnInit {
             localStorage.setItem("userToken", response.token);
         }
       },
-      error: (err) => {
-        console.log(err);
-        this.isLoading = false;
-        this.apiError = "Current Password Is Wrong! Please Try Again";
+        error: (err)=> {
+          console.log(err);
+          this.validationErrors = err.error.error.validations || {};
+          console.log(this.validationErrors.userHandle); // Log the validationErrors object
+          this.apiError = "Current Password Is Wrong! Please Try Again";   
+          console.log(this.apiError)
+          this.isLoading = false;
+          
+      
       }
     })
   }
