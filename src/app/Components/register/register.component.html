@@ -3,7 +3,10 @@
 	  <div class="box col-md-6 col-lg-4">
 		<form (ngSubmit)="handleRegister(registerForm)" [formGroup]="registerForm">
 		  <h2>Sign Up</h2>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 		  <span *ngIf="apiError" style="color:red">{{apiError}}</span>
   
 		  <div class="inputBox form-group">
@@ -62,6 +65,7 @@
 			<i></i>
 		  </div>
   
+<<<<<<< HEAD
 		  <!-- <span *ngIf="apiError" style="color:red">{{apiError}}</span> -->
 		  
 		  <div class="inputBox form-group">
@@ -116,6 +120,8 @@
 			<i></i>
 		  </div>
 		  
+=======
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 		  <div class="form-group">
 			<button [disabled]="registerForm.invalid" type="submit">
 			  <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>

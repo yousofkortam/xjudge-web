@@ -27,6 +27,10 @@ body {
   
   .box::after {
 	animation-delay: -3s;
+<<<<<<< HEAD
+=======
+	background: linear-gradient(60deg, transparent, #d9138a, #d9138a);
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
   }
   
   @keyframes animate {
@@ -34,9 +38,13 @@ body {
 	100% { transform: rotate(360deg); }
   }
   
+<<<<<<< HEAD
 
 
 form {
+=======
+  form {
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 	position: absolute;
 	inset: 2px;
 	z-index: 10;
@@ -73,6 +81,7 @@ form {
   }
   
   button[type="submit"] {
+<<<<<<< HEAD
 	font-size: 20px;
 	border: none;
 	outline: none;
@@ -148,6 +157,8 @@ form {
 
 
 button[type="submit"] {
+=======
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 	font-size: 20px;
 	border: none;
 	outline: none;
@@ -158,11 +169,12 @@ button[type="submit"] {
 	font-weight: 900;
 	cursor: pointer;
 	width: 100%;
-}
-
-button[type="submit"]:active {
+  }
+  
+  button[type="submit"]:active {
 	background: linear-gradient(90deg, #45f3ff, #d9138a);
 	opacity: 0.8;
+<<<<<<< HEAD
 
 }
 
@@ -179,3 +191,61 @@ button[type="submit"]:active {
 
 
 
+=======
+  }
+  
+  .inputBox span {
+	position: absolute;
+	left: 0;
+	padding: 20px 10px 10px;
+	font-size: 1em;
+	color: #8f8f8f;
+	pointer-events: none;
+	letter-spacing: 0.05em;
+	transition: 0.5s;
+  }
+  
+  .inputBox input:valid~span,
+  .inputBox input:focus~span {
+	color: #45f3ff;
+	transform: translateX(-10px) translateY(-30px);
+	font-size: 0.75em;
+  }
+  
+  .inputBox i {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 2px;
+	background: #45f3ff;
+	transition: 0.5s;
+	pointer-events: none;
+	border-radius: 4px;
+	z-index: 9;
+  }
+  
+  .inputBox input:valid~i,
+  .inputBox input:focus~i {
+	height: 44px;
+  }
+  
+  .error-message {
+	margin-bottom: 20px;
+	color: red;
+  }
+  
+  .inputBox span {
+	display: block;
+	margin: 5px;
+  }
+  
+  .inputBox input {
+	margin-bottom: 10px;
+  }
+  
+  .inputBox .form-group {
+	margin-bottom: 20px;
+  }
+  
+>>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
