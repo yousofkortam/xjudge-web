@@ -1,6 +1,7 @@
 # XJudge
 
-![Project Image](/images/home_page.jpg)
+![home_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/e47f73c2-22e4-4244-bd86-8e6db3b83e7e)
+
 
 XJudge is a competitive programming platform built with Angular. It allows users to create groups, contests, and problems, and to submit solutions for these problems.
 
@@ -45,70 +46,71 @@ To use XJudge, you can register an account and start creating groups and contest
 
 - Database
 
-![Database](/images/xJudge_DBD.png)
+![xJudge_DBD](https://github.com/yousofkortam/xjudge-web/assets/115800563/faf5d382-bbfb-498f-8f84-a38da5b98067)
+
 
 ## Frontend
 
   - Login Page
 
-![Login Page](/images/login_page.jpg)
+  ![login_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/7da4700e-d632-4833-a9e1-a5179ab3c15e)
 
   - Register Page
 
-![Register Page](/images/register_page.jpg)
+  ![register_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/0a6d387e-ab5a-4734-aecb-f0cfa1bc80f1)
 
   - Group List
 
-![Group Page](/images/group_list_page.jpg)
+  ![group_list_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/dd907b3b-ed11-4faf-a22e-631e8c9056f1)
 
   - Group Details
 
-![Group Page](/images/group_details.jpg)
+  ![group_details](https://github.com/yousofkortam/xjudge-web/assets/115800563/6827af63-2d4c-4040-aa69-326ad964fec2)
 
   - Problem List
 
-![Problem Page](/images/problem_list_page.jpg)
+  ![problem_list_page](https://github.com/yousofkortam/xjudge-web/assets/115800563/aa3e54a9-cc5f-4c0c-9f0a-7d2eb210e5c2)
 
   - Problem Details
 
-![Problem Page](/images/problem_details.jpg)
+  ![problem_details](https://github.com/yousofkortam/xjudge-web/assets/115800563/cfd01ca4-d1d7-4986-ab72-81459768e003)
 
   - Contest upcoming
 
-  ![Contest Page](/images/contest_details_upcoming.jpg)
+  ![contest_details_upcoming](https://github.com/yousofkortam/xjudge-web/assets/115800563/002fafdf-f5a4-4893-8e42-84a4bc94171b)
 
   - Contest running
 
-  ![Contest Page](/images/contest_details_running.jpg)
+  ![contest_details_running](https://github.com/yousofkortam/xjudge-web/assets/115800563/fca7d4e3-dab5-4a7b-92b4-5fb353210133)
 
   - Contest ended
 
-  ![Contest Page](/images/contest_ended.jpg)
+  ![contest_ended](https://github.com/yousofkortam/xjudge-web/assets/115800563/8628f9f5-7e6b-4396-8e63-7a7fc5edf3ea)
 
   - Contest Status
 
-  ![Contest Page](/images/contest_status.jpg)
+  ![contest_status](https://github.com/yousofkortam/xjudge-web/assets/115800563/7d774357-1718-4090-beab-12aacfcc3a6d)
 
   - Contest Rank
 
-  ![Contest Page](/images/contest_rank.jpg)
+  ![contest_rank](https://github.com/yousofkortam/xjudge-web/assets/115800563/568a057e-18fe-4bdb-8603-df8f960c046e)
 
   - Problem in contest
 
-  ![Contest Page](/images/problem_conetst1.jpg)
-  ![Contest Page](/images/problem_contest2.jpg)
+  ![problem_conetst1](https://github.com/yousofkortam/xjudge-web/assets/115800563/945b8871-f316-42b5-836e-90815fb551a6)
+  ![problem_contest2](https://github.com/yousofkortam/xjudge-web/assets/115800563/d96d0088-a936-4634-ad7c-a101187a1c8d)
 
   - Submission Status
 
-  ![Submission Page](/images/submission_status.jpg)
+  ![submission_status](https://github.com/yousofkortam/xjudge-web/assets/115800563/55c787d4-2ac9-494d-a0c4-42ab04ef632b)
 
   - Submission details
 
-  ![Submission Page](/images/submissoin_details.jpg)
+  ![submissoin_details](https://github.com/yousofkortam/xjudge-web/assets/115800563/44c3385b-e3a8-4be2-907c-e54a646a028f)
 
   - Profile
 
-  ![Problem Page](/images/profile.jpg)
+  ![profile](https://github.com/yousofkortam/xjudge-web/assets/115800563/26f63d0f-bdeb-4e34-9589-879cd53ed42f)
 
 
 ## Tests
