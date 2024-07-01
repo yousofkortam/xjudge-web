@@ -19,8 +19,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 To install the project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-github-username/XJudge.git`
-2. Navigate to the project directory: `cd XJudge`
+1. Clone the repository: `git clone https://github.com/yousofkortam/xjudge-web.git`
+2. Navigate to the project directory: `cd xjudge-web`
 3. Install dependencies: `npm install`
 4. Run the development server: `ng serve`
 
