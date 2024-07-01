@@ -17,11 +17,7 @@ export class RegisterComponent implements OnInit {
   isLoading: boolean = false;
   validationErrors: any = {};
   apiError:string = '';
-  validations: any={};
-<<<<<<< HEAD
   
-=======
->>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 
   registerForm: FormGroup = new FormGroup({
     userFirstName:new FormControl('', [Validators.required]),

@@ -3,69 +3,6 @@
 	  <div class="box col-md-6 col-lg-4">
 		<form (ngSubmit)="handleRegister(registerForm)" [formGroup]="registerForm">
 		  <h2>Sign Up</h2>
-<<<<<<< HEAD
-
-=======
->>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
-		  <span *ngIf="apiError" style="color:red">{{apiError}}</span>
-  
-		  <div class="inputBox form-group">
-			<div *ngIf="registerForm.get('userFirstName')?.errors && registerForm.get('userFirstName')?.touched" class="error-message">
-			  <span *ngIf="registerForm.get('userFirstName')?.getError('required')" style="color:red" >User first name is mandatory</span>
-			  <span *ngIf="registerForm.get('userFirstName')?.getError('pattern')" style="color:red">First name must contain only letters</span>
-			  <span *ngIf="registerForm.get('userFirstName')?.getError('minLength')" style="color:red">User first name must be at least 2 characters</span>
-			  <span *ngIf="registerForm.get('userFirstName')?.getError('maxLength')" style="color:red">User first name must be at most 30 characters</span>
-			</div>
-			<span for="userFirstName">First Name</span>
-			<input id="userFirstName" formControlName="userFirstName" type="text" required />
-			<i></i>
-		  </div>
-  
-		  <div class="inputBox form-group">
-			<div *ngIf="registerForm.get('userLastName')?.errors && registerForm.get('userLastName')?.touched" class="error-message">
-			  <span *ngIf="registerForm.get('userLastName')?.getError('required')" style="color:red">User last name is mandatory</span>
-			  <span *ngIf="registerForm.get('userLastName')?.getError('pattern')"style="color:red">Last name must contain only letters</span>
-			  <span *ngIf="registerForm.get('userLastName')?.getError('minLength')" style="color:red">User last name must be at least 2 characters</span>
-			  <span *ngIf="registerForm.get('userLastName')?.getError('maxLength')" style="color:red">User last name must be at most 30 characters</span>
-			</div>
-			<span for="userLastName">Last Name</span>
-			<input id="userLastName" formControlName="userLastName" type="text" required />
-			<i></i>
-		  </div>
-  
-		  <div class="inputBox form-group">
-			<div *ngIf="registerForm.get('userHandle')?.errors && registerForm.get('userHandle')?.touched" class="error-message">
-			  <span *ngIf="registerForm.get('userHandle')?.getError('required')" style="color:red">User handle is mandatory</span>
-			  <span *ngIf="registerForm.get('userHandle')?.getError('maxLength')" style="color:red">User handle length must be less than 20</span>
-			</div>
-			<span for="userHandle">Handle</span>
-			<input id="userHandle" formControlName="userHandle" type="text" required />
-			<i></i>
-		  </div>
-  
-		  <div class="inputBox form-group">
-			<div *ngIf="registerForm.get('userEmail')?.errors && registerForm.get('userEmail')?.touched" class="error-message">
-			  <span *ngIf="registerForm.get('userEmail')?.getError('required')" style="color:red">User email is mandatory</span>
-			  <span *ngIf="registerForm.get('userEmail')?.getError('email')" style="color:red">Enter valid email</span>
-			</div>
-			<span for="userEmail">Email</span>
-			<input id="userEmail" formControlName="userEmail" type="text" required />
-			<i></i>
-		  </div>
-  
-		  <div class="inputBox form-group">
-			<div *ngIf="registerForm.get('userPassword')?.errors && registerForm.get('userPassword')?.touched" class="error-message">
-			  <span *ngIf="registerForm.get('userPassword')?.getError('required')" style="color:red">User password is mandatory</span>
-			  <span *ngIf="registerForm.get('userPassword')?.getError('pattern')" style="color:red">User password is invalid</span>
-			  <span *ngIf="registerForm.get('userPassword')?.getError('minLength')" style="color:red">User password must be at least 6 characters</span>
-			  <span *ngIf="registerForm.get('userPassword')?.getError('maxLength')" style="color:red">User password must be at most 20 characters</span>
-			</div>
-			<span for="userPassword">Password</span>
-			<input id="userPassword" formControlName="userPassword" type="password" required />
-			<i></i>
-		  </div>
-  
-<<<<<<< HEAD
 		  <!-- <span *ngIf="apiError" style="color:red">{{apiError}}</span> -->
 		  
 		  <div class="inputBox form-group">
@@ -120,8 +57,6 @@
 			<i></i>
 		  </div>
 		  
-=======
->>>>>>> 9e2ab32 (handle of register to make the api error above the textbox)
 		  <div class="form-group">
 			<button [disabled]="registerForm.invalid" type="submit">
 			  <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
@@ -131,5 +66,4 @@
 		</form>
 	  </div>
 	</div>
-  </div>
-  
+</div>
