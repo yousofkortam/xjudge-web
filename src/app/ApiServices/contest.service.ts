@@ -76,4 +76,9 @@ export class ContestService {
       { headers: this.headers }
     );
   }
-}
+  markUserAsCheater(contestId: number): Observable<any> {
+    return this._HttpClient.put(`${this.baseUrl}/${contestId}/user/mark-cheater`, {}, { headers: this.headers });
+  }
+ 
+  
+  }
