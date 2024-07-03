@@ -29,6 +29,7 @@ export class ContestDetailsComponent implements OnInit {
   showPasswordForm: boolean = false;
 
   password: string = '';
+  leaveCount: number = 0;
 
   constructor(
     private titleService: Title, 
@@ -49,14 +50,14 @@ export class ContestDetailsComponent implements OnInit {
       this.updateProgressBar();
       this.updateCountdownTimer();
       if (this.contest.contestStatus === 'RUNNING') {
-        // this.checkActiveTabAndPrintUrl();
+         this.checkActiveTabAndPrintUrl();
       }
     });
-    // document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+     document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   ngOnDestroy(): void {
-    // document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+     document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   getContestDetails() {
@@ -146,26 +147,48 @@ export class ContestDetailsComponent implements OnInit {
     }
   }
 
-  // onVisibilityChange() {
-  //   if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
-  //     this.printCurrentUrl();
-  //   }
-  // }
+  onVisibilityChange() {
+    if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
+      this.printCurrentUrl();
+    }
+  }
 
-  // checkActiveTabAndPrintUrl() {
-  //   if (document.visibilityState === 'visible') {
-  //     console.log('Tab is active');
-  //     this.printCurrentUrl();
-  //   } else {
-  //     this.printCurrentUrl();
-  //     console.log('Tab is inactive');
-  //      this.printCurrentUrl();
-  //   }
-  // }
+  checkActiveTabAndPrintUrl() {
+    if (document.visibilityState === 'visible') {
+      console.log('Tab is active');
+      this.printCurrentUrl();
+    } else {
+      this.printCurrentUrl();
+      console.log('Tab is inactive');
+      this.leaveCount++;
+      console.log(`Tab left ${this.leaveCount} times`);
+      alert("return to xjudge and complete the contst")
+      if (this.leaveCount === 3) {
+        this.markAsCheater(this.contestId);
+      }
+    }
+  }
 
-  // printCurrentUrl() {
-  //   console.log('Current URL:', window.location.href);
-  // }
+
+  markAsCheater(contestId: number): void {
+    this.contestService.markUserAsCheater(contestId)
+      .subscribe(
+        response => {
+          console.log('Marked as cheater:', response);
+          // Handle success or update UI as needed
+        },
+        error => {
+          console.error('Error marking as cheater:', error);
+          // Handle error, show error message, etc.
+        }
+      );
+  }
+
+
+
+  printCurrentUrl() {
+    console.log('Current URL:', window.location.href);
+  }
 
   openUpdateContestDialog() {
     this.dialog.open(UpdateContestComponent, {
