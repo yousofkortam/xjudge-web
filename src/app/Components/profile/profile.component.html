@@ -5,27 +5,27 @@
         <div class="card-body p-lg-5 p-md-4 p-3">
           <div class="d-md-flex align-items-center">
             <!-- User image -->
-            <div class="profile-image mb-3 mb-md-0 me-md-4">
+            <div class="profile-image mb-3 mb-md-0 me-md-4 mb-5">
               <img [src]="user.photoUrl ?? defaultProfileImage" [alt]="user.firstName + ' ' + user.lastName"
                 [title]="user.firstName + ' ' + user.lastName" class="img-fluid rounded-circle">
             </div>
             <!-- User information -->
-            <div class="profile-details">
-              <h2 class="mb-3">{{user.firstName}} {{user.lastName}}</h2>
+            <div class="profile-details"> 
+               <h2 class="mb-3">{{user.firstName}} {{user.lastName}}</h2>
               <p><strong>Handle:</strong> {{user.handle}}</p>
               <p><strong>School:</strong> {{user.school ?? 'None'}}</p>
               <p><strong>Email:</strong> {{user.email}} <i *ngIf="user.isVerified"
                   class="fas fa-check text-success"></i></p>
               <hr>
-              <div class="row">
+               <div class="row">
                 <div class="col-md-4 mb-3 mb-md-0">
                   <div class="stat-item text-center">
                     <p class="text-muted mb-1">Overall</p>
                     <h4>{{user.solvedCount + user.attemptedCount}}</h4>
                   </div>
                 </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                  <div class="stat-item text-center">
+                <div class="col-md-4 mb-3 mb-md-0"> 
+                   <div class="stat-item text-center">
                     <p class="text-muted mb-1">Solved</p>
                     <h4>{{user.solvedCount}}</h4>
                   </div>
