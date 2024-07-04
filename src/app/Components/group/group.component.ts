@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CreateGroupComponent } from '../create-group/create-group.component';
 
 @Component({
@@ -9,27 +10,32 @@ import { CreateGroupComponent } from '../create-group/create-group.component';
   styleUrls: ['./group.component.css']
 })
 export class GroupComponent implements OnInit {
+  currentTab: string = 'myGroups'; // Default tab
 
   constructor(
     private titleService: Title,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.titleService.setTitle('Group');
   }
-  currentTab: string = 'myGroups'; // Default tab
 
   showMyGroups() {
     this.currentTab = 'myGroups';
+    this.router.navigate(['myGroups'], { relativeTo: this.route });
   }
 
   showExploreGroups() {
     this.currentTab = 'exploreGroups';
+    this.router.navigate(['exploreGroups'], { relativeTo: this.route });
   }
 
   showInvitations() {
     this.currentTab = 'invitations';
+    this.router.navigate(['invitations'], { relativeTo: this.route });
   }
 
   openCreateGroupForm() {
@@ -39,5 +45,6 @@ export class GroupComponent implements OnInit {
       disableClose: true
     });
   }
-
 }
+
+
