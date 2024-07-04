@@ -51,7 +51,9 @@ export class GroupDetailsComponent implements OnInit {
         this.titleService.setTitle(this.group.name);
       },
       error: (error: any) => {
-        console.log(error);
+        if (error.error.error.statusCode == 404) {
+          this.router.navigate(['/notFound']);
+        }
       }
     });
   }

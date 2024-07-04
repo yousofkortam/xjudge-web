@@ -111,7 +111,7 @@ export class ProblemDetailsComponent implements OnInit {
         }
       },
       error: (err) => {
-        if (err.error.success === false) {
+        if (err.error.error.statusCode == 404) {
           this._Router.navigate(['/notFound']);
         }
       }

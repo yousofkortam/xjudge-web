@@ -72,14 +72,12 @@ export class ContestDetailsComponent implements OnInit {
         this.updateCountdownTimer();
       },
       error: (err) => {
-        this._snackBar.open(err.error.error.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'bottom',
-        });
         if (err.error.error.statusCode === 403) {
           this.showPasswordForm = true;
         }
-        console.log(err);
+        if (err.error.error.statusCode == 404) {
+          this.router.navigate(['/notFound']);
+        }
       }
     });
   }
