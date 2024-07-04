@@ -21,6 +21,8 @@ import { StatusComponent } from './Components/status/status.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import {GroupDetailsComponent} from "./Components/group-details/group-details.component";
 import { ContestProblemComponent } from './Components/contest-problem/contest-problem.component';
+import { InvitationComponent } from './Components/invitation/invitation.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -33,7 +35,13 @@ const routes: Routes = [
   { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
   { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
   { path: 'contest/:contestId/problem/:hashTag', canActivate:[ProtectedAuthGuard], component:ContestProblemComponent },
-  { path: 'group', canActivate:[ProtectedAuthGuard], component:GroupComponent },
+ 
+  { path: 'group', canActivate: [ProtectedAuthGuard], component: GroupComponent, children: [
+    { path: '', redirectTo: 'myGroups', pathMatch: 'full' },
+    { path: 'myGroups', component: MyGroupsComponent },
+    { path: 'exploreGroups', component: ExploreGroupsComponent },
+    { path: 'invitations', component: InvitationComponent }
+  ]},
   { path: 'group/:groupId', canActivate:[ProtectedAuthGuard], component:GroupDetailsComponent},
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },
@@ -48,6 +56,7 @@ const routes: Routes = [
   { path: 'profile/:handle', component:ProfileComponent },
   { path: 'notFound', component:NotFoundComponent },
   { path: 'group_details',component:GroupDetailsComponent},
+  
   { path: '**', component:NotFoundComponent }
 ];
 
