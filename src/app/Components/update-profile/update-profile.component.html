@@ -57,7 +57,7 @@
 
                     <div class="mt-3 mb-3 d-flex ">
                         <label for="school" class="col-md-2 mt-2 me-3 col-4">School</label>
-                        <input type="text" required id="user-school" class="form-control ms-lg-2" placeholder="School"
+                        <input type="text" id="user-school" class="form-control ms-lg-2" placeholder="School"
                             formControlName="school" />
                         <div
                             *ngIf="updateProfielForm.get('school')?.errors && updateProfielForm.get('school')?.touched ">
