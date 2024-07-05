@@ -40,8 +40,8 @@
                 <div class="card w-100">
                     <div class="d-flex small-text" *ngFor="let property of problemInfo.properties">
                         <ng-container *ngIf="inContest || !property.spoiler">
-                            <dt class="col-sm-6">{{property.title}}</dt>
-                            <dd class="col-sm-6">{{property.content}}</dd>
+                            <dt style="text-align: left;" class="col-sm-6">{{property.title}}</dt>
+                            <dd style="text-align: left;" class="col-sm-6">{{property.content}}</dd>
                         </ng-container>
                     </div>
                 </div>
