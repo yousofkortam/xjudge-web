@@ -6,7 +6,8 @@
 }
 
 .user-role-member {
-  background-color: transparent;
+  background-color:darkcyan;
+  color: white;
 }
 
 .tag {
@@ -21,7 +22,8 @@
   width: 370px;
   background-color: #fff;
   border-radius: .25rem;
-  height: 10vh;
+
+  height: 400px;
   border-radius: 10px;
   box-shadow: 3px 3px 6px #888;
 }
@@ -41,6 +43,8 @@
   color: #bbb;
   overflow: hidden;
   padding: 5px 5px 5px 0px;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
   
 }
 .card-text p{
