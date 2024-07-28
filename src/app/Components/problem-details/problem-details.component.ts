@@ -9,6 +9,8 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/ApiServices/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-problem-details',
@@ -27,6 +29,7 @@ export class ProblemDetailsComponent implements OnInit {
   isLoading: boolean = false;
   apiError: string = '';
   title: string = '';
+  isAuthenticated: boolean = this.userService.isAuthenticated();
 
   descriptionUrl: SafeResourceUrl = '';
 
@@ -46,7 +49,9 @@ export class ProblemDetailsComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute,
     private submissionService: SubmissionService,
     private authService: AuthService,
+    private userService: UserService,
     private titleService: Title,
+    private _snackBar: MatSnackBar,
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
     @Inject(DOCUMENT) private document: Document) { }
@@ -68,19 +73,27 @@ export class ProblemDetailsComponent implements OnInit {
   }
 
   openModal() {
+    if (!this.isAuthenticated) {
+      this._snackBar.open('You need to login to submit a problem', 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+      });
+      return;
+    }
     this.dialog.open(SubmitProblemComponent, {
       data: {
         problemCode: this.problemCode,
         source: this.source,
-        inContest: this.inContest ,
-        contestId : this.contestId ,
+        inContest: this.inContest,
+        contestId: this.contestId,
       },
       width: '60%',
       height: 'auto',
       disableClose: true
     },
     );
-}
+  }
 
   openSubmitProblemModal() {
     this.dialog.open(SubmitProblemComponent, {
@@ -101,17 +114,15 @@ export class ProblemDetailsComponent implements OnInit {
 
     observable.subscribe({
       next: (response) => {
-        if (response.success === true) {
-          this.problemCode = response.data.code;
-          this.problemInfo = response.data;
-          console.log(this.problemInfo);
-          this.source = this.problemInfo.onlineJudge;
-          this.titleService.setTitle(this.problemInfo.title);
-          this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070${this.problemInfo.discriptionRoute}`);
-        }
+        this.problemCode = response.code;
+        this.problemInfo = response;
+        console.log(this.problemInfo);
+        this.source = this.problemInfo.onlineJudge;
+        this.titleService.setTitle(this.problemInfo.title);
+        this.descriptionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:7070${this.problemInfo.discriptionRoute}`);
       },
       error: (err) => {
-        if (err.error.error.statusCode == 404) {
+        if (err.error.statusCode == 404) {
           this._Router.navigate(['/notFound']);
         }
       }
@@ -122,11 +133,9 @@ export class ProblemDetailsComponent implements OnInit {
     this.isLoading = true;
     this.submissionService.filterSubmissions(this.authService.getUserHandle(), '', this.problemCode, '', 2, 0).subscribe({
       next: (response) => {
-        if (response.success === true) {
-          this.isLoading = false;
-          this.problemSumbissions = response.data.content;
-          this.totalSubmissions = response.data.totalElements;
-        }
+        this.isLoading = false;
+        this.problemSumbissions = response.content;
+        this.totalSubmissions = response.totalElements;
       },
       error: (error) => {
         this.isLoading = false;
@@ -149,5 +158,5 @@ export class ProblemDetailsComponent implements OnInit {
   recrawl() {
     window.location.reload();
   }
-  
+
 }

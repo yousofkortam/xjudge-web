@@ -9,9 +9,16 @@ import { environment } from '../environment/environment';
 export class OnlineJudgeService {
 
   baseUrl: string = environment.apiUrl + '/online-judge';
-  
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
-  constructor(private _HttpClient: HttpClient) { }
+
+  headers: any;
+  constructor(private _HttpClient: HttpClient) {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
 
   getOnlineJudges(): Observable<any> {
     return this._HttpClient.get(`${this.baseUrl}`, { headers: this.headers });

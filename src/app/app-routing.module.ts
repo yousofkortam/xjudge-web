@@ -30,19 +30,19 @@ const routes: Routes = [
   // // lazy loading for the component;
   // loadComponent: () =>import('./Components/home/home.component').then((c) => c.HomeComponent),},
   { path: 'home', component:HomeComponent },
-  { path: 'problem', canActivate:[ProtectedAuthGuard], component:ProblemComponent },
-  { path: 'status', canActivate:[ProtectedAuthGuard], component:StatusComponent},
-  { path: 'contest', canActivate:[ProtectedAuthGuard], component:ContestComponent },
-  { path: 'contest/:contestId', canActivate:[ProtectedAuthGuard], component:ContestDetailsComponent},
-  { path: 'contest/:contestId/problem/:hashTag', canActivate:[ProtectedAuthGuard], component:ContestProblemComponent },
+  { path: 'problem', component:ProblemComponent },
+  { path: 'status', component:StatusComponent},
+  { path: 'contest', component:ContestComponent },
+  { path: 'contest/:contestId', component:ContestDetailsComponent},
+  { path: 'contest/:contestId/problem/:hashTag', component:ContestProblemComponent },
  
-  { path: 'group', canActivate: [ProtectedAuthGuard], component: GroupComponent, children: [
+  { path: 'group', component: GroupComponent, children: [
     { path: '', redirectTo: 'myGroups', pathMatch: 'full' },
     { path: 'myGroups', component: MyGroupsComponent },
     { path: 'exploreGroups', component: ExploreGroupsComponent },
     { path: 'invitations', component: InvitationComponent }
   ]},
-  { path: 'group/:groupId', canActivate:[ProtectedAuthGuard], component:GroupDetailsComponent},
+  { path: 'group/:groupId', component:GroupDetailsComponent},
   { path: 'resetPassword', component:ResetPasswordComponent },
   { path: 'forgetPassword', component:ForgetPasswordComponent },
   { path: 'changePassword', canActivate:[ProtectedAuthGuard], component:ChangePasswordComponent },
@@ -52,7 +52,7 @@ const routes: Routes = [
   { path: 'create-group', component: CreateGroupComponent } ,
   { path: 'allGroups',component: ExploreGroupsComponent},
   { path: 'myGroups',component:MyGroupsComponent},
-  { path: 'problem/:source/:problemCode', canActivate:[ProtectedAuthGuard], component:ProblemDetailsComponent },
+  { path: 'problem/:source/:problemCode', component:ProblemDetailsComponent },
   { path: 'profile/:handle', component:ProfileComponent },
   { path: 'notFound', component:NotFoundComponent },
   { path: 'group_details',component:GroupDetailsComponent},

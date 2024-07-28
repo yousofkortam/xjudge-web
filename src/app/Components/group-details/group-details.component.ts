@@ -44,14 +44,16 @@ export class GroupDetailsComponent implements OnInit {
   getGroupDetails(id: number) {
     this.groupService.getSpecificGroup(id).subscribe({
       next: (response: any) => {
-        this.group = response.data;
+        this.group = response;
         this.isLeader = this.group.leader;
         this.isMember = this.group.member;
+        console.log('lol');
+        
         console.log(this.group);
         this.titleService.setTitle(this.group.name);
       },
       error: (error: any) => {
-        if (error.error.error.statusCode == 404) {
+        if (error.error.statusCode == 404) {
           this.router.navigate(['/notFound']);
         }
       }
@@ -61,7 +63,7 @@ export class GroupDetailsComponent implements OnInit {
   getGroupMembers(id: number) {
     this.groupService.getGroupMembers(id, 0, 25).subscribe({
       next: (response: any) => {
-        this.members = response.data.content;
+        this.members = response.content;
       },
       error: (error: any) => {
         console.log(error);
@@ -72,7 +74,7 @@ export class GroupDetailsComponent implements OnInit {
   getGroupContests(id: number) {
     this.groupService.getGroupContests(id).subscribe({
       next: (response: any) => {
-        this.contests = response.data;
+        this.contests = response;
       },
       error: (error: any) => {
         console.log(error);
@@ -91,7 +93,7 @@ export class GroupDetailsComponent implements OnInit {
         window.location.reload();
       },
       error: (error: any) => {
-        this.snackBar.open(error.error.error.message, 'close', {
+        this.snackBar.open(error.error.message, 'close', {
           duration: 2000,
           verticalPosition: 'top',
         });
@@ -105,10 +107,17 @@ export class GroupDetailsComponent implements OnInit {
         window.location.reload();
       },
       error: (error: any) => {
-        this.snackBar.open(error.error.error.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
+        if (error.status == 403) {
+          this.snackBar.open('You should login to join this group', 'close', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
+        } else {
+          this.snackBar.open(error.error.message, 'close', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
+        }
       }
     });
   }

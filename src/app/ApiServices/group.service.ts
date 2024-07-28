@@ -1,6 +1,6 @@
-import {HttpHeaders, HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,20 @@ export class GroupService {
 
   baseUrl: string = environment.apiUrl + '/group';
 
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
-  constructor(private _HttpClient: HttpClient) { }
+  headers: any;
+
+  constructor(private _HttpClient: HttpClient) {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
+
+  isAuthenticated() {
+    return localStorage.getItem('userToken') ? true : false;
+  }
 
   getSpecificGroup(GroupId: number): Observable<any> {
     return this._HttpClient.get(`${this.baseUrl}/${GroupId}`, { headers: this.headers }
@@ -93,6 +105,7 @@ export class GroupService {
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
-    );}
+    );
+  }
 
 }

@@ -11,10 +11,17 @@ export class ProblemService {
 
   baseUrl: string = environment.apiUrl;
 
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
+  headers: any;
   constructor(private _HttpClient: HttpClient,
     private contestService: ContestService
-  ) { }
+  ) { 
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
 
   getAllProblems(pageSize: number, pageNo: number): Observable<any> {
     return this._HttpClient.get(

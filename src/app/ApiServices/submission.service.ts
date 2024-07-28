@@ -10,8 +10,15 @@ export class SubmissionService {
 
   baseUrl: string = environment.apiUrl + '/submission';
 
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
-  constructor(private _HttpClient: HttpClient) { }
+  headers: any;
+  constructor(private _HttpClient: HttpClient) {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
 
   getAllSubmissions(pageSize: number, pageNo: number): Observable<any> {
     return this._HttpClient.get(

@@ -9,16 +9,19 @@ import { Router } from '@angular/router';
 })
 export class InvitationComponent implements OnInit {
   invitations: any[] = [];
+  isAuthenticated: boolean;
 
   constructor(
     private userService: UserService,
     private router: Router  // Inject Router here
-  ) {}
+  ) {
+    this.isAuthenticated = this.userService.isAuthenticated();
+  }
 
   ngOnInit(): void {
     this.userService.getUserInvitations().subscribe(
       (response) => {
-        this.invitations = response.data; // Adjust based on your API response structure
+        this.invitations = response; // Adjust based on your API response structure
       },
       (error) => {
         console.error('Error fetching invitations:', error);

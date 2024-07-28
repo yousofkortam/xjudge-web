@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 export class ForgetPasswordComponent implements OnInit {
 
   apiError: string = "";
-  validationErrors: any 
+  validationErrors: any
   isLoading: boolean = false;
 
   forgetPasswordForm: FormGroup = new FormGroup({
@@ -29,34 +29,31 @@ export class ForgetPasswordComponent implements OnInit {
     this.titleService.setTitle('Forget Password');
   }
 
-  handleForgetPassword(forgetPasswordForm:FormGroup) {
+  handleForgetPassword(forgetPasswordForm: FormGroup) {
     this.isLoading = true;
-    if(forgetPasswordForm.valid){
+    if (forgetPasswordForm.valid) {
       this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({
         next: (response) => {
           console.log(response);
-          if (response.success === true) {        
-            this._snackBar.open(response.data.message, 'close', {
-              duration: 5000,
-              verticalPosition: 'top',
-            });
-            localStorage.setItem("isSendCode", 'true');
-           this.isLoading = false;
-      }
-         
+          this._snackBar.open(response.message, 'close', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+          localStorage.setItem("isSendCode", 'true');
+          this.isLoading = false;
         },
         error: (err) => {
           console.log(err)
-          this.validationErrors = err.error.error.message ;
-           console.log(this.validationErrors)
+          this.validationErrors = err.error.message;
+          console.log(this.validationErrors)
           // this.apiError = err.error.message;         
           // this._snackBar.open(this.apiError, 'close', {
           //   duration: 2000,
           //   verticalPosition: 'top',
           // });
-           this.isLoading = false;   
-    }
+          this.isLoading = false;
+        }
       })
-  }
+    }
   }
 }

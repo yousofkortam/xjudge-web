@@ -49,6 +49,7 @@ import { ContestProblemComponent } from './Components/contest-problem/contest-pr
 import { InviteUserComponent } from './Components/invite-user/invite-user.component';
 import { UpdateContestComponent } from './Components/update-contest/update-contest.component';
 import { InvitationComponent } from './Components/invitation/invitation.component';
+import { NotLoggedInComponent } from './Components/not-logged-in/not-logged-in.component';
 
 
 
@@ -91,7 +92,8 @@ import { InvitationComponent } from './Components/invitation/invitation.componen
     ContestProblemComponent,
     InviteUserComponent,
     InvitationComponent,
-    UpdateContestComponent
+    UpdateContestComponent,
+    NotLoggedInComponent
   ],
   imports: [
     RouterModule,

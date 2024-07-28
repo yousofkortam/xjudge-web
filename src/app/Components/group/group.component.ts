@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateGroupComponent } from '../create-group/create-group.component';
+import { UserService } from 'src/app/ApiServices/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-group',
@@ -10,13 +12,15 @@ import { CreateGroupComponent } from '../create-group/create-group.component';
   styleUrls: ['./group.component.css']
 })
 export class GroupComponent implements OnInit {
-  currentTab: string = 'myGroups'; // Default tab
+  currentTab: string = 'myGroups';
 
   constructor(
     private titleService: Title,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +43,14 @@ export class GroupComponent implements OnInit {
   }
 
   openCreateGroupForm() {
+    if (!this.userService.isAuthenticated()) {
+      this._snackBar.open('You need to login to create a group', 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+      });
+      return;
+    }
     this.dialog.open(CreateGroupComponent, {
       width: '50%',
       height: 'auto',

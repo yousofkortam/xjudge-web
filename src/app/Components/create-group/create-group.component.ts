@@ -49,22 +49,20 @@ export class CreateGroupComponent {
         next: (response) => {
           this.isLoading = false;
           console.log('Response received:', response);
-          if (response.success === true) {
-            const groupId = response.data?.id;
-            if (groupId) {
-              console.log('Group ID:', groupId);
-              this.dialgo.closeAll();
-              this._Router.navigate(['/group', groupId]);
-            } else {
-              console.error('Group ID not found in response:', response);
-            }
+          const groupId = response?.id;
+          if (groupId) {
+            console.log('Group ID:', groupId);
+            this.dialgo.closeAll();
+            this._Router.navigate(['/group', groupId]);
+          } else {
+            console.error('Group ID not found in response:', response);
           }
         },
         error: (response) => {
           this.isLoading = false;
           console.log(response);
-          
-          this.apiError = response.error.error.message;
+
+          this.apiError = response.error.message;
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
@@ -81,14 +79,12 @@ export class CreateGroupComponent {
         next: (response) => {
           this.isLoading = false;
           console.log('Response received:', response);
-          if (response.success === true) {
-            this.dialgo.closeAll();
-            window.location.reload();
-          }
+          this.dialgo.closeAll();
+          window.location.reload();
         },
         error: (response) => {
           this.isLoading = false;
-          this.apiError = response.error.error.message;
+          this.apiError = response.error.message;
           this._snackBar.open(this.apiError, 'close', {
             duration: 2000,
             verticalPosition: 'top',
@@ -96,4 +92,5 @@ export class CreateGroupComponent {
         }
       });
     }
-  }}
+  }
+}

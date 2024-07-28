@@ -65,13 +65,11 @@ export class ChangePasswordComponent implements OnInit {
       },
         error: (err)=> {
           console.log(err);
-          this.validationErrors = err.error.error.validations || {};
+          this.validationErrors = err.error.validations || {};
           console.log(this.validationErrors.userHandle); // Log the validationErrors object
           this.apiError = "Current Password Is Wrong! Please Try Again";   
           console.log(this.apiError)
           this.isLoading = false;
-          
-      
       }
     })
   }

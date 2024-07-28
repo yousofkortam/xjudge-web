@@ -24,8 +24,8 @@ export class ExploreGroupsComponent implements OnInit {
     this.loading = true;
     this.groupService.searchGroupByName(this.searchName, this.pageNo, this.size).subscribe({
       next: (response) => {
-        this.groups = response.data.content;
-        this.totalPages = response.data.totalPages;
+        this.groups = response.content;
+        this.totalPages = response.totalPages;
         this.loading = false;
       },
       error: (error) => {

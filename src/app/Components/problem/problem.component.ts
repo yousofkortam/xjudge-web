@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
+import { UserService } from 'src/app/ApiServices/user.service';
 
 @Component({
   selector: 'app-problem',
@@ -21,7 +22,10 @@ export class ProblemComponent implements OnInit {
 
   onlineJudges: any = [];
 
-  statistics: any;
+  statistics: any = {
+    solvedProblems: 0,
+    attemptedProblems: 0
+  };
 
   oj: string = '';
   problemCode: string = '';
@@ -31,14 +35,18 @@ export class ProblemComponent implements OnInit {
   constructor(
     private _problemService: ProblemService,
     private onlineJudgeService: OnlineJudgeService,
-   private _Router: Router,
+    private userService: UserService,
+    private _Router: Router,
     private titleService: Title) { }
 
   ngOnInit(): void {
     this.getOnlineJudges();
     this.titleService.setTitle('Problems');
     this.filterProblems();
-    this.getUserStatistics();
+    if (this.userService.isAuthenticated()) {
+      this.getUserStatistics()
+    }
+    
   }
 
   trackByProblemCode(index: number, problem: any): string {
@@ -60,22 +68,17 @@ export class ProblemComponent implements OnInit {
     this.loading = true;
     this._problemService.filterProblem(this.oj, this.problemCode, this.title, this.contestName, this.pageSize, this.pageNo).subscribe({
       next: (response) => {
-        console.log(response);
-        if (response.success === true) {
-          this.loading = false;
-          this.Problems = response.data.content;
-          this.totalPages = response.data.totalPages;
-          this.pageNo = response.data.pageable.pageNumber;
-          this.totalElements = response.data.totalElements;
-        }
+        this.loading = false;
+        this.Problems = response.content;        
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
       },
       error: (error) => {
         this.loading = false;
-        console.log(error);
         if (error.error.success === false) {
           this._Router.navigate(['/notFound']);
-       
-         }
+
+        }
       }
     });
   }
@@ -98,10 +101,7 @@ export class ProblemComponent implements OnInit {
   getOnlineJudges() {
     this.onlineJudgeService.getOnlineJudges().subscribe({
       next: (response) => {
-        console.log(response);
-        if (response.success === true) {
-          this.onlineJudges = response.data;
-        }
+        this.onlineJudges = response;        
       },
       error: (error) => {
         console.log(error);
@@ -112,10 +112,7 @@ export class ProblemComponent implements OnInit {
   getUserStatistics() {
     this._problemService.getUserStatistics().subscribe({
       next: (response) => {
-        console.log(response);
-        if (response.success === true) {
-          this.statistics = response.data;
-        }
+        this.statistics = response;
       },
       error: (error) => {
         console.log(error);

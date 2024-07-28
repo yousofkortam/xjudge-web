@@ -19,12 +19,12 @@ export class ContestRankComponent implements OnInit {
   ngOnInit(): void {
     this.contestService.getContstRank(this.contestId).subscribe({
       next: (response) => {
-        this.contestRank = response.data;
+        this.contestRank = response;
         for (let i = 0; i < this.contestRank.length; i++) {
           const submissionList = this.getSubmissionsForContestant(this.contestRank[i]);
           this.contestRank[i]["submissionStatus"] = submissionList;
         }
-        console.log(response.data)
+        console.log(response)
       },
       error: (err) => {
         console.error('Error fetching contest rank:', err);

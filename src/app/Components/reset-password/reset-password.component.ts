@@ -63,22 +63,20 @@ export class ResetPasswordComponent implements OnInit {
     };
     this._AuthService.resetPassword(requestBody).subscribe({
       next: (response) => {
-        if (response.success === true) {
-          this.isLoading = false;
-          this._snackBar.open(response.data.message, 'close', {
-            duration: 2000,
-            verticalPosition: 'top',
-          });
-          this._Router.navigate(["/login"]).then(r => r);
-        }
+        this.isLoading = false;
+        this._snackBar.open(response.message, 'close', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+        this._Router.navigate(["/login"]).then(r => r);
       },
       error: (err) => {
         console.log(err);
-          this.validationErrors = err.error.error.message
-          // this.apiError = err.error.error.message;
-          // console.log(this.apiError)
-          this.isLoading = false;
-          
+        this.validationErrors = err.error.message
+        // this.apiError = err.error.message;
+        // console.log(this.apiError)
+        this.isLoading = false;
+
         // this._snackBar.open(this.apiError, 'close', {
         //   duration: 2000,
         //   verticalPosition: 'top',

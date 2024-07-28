@@ -43,8 +43,8 @@ export class InviteUserComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.validationsErrors = err.error.error;
-        this.snackBar.open(err.error.error.message, 'close', {
+        this.validationsErrors = err.error;
+        this.snackBar.open(err.error.message, 'close', {
           duration: 2000,
           verticalPosition: 'top',
         });
