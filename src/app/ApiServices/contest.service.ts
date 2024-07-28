@@ -14,10 +14,17 @@ export class ContestService {
   private dataSubject = new Subject<any>();
   data$ = this.dataSubject.asObservable();
 
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
+  headers: any;
   constructor(
     private _HttpClient: HttpClient,
-    private groupService: GroupService) { }
+    private groupService: GroupService) {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
 
 
   searchContestByTitle(title: String, pageSize: number, pageNo: number): Observable<any> {

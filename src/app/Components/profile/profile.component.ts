@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   user: any;
   isTheRightUser: boolean = true;
   defaultProfileImage: string = "./assets/images/Default_Image.jpg";
-  
+
   constructor(
     private _ActivatedRoute: ActivatedRoute,
     private userService: UserService,
@@ -39,11 +39,11 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserDetails(this.userHandle, this.user).subscribe({
       next: (response) => {
         console.log(response);
-        this.user = response.data;
+        this.user = response;
       },
       error: (err) => {
         console.log(err);
-        if (err.error.error.statusCode == 404) {
+        if (err.error.statusCode == 404) {
           this.router.navigate(['/notFound']);
         }
       }

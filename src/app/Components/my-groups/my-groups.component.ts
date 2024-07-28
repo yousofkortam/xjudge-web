@@ -11,8 +11,11 @@ export class MyGroupsComponent implements OnInit {
   groups: any[] = []; // Array to hold the groups
   currentPage = 0;
   totalPages = 0;
+  isAuthenticated = true;
 
-  constructor(private groupService: GroupService) {}
+  constructor(private groupService: GroupService) {
+    this.isAuthenticated = this.groupService.isAuthenticated();
+  }
 
   ngOnInit(): void {
     this.loadGroups();
@@ -21,9 +24,9 @@ export class MyGroupsComponent implements OnInit {
   loadGroups() {
     this.groupService.getGroupsByUserHandle(this.currentPage, 25).subscribe(
       (response) => {
-        this.groups = response.data.content; 
-        this.currentPage = response.data.number; 
-        this.totalPages = response.data.totalPages; 
+        this.groups = response.content; 
+        this.currentPage = response.number; 
+        this.totalPages = response.totalPages; 
         console.log(this.groups);
       },
       (error) => {

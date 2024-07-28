@@ -8,6 +8,7 @@ import { ContestService } from 'src/app/ApiServices/contest.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
 import { UpdateContestComponent } from '../update-contest/update-contest.component';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { UserService } from 'src/app/ApiServices/user.service';
 
 @Component({
   selector: 'app-contest-details',
@@ -36,6 +37,7 @@ export class ContestDetailsComponent implements OnInit {
     private contestService: ContestService,
     private _ProblemService: ProblemService,
     private authService: AuthService, 
+    private userService: UserService,
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar) {}
@@ -52,31 +54,33 @@ export class ContestDetailsComponent implements OnInit {
         // this.checkActiveTabAndPrintUrl();
       }
     });
-    // document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
   }
 
   ngOnDestroy(): void {
-    // document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+    this.titleService.setTitle('Contest Details');
   }
 
   getContestDetails() {
     this.contestService.getSpecificContestById(this.contestId, this.password).subscribe({
       next: (response) => {
         this.showPasswordForm = false;
-        this.contest = response.data;
+        this.contest = response;
         this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
         this.titleService.setTitle(this.contest.title);
-        this.problemSet = response.data.problemSet;
+        this.problemSet = response.problemSet;
         this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
         this.updateProgressBar();
         this.updateCountdownTimer();
       },
       error: (err) => {
-        if (err.error.error.statusCode === 403) {
+        if (err.error.statusCode === 403) {
           this.showPasswordForm = true;
         }
-        if (err.error.error.statusCode == 404) {
+        if (err.error.statusCode == 404) {
           this.router.navigate(['/notFound']);
+        }
+        if (err.error.statusCode == 400 && !this.userService.isAuthenticated()) {
+          this.router.navigate(['/login']);
         }
       }
     });
@@ -85,7 +89,7 @@ export class ContestDetailsComponent implements OnInit {
   getProblemDetailsWithHashtag(problemHashtag: string) {
     this._ProblemService.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag).subscribe({
       next: (response) => {
-        this.problemInfo = response.data;
+        this.problemInfo = response;
       },
       error: (err) => {
         console.log(err);
@@ -143,27 +147,6 @@ export class ContestDetailsComponent implements OnInit {
       }
     }
   }
-
-  // onVisibilityChange() {
-  //   if (document.visibilityState === 'visible' && this.contest?.contestStatus === 'RUNNING') {
-  //     this.printCurrentUrl();
-  //   }
-  // }
-
-  // checkActiveTabAndPrintUrl() {
-  //   if (document.visibilityState === 'visible') {
-  //     console.log('Tab is active');
-  //     this.printCurrentUrl();
-  //   } else {
-  //     this.printCurrentUrl();
-  //     console.log('Tab is inactive');
-  //      this.printCurrentUrl();
-  //   }
-  // }
-
-  // printCurrentUrl() {
-  //   console.log('Current URL:', window.location.href);
-  // }
 
   openUpdateContestDialog() {
     this.dialog.open(UpdateContestComponent, {

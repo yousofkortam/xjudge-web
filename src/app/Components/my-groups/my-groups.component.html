@@ -1,1 +1,4 @@
-<app-groups [groups]="groups" ></app-groups>
+<app-groups *ngIf="isAuthenticated; else noGroups" [groups]="groups"></app-groups>
+<ng-template #noGroups>
+  <app-not-logged-in></app-not-logged-in>
+</ng-template>

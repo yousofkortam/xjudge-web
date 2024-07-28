@@ -154,7 +154,7 @@ export class UpdateContestComponent implements OnInit {
   getOnlineJudges() {
     return this._OnlineJudgeService.getOnlineJudges().subscribe({
       next: (response) => {
-        this.onlineJudges = response.data;
+        this.onlineJudges = response;
       },
       error: (err) => {
         console.log(err);

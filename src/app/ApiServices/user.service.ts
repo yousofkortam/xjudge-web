@@ -10,10 +10,21 @@ export class UserService {
 
   baseUrl: string = environment.apiUrl + '/user';
 
-  headers: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('userToken')}`);
-  constructor(private _HttpClient: HttpClient) { }
+  headers: any;
+  constructor(private _HttpClient: HttpClient) {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    } else {
+      this.headers = new HttpHeaders();
+    }
+  }
 
-  getUserDetails(handle: string, email:string): Observable<any> {
+  isAuthenticated(): boolean {
+    return localStorage.getItem('userToken') != null;
+  }
+
+  getUserDetails(handle: string, email: string): Observable<any> {
     return this._HttpClient.get(
       `${this.baseUrl}/${handle}`,
       { headers: this.headers }
@@ -50,5 +61,5 @@ export class UserService {
       { headers: this.headers }
     );
   }
-  
+
 }

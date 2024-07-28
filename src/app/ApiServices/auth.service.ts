@@ -1,5 +1,5 @@
 import { SubmitProblemComponent } from './../Components/submit-problem/submit-problem.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -15,11 +15,17 @@ export class AuthService implements OnInit {
 
   userData = new BehaviorSubject(null);
 
-  headers: any = { token: localStorage.getItem("userToken") };
+  headers: any;
 
   constructor(
     private _HttpClient: HttpClient,
     private _Router: Router) {
+      const token = localStorage.getItem('userToken');
+      if (token) {
+        this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      } else {
+        this.headers = new HttpHeaders();
+      }
     if (this.isLogin()) {
       this.decodeUserData();
     }
@@ -49,7 +55,9 @@ export class AuthService implements OnInit {
   }
 
   getUserHandle() {
-    return this.decodeUserData().sub;
+    if (this.isLogin()) {
+      return this.decodeUserData().sub || "";
+    }
   }
 
   register(userData: object): Observable<any> {

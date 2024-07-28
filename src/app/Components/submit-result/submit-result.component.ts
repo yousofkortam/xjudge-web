@@ -38,9 +38,9 @@ export class SubmitResultComponent implements OnInit {
     this.data.response.subscribe({
       next: (response: any) => {
         console.log(response);
-        
+
         this.isLoading = false;
-        this.result = response.data;
+        this.result = response;
         this.result.solution = this.data.dummy.solution;
         this.isChecked = this.result.isOpen;
       },
@@ -70,17 +70,15 @@ export class SubmitResultComponent implements OnInit {
     this.submissionService.getSubmissionById(this.data.submissionId).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        this.result = response.data;
+        this.result = response;
         this.isChecked = this.result.isOpen;
       },
       error: (err: any) => {
         this.isLoading = false;
-        if (err.error.success === false) {
-          this.dialog.closeAll();
-          this._snackBar.open(err.error.error.message, 'close', {
-            verticalPosition: 'bottom',
-          });
-        }
+        this.dialog.closeAll();
+        this._snackBar.open(err.error.message, 'close', {
+          verticalPosition: 'bottom',
+        });
       }
     });
   }

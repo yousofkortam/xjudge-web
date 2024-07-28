@@ -8,30 +8,29 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li *ngIf="isLogin" class="nav_menu nav-item active ">
+            <li class="nav_menu nav-item active ">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="home">Home </a>
             </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
+            <li class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="problem">Problem</a>
             </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
+            <li class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="status">Status</a>
             </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
+            <li class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="group">Group</a>
             </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
+            <li class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="contest">Contest</a>
             </li>
-
+            <li class="nav_menu nav-item">
+                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="profile/{{handle}}">Profile</a>
+            </li>
             <li *ngIf="!isLogin" class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="login">Login</a>
             </li>
             <li *ngIf="!isLogin" class="nav_menu nav-item">
                 <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="register">Register</a>
-            </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="profile/{{handle}}">Profile</a>
             </li>
             <li *ngIf="isLogin" class="nav_menu nav-item">
                 <a (click)="logOut()" class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="logout">Logout</a>

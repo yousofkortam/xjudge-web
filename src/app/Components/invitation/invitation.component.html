@@ -10,7 +10,7 @@
     </div>
   </div>
 </div> -->
-<div class="container mt-4">
+<div *ngIf="isAuthenticated; else noInvitations" class="container mt-4">
   <div *ngFor="let invitation of invitations" class="card mb-3">
     <div class="card-body">
       <p class="card-text">
@@ -27,3 +27,6 @@
     </div>
   </div>
 </div>
+<ng-template #noInvitations>
+  <app-not-logged-in></app-not-logged-in>
+</ng-template>

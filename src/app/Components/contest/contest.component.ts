@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { CreateContestComponent } from '../create-contest/create-contest.component';
 import { Title } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from 'src/app/ApiServices/user.service';
 
 @Component({
   selector: 'app-contest',
@@ -26,21 +28,24 @@ export class ContestComponent implements OnInit {
   status: string = '';
   title: string = '';
   owner: string = '';
+  isAuthenticated: boolean = this.userService.isAuthenticated();
 
   buttons: any = [
-    { 'name': 'All', 'style': {'background-color': '#0275d8', 'color': 'while'}, click: () => this.reset() },
-    { 'name': 'Public Contests', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getPublicContests() },
-    { 'name': 'Private Contests', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getPrivateContests() },
-    { 'name': 'My Contests', 'style': {'background-color': 'white', 'color': 'black'}, click: () => this.getMineContests() },
+    { 'name': 'All', 'style': { 'background-color': '#0275d8', 'color': 'while' }, click: () => this.reset() },
+    { 'name': 'Public Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getPublicContests() },
+    { 'name': 'Private Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getPrivateContests() },
+    { 'name': 'My Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getMineContests() },
   ];
 
   buttonsType: any = [
-    { 'name': 'Classical', 'style': {'background-color': 'white', 'color': 'black'}, 'img': '/assets/images/classical.gif' , click: () => this.getClassicalContests() },
-    { 'name': 'Group', 'style': {'background-color': 'white', 'color': 'black'}, 'img': '/assets/images/group.png', click: () => this.getGroupContests() },
+    { 'name': 'Classical', 'style': { 'background-color': 'white', 'color': 'black' }, 'img': '/assets/images/classical.gif', click: () => this.getClassicalContests() },
+    { 'name': 'Group', 'style': { 'background-color': 'white', 'color': 'black' }, 'img': '/assets/images/group.png', click: () => this.getGroupContests() },
   ];
 
   constructor(private _ContestService: ContestService,
     private titleService: Title,
+    private _snackBar: MatSnackBar,
+    private userService: UserService,
     @Inject(DOCUMENT) private document: Document,
     private dialog: MatDialog) { }
 
@@ -78,10 +83,17 @@ export class ContestComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
-    this.filterContests();
+    this.filterContests();  
   }
 
   openCreateContestDialog() {
+    if (!this.isAuthenticated) {
+      this._snackBar.open('You need to login to create a contest', 'close', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
+      return;
+    }
     this.dialog.open(CreateContestComponent, {
       data: {
         inGroup: false,
@@ -97,15 +109,18 @@ export class ContestComponent implements OnInit {
     this.loading = true;
     this._ContestService.filterContests(category, status, owner, this.title, this.pageNo, this.pageSize).subscribe({
       next: (response: any) => {
-        if (response.success === true) {
-          this.loading = false;
-          this.Contests = response.data.content;
-          this.totalPages = response.data.totalPages;
-          this.totalElements = response.data.totalElements;
-        }
+        this.loading = false;
+        this.Contests = response.content;
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
       },
       error: (error: any) => {
         this.loading = false;
+        this.resetFilterOptions();
+        this._snackBar.open(error.error.message, 'close', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
         console.log(error);
       }
     });

@@ -53,10 +53,10 @@ export class StatusComponent implements OnInit {
   filterSubmissions() {
     this.submissionService.filterSubmissions(this.userHandle, this.oj, this.problemCode, this.language, this.pageSize, this.pageNo).subscribe({
       next: (response) => {
-        this.submissions = response.data.content;
-        this.totalPages = response.data.totalPages;
-        this.totalElements = response.data.totalElements;
-        this.pageNo = response.data.pageable.pageNumber;
+        this.submissions = response.content;
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+        this.pageNo = response.pageable.pageNumber;
       },
       error: (err) => {
         console.log(err);
@@ -121,7 +121,7 @@ export class StatusComponent implements OnInit {
   getOnlineJudges() {
     this.onlineJudgeService.getOnlineJudges().subscribe({
       next: (response) => {
-        this.onlineJudges = response.data;
+        this.onlineJudges = response;
       },
       error: (err) => {
         console.log(err);
