@@ -122,14 +122,14 @@ export class GroupDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.actionPending = false;
-          this.snackBar.open('You left the group.', 'Close', { duration: 4000, verticalPosition: 'top' });
+          this.snackBar.open('You left the group.', 'Close', { duration: 4000 });
           // A leader who leaves loses access to the page entirely.
           if (this.isLeader) void this.router.navigate(['/group/myGroups']);
           else this.reload();
         },
         error: (error: any) => {
           this.actionPending = false;
-          this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000, verticalPosition: 'top' });
+          this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000 });
         }
       });
   }
@@ -149,12 +149,12 @@ export class GroupDetailsComponent implements OnInit, OnDestroy {
           this.actionPending = false;
           this.snackBar.open(
             this.group?.visibility === 'PRIVATE' ? 'Join request sent.' : 'You joined the group.',
-            'Close', { duration: 4000, verticalPosition: 'top' });
+            'Close', { duration: 4000 });
           this.reload();
         },
         error: (error: any) => {
           this.actionPending = false;
-          this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000, verticalPosition: 'top' });
+          this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000 });
         }
       });
   }

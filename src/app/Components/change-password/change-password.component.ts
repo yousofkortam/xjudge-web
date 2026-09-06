@@ -4,7 +4,6 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
@@ -30,7 +29,6 @@ export class ChangePasswordComponent implements OnInit {
 
   constructor (
     private _AuthService:AuthService,
-    private _snackBar: MatSnackBar,
     private _ActivatedRoute:ActivatedRoute,
     private titleService: Title) {
     this._ActivatedRoute.queryParams.subscribe(value => {
@@ -71,14 +69,12 @@ export class ChangePasswordComponent implements OnInit {
         // The change-password endpoint returns `{statusCode, message}` — it does
         // not issue a new token, so nothing may be written to session storage here.
         this.successMessage = response?.message || 'Your password has been changed.';
-        this._snackBar.open(this.successMessage, 'Close', { duration: 5000, verticalPosition: 'top' });
         changePasswordForm.reset();
       },
       error: (err) => {
         this.isLoading = false;
         this.validationErrors = apiValidationErrors(err);
         this.apiError = apiErrorMessage(err);
-        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
       }
     });
   }

@@ -58,7 +58,7 @@ export class UpdateProfileComponent implements OnDestroy {
       .subscribe({
         next: (updated) => {
           this.isLoading = false;
-          this.snackBar.open('Profile updated.', 'Close', { duration: 4000, verticalPosition: 'top' });
+          this.snackBar.open('Profile updated.', 'Close', { duration: 4000 });
           // Hand the new values back so the profile page can refresh in place
           // rather than round-tripping through the router.
           this.dialogRef.close(updated ?? this.updateProfielForm.value);

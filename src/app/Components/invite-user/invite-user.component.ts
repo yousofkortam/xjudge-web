@@ -1,7 +1,6 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { GroupService } from 'src/app/ApiServices/group.service';
 import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
@@ -27,7 +26,6 @@ export class InviteUserComponent implements OnDestroy {
   constructor(
     private groupService: GroupService,
     private dialogRef: MatDialogRef<InviteUserComponent>,
-    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any = {}) {}
 
   ngOnDestroy(): void {
@@ -56,7 +54,6 @@ export class InviteUserComponent implements OnDestroy {
         this.successMessage = typeof response === 'string'
           ? response
           : (response?.message || `Invitation sent to ${this.inviteUserForm.value.handle}.`);
-        this.snackBar.open(this.successMessage, 'Close', { duration: 5000, verticalPosition: 'top' });
         // Keep the dialog open so a leader can invite several people in a row.
         this.inviteUserForm.reset({ handle: '' });
       },

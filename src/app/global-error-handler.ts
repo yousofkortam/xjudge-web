@@ -35,7 +35,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     this.lastShownAt = now;
 
     this.zone.run(() => {
-      this.snackBar.open(message, 'Dismiss', { duration: 6000, verticalPosition: 'top' });
+      this.snackBar.open(message, 'Dismiss', { duration: 6000 });
     });
   }
 }

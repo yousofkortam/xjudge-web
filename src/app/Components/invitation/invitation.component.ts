@@ -89,11 +89,11 @@ export class InvitationComponent implements OnInit, OnDestroy {
           invitation.id === invitationId ? { ...invitation, status } : invitation);
         this.snackBar.open(
           status === 'ACCEPTED' ? 'Invitation accepted.' : 'Invitation declined.',
-          'Close', { duration: 4000, verticalPosition: 'top' });
+          'Close', { duration: 4000 });
       },
       error: (error) => {
         this.pending.delete(invitationId);
-        this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000, verticalPosition: 'top' });
+        this.snackBar.open(apiErrorMessage(error), 'Close', { duration: 6000 });
       }
     });
   }

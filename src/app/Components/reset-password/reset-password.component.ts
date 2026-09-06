@@ -73,7 +73,7 @@ export class ResetPasswordComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         this._snackBar.open(response?.message || 'Password updated. You can sign in now.', 'Close', {
-          duration: 5000, verticalPosition: 'top',
+          duration: 5000
         });
         void this._Router.navigate(['/login']);
       },
@@ -81,7 +81,6 @@ export class ResetPasswordComponent implements OnInit {
         this.isLoading = false;
         this.validationErrors = apiValidationErrors(err);
         this.apiError = apiErrorMessage(err);
-        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
       }
     });
   }

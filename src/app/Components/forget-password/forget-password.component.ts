@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
@@ -24,7 +23,6 @@ export class ForgetPasswordComponent implements OnInit {
 
   constructor(
     private _AuthService: AuthService,
-    private _snackBar: MatSnackBar,
     private titleService: Title) { }
 
   ngOnInit(): void {
@@ -44,13 +42,11 @@ export class ForgetPasswordComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         this.successMessage = response?.message || 'If that address has an account, a reset link is on its way.';
-        this._snackBar.open(this.successMessage, 'Close', { duration: 8000, verticalPosition: 'top' });
       },
       error: (err) => {
         this.isLoading = false;
         this.validationErrors = apiValidationErrors(err);
         this.apiError = apiErrorMessage(err);
-        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
       }
     });
   }

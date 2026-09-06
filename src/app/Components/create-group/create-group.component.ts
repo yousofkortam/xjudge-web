@@ -69,7 +69,7 @@ export class CreateGroupComponent implements OnDestroy {
       next: (response) => {
         this.isLoading = false;
         this._snackBar.open(this.isEdit ? 'Group updated.' : 'Group created.', 'Close',
-          { duration: 4000, verticalPosition: 'top' });
+          { duration: 4000 });
         // Closing with a truthy value lets the opener refresh instead of the
         // old full-page window.location.reload().
         this.dialogRef.close(true);

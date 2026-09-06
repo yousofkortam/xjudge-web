@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
@@ -33,7 +32,6 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _AuthService: AuthService,
     private _Router: Router,
-    private _snackBar: MatSnackBar,
     private titleService: Title) {}
 
   ngOnInit(): void {
@@ -57,14 +55,12 @@ export class RegisterComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         this.successMessage = response?.message || 'Account created. Check your inbox to verify your email address.';
-        this._snackBar.open(this.successMessage, 'Close', { duration: 8000, verticalPosition: 'top' });
         registerForm.reset();
       },
       error: (err) => {
         this.isLoading = false;
         this.validationErrors = apiValidationErrors(err);
         this.apiError = apiErrorMessage(err);
-        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
       }
     });
   }

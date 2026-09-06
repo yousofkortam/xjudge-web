@@ -85,7 +85,6 @@ export class SubmitResultComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           this.isLoading = false;
           this.loadError = apiErrorMessage(err);
-          this._snackBar.open(this.loadError, 'Close', { duration: 6000, verticalPosition: 'top' });
         }
       });
   }
@@ -156,7 +155,7 @@ export class SubmitResultComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.visibilitySaving = false;
-          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 5000, verticalPosition: 'top' });
+          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 5000 });
         }
       });
   }

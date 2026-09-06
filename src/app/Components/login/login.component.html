@@ -8,14 +8,34 @@
     <h1 class="xj-auth__title">Sign in</h1>
     <p class="xj-auth__subtitle">Use your X-Judge handle to continue.</p>
 
-    <div *ngIf="sessionExpired" class="xj-alert xj-alert--warning xj-auth__alert" role="status">
+    <div *ngIf="sessionExpired && !apiError"
+         class="xj-alert xj-alert--warning xj-auth__alert"
+         role="status">
       <i class="fa fa-clock xj-alert__icon" aria-hidden="true"></i>
-      <div class="xj-alert__body">Your session ended. Please sign in again.</div>
+      <div class="xj-alert__body">
+        <span class="xj-alert__title">Session ended</span>
+        <span class="xj-alert__text">Please sign in again to continue.</span>
+      </div>
+      <button type="button" class="xj-alert__close" aria-label="Dismiss" (click)="sessionExpired = false">
+        <i class="fa fa-xmark" aria-hidden="true"></i>
+      </button>
     </div>
 
-    <div *ngIf="apiError" class="xj-alert xj-alert--error xj-auth__alert" role="alert">
+    <!-- The single place a failed sign-in is reported. It sits with the form it
+         belongs to, is announced to assistive tech, and is cleared on the next
+         attempt — no floating toast repeating the same sentence. -->
+    <div *ngIf="apiError"
+         class="xj-alert xj-alert--error xj-auth__alert"
+         role="alert"
+         aria-live="assertive">
       <i class="fa fa-circle-exclamation xj-alert__icon" aria-hidden="true"></i>
-      <div class="xj-alert__body">{{ apiError }}</div>
+      <div class="xj-alert__body">
+        <span class="xj-alert__title">{{ errorTitle }}</span>
+        <span class="xj-alert__text">{{ apiError }}</span>
+      </div>
+      <button type="button" class="xj-alert__close" aria-label="Dismiss" (click)="apiError = ''">
+        <i class="fa fa-xmark" aria-hidden="true"></i>
+      </button>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="handleLogin(loginForm)" novalidate>

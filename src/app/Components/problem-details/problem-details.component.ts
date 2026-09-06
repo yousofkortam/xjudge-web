@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
@@ -44,6 +44,36 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
   statementLoading = false;
   statementError = '';
 
+  /**
+   * Height of the statement frame, in px.
+   *
+   * The frame reports its own content height (see `STATEMENT_RESIZE_SCRIPT`)
+   * because the parent cannot measure it: the sandbox deliberately withholds
+   * `allow-same-origin`, so `contentDocument` is unreachable. Seeded with a
+   * typical statement height so the card does not jump from zero on first paint.
+   */
+  statementHeight = DEFAULT_STATEMENT_HEIGHT;
+
+  @ViewChild('statementFrame')
+  set statementFrame(ref: ElementRef<HTMLIFrameElement> | undefined) {
+    this.frameEl = ref?.nativeElement ?? null;
+  }
+  private frameEl: HTMLIFrameElement | null = null;
+
+  private readonly onFrameMessage = (event: MessageEvent): void => {
+    // Only trust messages coming from this component's own frame. Its origin is
+    // opaque ("null"), so identity is established by the source window itself.
+    if (!this.frameEl || event.source !== this.frameEl.contentWindow) return;
+
+    const height = Number((event.data as any)?.xjStatementHeight);
+    if (!Number.isFinite(height) || height <= 0) return;
+
+    // Guard against a runaway report from a broken statement.
+    const next = Math.min(Math.ceil(height), MAX_STATEMENT_HEIGHT);
+    if (next === this.statementHeight) return;
+    this.zone.run(() => { this.statementHeight = next; });
+  };
+
   contestId: string | null = null;
   hashTag: string | null = null;
 
@@ -57,10 +87,12 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog,
+    private zone: NgZone,
     private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.isAuthenticated = this.authService.isLogin();
+    window.addEventListener('message', this.onFrameMessage);
 
     this._ActivatedRoute.paramMap
       .pipe(takeUntil(this.destroy$))
@@ -77,6 +109,7 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    window.removeEventListener('message', this.onFrameMessage);
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -92,7 +125,7 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
   openModal(): void {
     if (!this.isAuthenticated) {
       this._snackBar.open('Sign in to submit a solution.', 'Close', {
-        duration: 5000, verticalPosition: 'top',
+        duration: 5000
       });
       return;
     }
@@ -152,6 +185,8 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
   private loadStatement(route: string | null | undefined): void {
     this.statementSrcDoc = null;
     this.statementError = '';
+    // A new statement re-measures from scratch.
+    this.statementHeight = DEFAULT_STATEMENT_HEIGHT;
     if (!route) return;
 
     this.statementLoading = true;
@@ -211,6 +246,57 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
   }
 }
 
+/** Shown until the frame reports its real height; also the fallback if it never does. */
+const DEFAULT_STATEMENT_HEIGHT = 520;
+
+/** Upper bound, so one malformed statement cannot produce an endless page. */
+const MAX_STATEMENT_HEIGHT = 20000;
+
+/**
+ * Injected into the statement frame so it can report its own content height.
+ *
+ * The parent cannot measure the frame: the sandbox withholds `allow-same-origin`
+ * on purpose, so `contentDocument` is unreachable and adding that flag would let
+ * scraped third-party markup run with access to this app's session. A frame can
+ * still `postMessage` out of an opaque origin, so it measures and reports itself.
+ *
+ * The script hides its own scrollbars as its first act: if it never runs (scripts
+ * blocked, parse error) the frame keeps native scrolling instead of clipping the
+ * statement at the fallback height.
+ */
+const STATEMENT_RESIZE_SCRIPT = `<script>(function () {
+  var d = document, r = d.documentElement, last = 0;
+  r.style.overflow = 'hidden';
+
+  function measure() {
+    var b = d.body;
+    return Math.max(
+      r.scrollHeight, r.offsetHeight,
+      b ? b.scrollHeight : 0, b ? b.offsetHeight : 0
+    );
+  }
+
+  function report() {
+    var h = measure();
+    // Ignore sub-pixel churn; MathJax reflow moves the height by far more.
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ xjStatementHeight: h }, '*');
+  }
+
+  if (typeof ResizeObserver === 'function') {
+    var ro = new ResizeObserver(report);
+    ro.observe(r);
+    if (d.body) ro.observe(d.body);
+  }
+  addEventListener('load', report);
+  addEventListener('resize', report);
+  // MathJax typesets after load and changes the height substantially; webfonts
+  // land later still. A few settling passes cover both without polling forever.
+  [0, 150, 400, 900, 1800, 3500].forEach(function (t) { setTimeout(report, t); });
+  report();
+}());<\/script>`;
+
 /**
  * The scraped page links its CSS, scripts and images with root-relative paths
  * that only resolve against the API host, so a <base> is injected before the
@@ -221,11 +307,17 @@ export class ProblemDetailsComponent implements OnInit, OnDestroy {
  * needs none of its behaviour, so the tag is dropped rather than left to fail.
  */
 function withBaseHref(html: string, apiUrl: string): string {
-  const base = `<base href="${apiUrl.replace(/\/$/, '')}/">`;
+  const head = `<base href="${apiUrl.replace(/\/$/, '')}/">`;
   const cleaned = html.replace(
     /<script\b[^>]*\bsrc\s*=\s*["'][^"']*bootstrap[^"']*["'][^>]*>\s*<\/script>/gi, '');
 
-  if (/<head[^>]*>/i.test(cleaned)) return cleaned.replace(/<head([^>]*)>/i, `<head$1>${base}`);
-  if (/<html[^>]*>/i.test(cleaned)) return cleaned.replace(/<html([^>]*)>/i, `<html$1><head>${base}</head>`);
-  return `<head>${base}</head>${cleaned}`;
+  // The reporter goes last so it observes the fully parsed document.
+  const withBase =
+    /<head[^>]*>/i.test(cleaned) ? cleaned.replace(/<head([^>]*)>/i, `<head$1>${head}`)
+    : /<html[^>]*>/i.test(cleaned) ? cleaned.replace(/<html([^>]*)>/i, `<html$1><head>${head}</head>`)
+    : `<head>${head}</head>${cleaned}`;
+
+  return /<\/body>/i.test(withBase)
+    ? withBase.replace(/<\/body>/i, `${STATEMENT_RESIZE_SCRIPT}</body>`)
+    : withBase + STATEMENT_RESIZE_SCRIPT;
 }

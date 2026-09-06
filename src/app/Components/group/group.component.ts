@@ -47,7 +47,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
   openCreateGroupForm(): void {
     if (!this.isAuthenticated) {
-      this._snackBar.open('Sign in to create a group.', 'Close', { duration: 4000, verticalPosition: 'top' });
+      this._snackBar.open('Sign in to create a group.', 'Close', { duration: 4000 });
       return;
     }
     this.dialog

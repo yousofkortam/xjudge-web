@@ -98,7 +98,7 @@ export class StatusComponent implements OnInit, OnDestroy {
   showMine(): void {
     const handle = this.authService.getUserHandle();
     if (!handle) {
-      this.snackBar.open('Sign in to see your own submissions.', 'Close', { duration: 4000, verticalPosition: 'top' });
+      this.snackBar.open('Sign in to see your own submissions.', 'Close', { duration: 4000 });
       return;
     }
     this.scope = 'mine';

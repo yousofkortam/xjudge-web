@@ -207,11 +207,11 @@ export class ContestDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this._snackBar.open('Contest deleted.', 'Close', { duration: 4000, verticalPosition: 'top' });
+          this._snackBar.open('Contest deleted.', 'Close', { duration: 4000 });
           void this.router.navigate(['/contest']);
         },
         error: (err) => {
-          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 6000, verticalPosition: 'top' });
+          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 6000 });
         }
       });
   }

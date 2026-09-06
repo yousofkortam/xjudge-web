@@ -33,7 +33,7 @@
 .xj-auth__title { margin: 0 0 4px; font-size: 1.375rem; }
 .xj-auth__subtitle { margin: 0 0 22px; color: var(--xj-text-muted); font-size: .875rem; }
 
-.xj-auth__alert { margin-bottom: 18px; }
+.xj-auth__alert { margin-bottom: 20px; }
 
 .xj-auth__links {
   display: flex;

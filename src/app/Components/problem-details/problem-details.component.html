@@ -77,10 +77,16 @@
           <!-- Scraped third-party HTML. It is injected as `srcdoc` (the backend
                sends X-Frame-Options: DENY, so a cross-origin src would be
                blocked) and sandboxed without allow-same-origin, so it runs in an
-               opaque origin and cannot reach this app's storage or DOM. -->
-          <iframe class="xj-problem__frame"
+               opaque origin and cannot reach this app's storage or DOM.
+               Because of that isolation the frame measures itself and posts its
+               height back; the binding below grows the card to fit, so the
+               statement never scrolls inside its own box. -->
+          <iframe #statementFrame
+                  class="xj-problem__frame"
                   [srcdoc]="statementSrcDoc"
+                  [style.height.px]="statementHeight"
                   title="Problem statement"
+                  scrolling="no"
                   sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
                   referrerpolicy="no-referrer"></iframe>
         </div>

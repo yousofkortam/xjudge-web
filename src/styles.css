@@ -303,20 +303,65 @@ code, kbd, pre, samp, .xj-mono { font-family: var(--xj-mono); font-size: .9em; }
 .xj-verdict--running    { color: var(--xj-info); }
 .xj-verdict--unknown    { color: var(--xj-text-muted); }
 
-/* ---------- alerts ------------------------------------------------------ */
+/* ---------- alerts -------------------------------------------------------
+   Inline feedback shown in place, next to the thing it is about. This is the
+   primary channel for form errors: a message that belongs to a form stays with
+   the form rather than floating over the page. */
 .xj-alert {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 12px 14px;
+  --xj-alert-accent: var(--xj-border-strong);
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 14px 13px 15px;
   border: 1px solid transparent;
+  border-left: 3px solid var(--xj-alert-accent);
   border-radius: var(--xj-radius);
+  box-shadow: var(--xj-shadow-sm);
   font-size: .875rem;
+  line-height: 1.5;
+  animation: xj-alert-in .18s ease-out both;
 }
-.xj-alert__icon { flex: none; margin-top: 2px; }
+
+.xj-alert__icon {
+  flex: none;
+  margin-top: 1px;
+  font-size: .9375rem;
+  color: var(--xj-alert-accent);
+}
+
 .xj-alert__body { flex: 1; min-width: 0; }
-.xj-alert--error   { background: var(--xj-danger-soft);  border-color: #f3c9c9; color: #8c1c1c; }
-.xj-alert--success { background: var(--xj-success-soft); border-color: #bfe3ca; color: #0f5c2c; }
-.xj-alert--warning { background: var(--xj-warning-soft); border-color: #f0d8b4; color: #7a4305; }
-.xj-alert--info    { background: var(--xj-info-soft);    border-color: #bfdfeb; color: #124d64; }
+.xj-alert__title { display: block; font-weight: 650; margin-bottom: 1px; }
+.xj-alert__text { display: block; }
+
+/* Optional dismiss affordance. Sized to a comfortable hit target. */
+.xj-alert__close {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin: -3px -4px 0 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: .8125rem;
+  color: inherit;
+  opacity: .55;
+  background: transparent;
+  border: none;
+  border-radius: var(--xj-radius-sm);
+  cursor: pointer;
+}
+.xj-alert__close:hover { opacity: 1; background: rgba(0, 0, 0, .06); }
+
+.xj-alert--error   { --xj-alert-accent: var(--xj-danger);  background: var(--xj-danger-soft);  border-color: #f1cccc; border-left-color: var(--xj-danger);  color: #8c1c1c; }
+.xj-alert--success { --xj-alert-accent: var(--xj-success); background: var(--xj-success-soft); border-color: #c3e5cd; border-left-color: var(--xj-success); color: #0f5c2c; }
+.xj-alert--warning { --xj-alert-accent: var(--xj-warning); background: var(--xj-warning-soft); border-color: #f0dab8; border-left-color: var(--xj-warning); color: #7a4305; }
+.xj-alert--info    { --xj-alert-accent: var(--xj-info);    background: var(--xj-info-soft);    border-color: #c4e1ec; border-left-color: var(--xj-info);    color: #124d64; }
+
+@keyframes xj-alert-in {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: none; }
+}
 
 /* ---------- states: loading / empty / error ----------------------------- */
 .xj-state {
@@ -351,8 +396,11 @@ code, kbd, pre, samp, .xj-mono { font-family: var(--xj-mono); font-size: .9em; }
 @keyframes xj-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .xj-spinner, .xj-skeleton { animation-duration: 0.01ms; animation-iteration-count: 1; }
-  * { transition-duration: .01ms !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 /* ---------- pagination -------------------------------------------------- */
@@ -401,9 +449,55 @@ code, kbd, pre, samp, .xj-mono { font-family: var(--xj-mono); font-size: .9em; }
 }
 .xj-statement table { display: block; max-width: 100%; overflow-x: auto; }
 
-/* Angular Material overrides so dialogs/snackbars match the rest. */
+/* ---------- toast --------------------------------------------------------
+   Transient confirmation for actions with no natural place on the page (a
+   group left, a contest deleted). Anything that belongs to a visible form uses
+   .xj-alert instead, so the same message is never shown twice.
+
+   Material's default snackbar is a dark bar across the top; this restyles it as
+   a light card and AppModule anchors it bottom-end, out of the content's way. */
+.xj-toast .mdc-snackbar__surface {
+  min-width: 0 !important;
+  max-width: min(420px, calc(100vw - 32px)) !important;
+  padding: 0 !important;
+  background: var(--xj-surface) !important;
+  border: 1px solid var(--xj-border) !important;
+  border-left: 3px solid var(--xj-primary) !important;
+  border-radius: var(--xj-radius-lg) !important;
+  box-shadow: var(--xj-shadow-lg) !important;
+}
+
+.xj-toast .mdc-snackbar__label {
+  padding: 13px 6px 13px 15px !important;
+  font-family: var(--xj-font) !important;
+  font-size: .875rem !important;
+  line-height: 1.5 !important;
+  color: var(--xj-text) !important;
+}
+
+.xj-toast .mat-mdc-snack-bar-actions { padding-right: 9px !important; }
+
+.xj-toast .mat-mdc-button.mat-mdc-snack-bar-action {
+  --mdc-text-button-label-text-color: var(--xj-primary);
+  min-width: 0 !important;
+  padding: 0 10px !important;
+  font-family: var(--xj-font) !important;
+  font-size: .8125rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  color: var(--xj-primary) !important;
+  border-radius: var(--xj-radius-sm) !important;
+}
+.xj-toast .mat-mdc-button.mat-mdc-snack-bar-action:hover { background: var(--xj-primary-soft) !important; }
+
+/* Severity is carried by the accent stripe, matching .xj-alert. */
+.xj-toast--error .mdc-snackbar__surface   { border-left-color: var(--xj-danger) !important; }
+.xj-toast--success .mdc-snackbar__surface { border-left-color: var(--xj-success) !important; }
+.xj-toast--warning .mdc-snackbar__surface { border-left-color: var(--xj-warning) !important; }
+
+.mat-mdc-snack-bar-container.xj-toast { margin: 16px !important; }
+
 .mat-mdc-dialog-surface { border-radius: var(--xj-radius-lg) !important; }
-.mdc-snackbar__surface { border-radius: var(--xj-radius) !important; }
 
 @media (max-width: 575.98px) {
   .xj-page { padding: 16px 14px 40px; }

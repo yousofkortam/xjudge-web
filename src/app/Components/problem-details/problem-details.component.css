@@ -31,10 +31,9 @@
 .xj-problem__frame {
   display: block;
   width: 100%;
-  /* Tall enough for a typical statement; the frame itself scrolls beyond that
-     rather than the old fixed 5000px, which left a huge blank page. */
-  height: 78vh;
-  min-height: 520px;
+  /* No fixed height: the frame reports its content height (see
+     STATEMENT_RESIZE_SCRIPT) and the component binds it, so the card grows to
+     fit the whole statement and only the page scrolls. */
   border: 0;
 }
 
@@ -59,5 +58,4 @@
   .xj-problem__layout { grid-template-columns: minmax(0, 1fr); }
   /* Limits and attempts belong above a long statement on narrow screens. */
   .xj-problem__side { order: -1; }
-  .xj-problem__frame { height: 70vh; }
 }
