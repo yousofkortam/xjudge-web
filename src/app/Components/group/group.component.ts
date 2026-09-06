@@ -1,62 +1,67 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CreateGroupComponent } from '../create-group/create-group.component';
-import { UserService } from 'src/app/ApiServices/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subject, filter, takeUntil } from 'rxjs';
+import { UserService } from 'src/app/ApiServices/user.service';
+import { CreateGroupComponent } from '../create-group/create-group.component';
 
 @Component({
   selector: 'app-group',
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.css']
 })
-export class GroupComponent implements OnInit {
-  currentTab: string = 'myGroups';
+export class GroupComponent implements OnInit, OnDestroy {
+
+  readonly tabs = [
+    { path: 'myGroups',      label: 'My groups',  requiresAuth: true },
+    { path: 'exploreGroups', label: 'Explore',    requiresAuth: false },
+    { path: 'invitations',   label: 'Invitations', requiresAuth: true },
+  ];
+
+  isAuthenticated = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private titleService: Title,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private userService: UserService
-  ) {}
+    private userService: UserService) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle('Group');
+    this.titleService.setTitle('Groups · X-Judge');
+    this.isAuthenticated = this.userService.isAuthenticated();
   }
 
-  showMyGroups() {
-    this.currentTab = 'myGroups';
-    this.router.navigate(['myGroups'], { relativeTo: this.route });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  showExploreGroups() {
-    this.currentTab = 'exploreGroups';
-    this.router.navigate(['exploreGroups'], { relativeTo: this.route });
+  get visibleTabs() {
+    return this.tabs.filter(tab => !tab.requiresAuth || this.isAuthenticated);
   }
 
-  showInvitations() {
-    this.currentTab = 'invitations';
-    this.router.navigate(['invitations'], { relativeTo: this.route });
-  }
-
-  openCreateGroupForm() {
-    if (!this.userService.isAuthenticated()) {
-      this._snackBar.open('You need to login to create a group', 'Close', {
-        duration: 5000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-      });
+  openCreateGroupForm(): void {
+    if (!this.isAuthenticated) {
+      this._snackBar.open('Sign in to create a group.', 'Close', { duration: 4000, verticalPosition: 'top' });
       return;
     }
-    this.dialog.open(CreateGroupComponent, {
-      width: '50%',
-      height: 'auto',
-      disableClose: true
-    });
+    this.dialog
+      .open(CreateGroupComponent, {
+        width: 'min(560px, 94vw)',
+        maxHeight: '90vh',
+        autoFocus: 'first-tabbable',
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(created => {
+        // Re-enter the current child route so the freshly created group appears.
+        if (created) void this.router.navigateByUrl(this.router.url);
+      });
   }
 }
-
-

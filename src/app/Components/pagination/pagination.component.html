@@ -1,4 +1,36 @@
-<mat-paginator style="background-color: transparent !important; width:fit-content !important;"
-    [length]="totalElements" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
-    (page)="onPageChange($event)" aria-label="Select page">
-</mat-paginator>
+<nav class="xj-pagination" aria-label="Pagination" *ngIf="totalElements > 0">
+  <p class="xj-pagination__info" aria-live="polite">
+    {{ rangeStart }}–{{ rangeEnd }} of {{ totalElements }}
+  </p>
+
+  <button type="button" class="xj-pagination__btn"
+          [disabled]="pageIndex === 0"
+          (click)="goTo(pageIndex - 1)"
+          aria-label="Previous page">
+    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+  </button>
+
+  <ng-container *ngFor="let page of pages; trackBy: trackByPage">
+    <span *ngIf="page === -1" class="xj-pagination__gap" aria-hidden="true">…</span>
+    <button *ngIf="page !== -1"
+            type="button"
+            class="xj-pagination__btn"
+            [attr.aria-current]="page === pageIndex ? 'page' : null"
+            [attr.aria-label]="'Page ' + (page + 1)"
+            (click)="goTo(page)">{{ page + 1 }}</button>
+  </ng-container>
+
+  <button type="button" class="xj-pagination__btn"
+          [disabled]="pageIndex >= totalPages - 1"
+          (click)="goTo(pageIndex + 1)"
+          aria-label="Next page">
+    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+  </button>
+
+  <label class="xj-sr-only" for="xj-page-size">Rows per page</label>
+  <select id="xj-page-size" class="xj-pagination__size"
+          [value]="pageSize"
+          (change)="changeSize($any($event.target).value)">
+    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }} / page</option>
+  </select>
+</nav>

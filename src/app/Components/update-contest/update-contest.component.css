@@ -1,15 +1,66 @@
-.active {
-    background-color: #adadad;
-    color: white;
-    border-radius: 4px;
-    padding: 10px;
+.xj-dialog__title { font-size: 1.125rem !important; font-weight: 650; }
+.xj-dialog__content { padding-top: 8px !important; }
+.xj-dialog__alert { margin-bottom: 16px; }
+
+.xj-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px !important;
 }
 
-.dialog-actions {
-    padding: 20px;
-    justify-content: flex-end;
+.xj-cc__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+
+.xj-toggle { display: inline-flex; padding: 3px; background: var(--xj-surface-3); border-radius: var(--xj-radius); }
+.xj-toggle__btn {
+  padding: 6px 14px;
+  font: inherit; font-size: .8125rem; font-weight: 550;
+  color: var(--xj-text-muted);
+  background: transparent; border: none; border-radius: var(--xj-radius-sm);
+  cursor: pointer;
+}
+.xj-toggle__btn:disabled { opacity: .5; cursor: not-allowed; }
+.xj-toggle__btn.is-active { background: var(--xj-surface); color: var(--xj-text); box-shadow: var(--xj-shadow-sm); }
+
+.xj-cc__problems {
+  border: 1px solid var(--xj-border);
+  border-radius: var(--xj-radius);
+  padding: 14px 16px 16px;
+  margin: 4px 0 0;
+}
+.xj-cc__problems > .xj-label { padding: 0 6px; }
+
+.xj-cc__problem {
+  display: grid;
+  grid-template-columns: 34px 130px 1fr 1fr 82px 34px;
+  gap: 8px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+.xj-cc__problem .xj-field { margin-bottom: 0; }
+
+.xj-cc__problem-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 36px;
+  background: var(--xj-primary-soft);
+  color: var(--xj-primary);
+  border-radius: var(--xj-radius);
+  font-family: var(--xj-mono);
+  font-size: .8125rem; font-weight: 650;
 }
 
-.dialog-actions .btn {
-    margin-left: 10px;
+.xj-cc__remove { height: 36px; padding: 0; color: var(--xj-danger); }
+.xj-cc__remove:disabled { color: var(--xj-text-subtle); }
+
+@media (max-width: 767.98px) {
+  .xj-cc__row { grid-template-columns: 1fr; }
+  .xj-cc__problem {
+    grid-template-columns: 34px 1fr 34px;
+    grid-template-areas: "tag oj remove" ". code ." ". alias ." ". weight .";
+    row-gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--xj-border);
+  }
+  .xj-cc__problem-tag { grid-area: tag; }
+  .xj-cc__remove { grid-area: remove; }
 }

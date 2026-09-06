@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
-
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
+/** Mirrors the backend's RegisterRequest constraint so the user finds out before submitting. */
+const PASSWORD_RULE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*$/;
 
 @Component({
   selector: 'app-register',
@@ -14,56 +16,56 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  isLoading: boolean = false;
-  validationErrors: any = {};
-  apiError: string = '';
-
+  isLoading = false;
+  apiError = '';
+  successMessage = '';
+  showPassword = false;
+  validationErrors: Record<string, string> = {};
 
   registerForm: FormGroup = new FormGroup({
-    userFirstName: new FormControl('', [Validators.required]),
-    userLastName: new FormControl('', [Validators.required]),
-    userHandle: new FormControl('', [Validators.required]),
-    userEmail: new FormControl('', [Validators.required]),
-    userPassword: new FormControl('', [Validators.required]),
+    userFirstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(/^[a-zA-Z]+$/)]),
+    userLastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(/^[a-zA-Z]+$/)]),
+    userHandle: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+    userEmail: new FormControl('', [Validators.required, Validators.email]),
+    userPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(PASSWORD_RULE)]),
   });
 
   constructor(
     private _AuthService: AuthService,
     private _Router: Router,
     private _snackBar: MatSnackBar,
-    private titleService: Title) {
-    if (this._AuthService.isLogin()) {
-      this._AuthService.decodeUserData();
-      this._Router.navigate(['/home']).then(r => r);
-    }
-  }
+    private titleService: Title) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle('Register');
+    this.titleService.setTitle('Create account · X-Judge');
+    if (this._AuthService.isLogin()) void this._Router.navigate(['/home']);
   }
 
-  handleRegister(registerForm: FormGroup) {
-    this.isLoading = true;
-    if (registerForm.valid) {
-      this._AuthService.register(registerForm.value).subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this._snackBar.open(response.message, 'close', {
-            duration: 5000,
-            verticalPosition: 'top',
-          });
-        },
-        error: (err) => {
-          console.log(err);
-          this.validationErrors = err.error.validations || {};
-          console.log(this.validationErrors.userHandle); // Log the validationErrors object
-          this.apiError = err.error.message;
-          console.log(this.apiError)
-          this.isLoading = false;
-
-        }
-      });
+  handleRegister(registerForm: FormGroup): void {
+    if (this.isLoading) return;
+    if (registerForm.invalid) {
+      registerForm.markAllAsTouched();
+      return;
     }
-  }
 
+    this.isLoading = true;
+    this.apiError = '';
+    this.successMessage = '';
+    this.validationErrors = {};
+
+    this._AuthService.register(registerForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.successMessage = response?.message || 'Account created. Check your inbox to verify your email address.';
+        this._snackBar.open(this.successMessage, 'Close', { duration: 8000, verticalPosition: 'top' });
+        registerForm.reset();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.validationErrors = apiValidationErrors(err);
+        this.apiError = apiErrorMessage(err);
+        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
+      }
+    });
+  }
 }

@@ -1,9 +1,13 @@
-<div class="justify-content-center align-items-center py-3">
-
-    <div>
-
-        <img [src]="imageNotFound" class="w-100 h-100">
-
+<div class="xj-page xj-page--narrow">
+  <div class="xj-card xj-notfound">
+    <p class="xj-notfound__code" aria-hidden="true">404</p>
+    <h1 class="xj-notfound__title">Page not found</h1>
+    <p class="xj-notfound__text">
+      The page you were looking for does not exist, or it may have moved.
+    </p>
+    <div class="xj-row xj-notfound__actions">
+      <a class="xj-btn xj-btn--primary" routerLink="/home">Back to home</a>
+      <a class="xj-btn xj-btn--secondary" routerLink="/problem">Browse problems</a>
     </div>
-
+  </div>
 </div>

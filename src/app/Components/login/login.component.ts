@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
 @Component({
   selector: 'app-login',
@@ -12,54 +13,77 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  isLoading: boolean = false;
-  apiError: string = '';
-  validationErrors: any = {}
+  isLoading = false;
+  apiError = '';
+  sessionExpired = false;
+  showPassword = false;
+  validationErrors: Record<string, string> = {};
 
   loginForm: FormGroup = new FormGroup({
-    userHandle: new FormControl(null, [Validators.required]),
-    userPassword: new FormControl(null, [Validators.required]),
+    userHandle: new FormControl('', [Validators.required]),
+    userPassword: new FormControl('', [Validators.required]),
   });
+
+  private returnUrl = '/home';
 
   constructor(
     private _AuthService: AuthService,
     private _Router: Router,
+    private _route: ActivatedRoute,
     private _snackBar: MatSnackBar,
-    private titleService: Title) {
-    if (this._AuthService.isLogin()) {
-      this._AuthService.decodeUserData();
-      this._Router.navigate(['/home']).then(r => r);
-    }
-  }
+    private titleService: Title) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle('Login');
-  }
+    this.titleService.setTitle('Sign in · X-Judge');
 
-  handleLogin(loginForm: FormGroup) {
-    this.isLoading = true;
-    if (loginForm.valid) {
-      this._AuthService.login(loginForm.value).subscribe({
-        next: (response) => { // use any right now
-          localStorage.setItem('userToken', response.token);
-          this._AuthService.decodeUserData();
-          this.isLoading = false;
-          this._Router.navigate(['/home']).then(r => r);
-        },
-        error: (err) => {
-          console.log(err);
-          this.validationErrors = err.error.validations || {};
-          console.log(this.validationErrors.userHandle); // Log the validationErrors object
-          this.apiError = err.error.message;
-          console.log(this.apiError)
-          this.isLoading = false;
-          this._snackBar.open(this.apiError, 'close', {
-            duration: 2000,
-            verticalPosition: 'top',
-          });
-        }
-      });
+    const params = this._route.snapshot.queryParamMap;
+    this.sessionExpired = params.get('session') === 'expired';
+    // Never bounce back to an auth page, or the redirect chases its own tail.
+    const requested = params.get('returnUrl');
+    if (requested && requested.startsWith('/') && !isAuthRoute(requested)) {
+      this.returnUrl = requested;
+    }
+
+    // Already signed in and arriving at /login by hand: send the user onwards.
+    if (this._AuthService.isLogin()) {
+      void this._Router.navigateByUrl(this.returnUrl);
     }
   }
 
+  handleLogin(loginForm: FormGroup): void {
+    if (this.isLoading) return;               // guards against double submits
+    if (loginForm.invalid) {
+      loginForm.markAllAsTouched();
+      return;
+    }
+
+    this.isLoading = true;
+    this.apiError = '';
+    this.validationErrors = {};
+
+    this._AuthService.login(loginForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        // The backend answers `{statusCode, token}` once the envelope is
+        // unwrapped. Anything else must not be written to storage — a bad value
+        // there is what used to break the app on the next page load.
+        if (!this._AuthService.setSession(response?.token)) {
+          this.apiError = 'Sign-in succeeded but the server did not return a usable session. Please try again.';
+          this._snackBar.open(this.apiError, 'Close', { duration: 5000, verticalPosition: 'top' });
+          return;
+        }
+        void this._Router.navigateByUrl(this.returnUrl);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.validationErrors = apiValidationErrors(err);
+        this.apiError = apiErrorMessage(err);
+        this._snackBar.open(this.apiError, 'Close', { duration: 5000, verticalPosition: 'top' });
+      }
+    });
+  }
+}
+
+function isAuthRoute(url: string): boolean {
+  return /^\/(login|register|forgetPassword|resetPassword)\b/.test(url);
 }

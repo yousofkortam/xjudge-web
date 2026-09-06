@@ -1,0 +1,23 @@
+.xj-notfound {
+  padding: 56px 32px;
+  text-align: center;
+}
+
+.xj-notfound__code {
+  margin: 0 0 8px;
+  font-size: 3.5rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--xj-border-strong);
+}
+
+.xj-notfound__title { margin: 0 0 8px; font-size: 1.375rem; }
+
+.xj-notfound__text {
+  margin: 0 auto 24px;
+  max-width: 44ch;
+  color: var(--xj-text-muted);
+}
+
+.xj-notfound__actions { justify-content: center; }

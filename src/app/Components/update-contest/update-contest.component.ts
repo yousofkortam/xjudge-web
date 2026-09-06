@@ -1,164 +1,196 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 import { ContestService } from 'src/app/ApiServices/contest.service';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
 @Component({
   selector: 'app-update-contest',
   templateUrl: './update-contest.component.html',
   styleUrls: ['./update-contest.component.css'],
-  
 })
-export class UpdateContestComponent implements OnInit {
+export class UpdateContestComponent implements OnInit, OnDestroy {
 
-  isLoading: boolean = false;
-  validationsErrors: any = {};
-  userGroups: any = [];
-  onlineJudges: any = [];
-  isGroupSelected: boolean = false;
-  isGroupSelectorDisabled: boolean = false;
-  enableDeleteProblem: boolean = false;
-  updateContestForm: any;
+  isLoading = false;
+  apiError = '';
+  validationErrors: Record<string, string> = {};
+
+  onlineJudges: string[] = [];
+  isGroupSelected = false;
+
+  updateContestForm!: FormGroup;
+  ready = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private _ContestService: ContestService,
     private _OnlineJudgeService: OnlineJudgeService,
-    private router: Router,
-    private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public Contestdata: any = {}
-  ) {}
+    private dialogRef: MatDialogRef<UpdateContestComponent>,
+    @Inject(MAT_DIALOG_DATA) public Contestdata: any = {}) {}
 
   ngOnInit(): void {
-    // Ensure data is loaded before initializing the form
-    if (this.Contestdata && this.Contestdata.contest && this.Contestdata.problemSet) {
-      this.getOnlineJudges();
-      this.initializeForm();
-    } else {
-      console.error('Contest data is not available');
+    if (!this.Contestdata?.contest) {
+      this.apiError = 'This contest could not be loaded for editing.';
+      return;
     }
+    this.getOnlineJudges();
+    this.initializeForm();
   }
 
-  initializeForm() {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  initializeForm(): void {
     const contest = this.Contestdata.contest;
-    const problems = this.Contestdata.problemSet;
-    this.enableDeleteProblem = problems.length > 1;
-    
+    const problems = this.Contestdata.problemSet ?? [];
+
+    this.isGroupSelected = contest.type === 'GROUP';
+
     this.updateContestForm = new FormGroup({
-      title: new FormControl(contest.title, [Validators.required]),
-      durationSeconds: new FormControl(contest.duration, [Validators.required]),
-      type: new FormControl(contest.type, [Validators.required]),
-      visibility: new FormControl(contest.visibility, [Validators.required]),
-      beginTime: new FormControl(new Date(contest.beginTime * 1000).toISOString().slice(0, 19), [Validators.required]),
-      problems: new FormArray(problems.map(problem => new FormGroup({
-        problemAlias: new FormControl(problem.problemAlias, [Validators.required]),
-        ojType: new FormControl(problem.source, [Validators.required]),
-        code: new FormControl(problem.problemCode, [Validators.required]),
-        problemHashtag: new FormControl(problem.problemHashtag),
-        problemWeight: new FormControl(problem.problemWeight, [Validators.required]),
+      title: new FormControl(contest.title ?? '', [Validators.required, Validators.maxLength(120)]),
+      // Shown in minutes, like the create dialog; converted back on submit.
+      durationSeconds: new FormControl(Math.round(Number(contest.duration ?? 0) / 60),
+        [Validators.required, Validators.min(1)]),
+      type: new FormControl(contest.type ?? 'CLASSIC', [Validators.required]),
+      visibility: new FormControl(contest.visibility ?? 'PUBLIC', [Validators.required]),
+      beginTime: new FormControl(toLocalDateTimeInput(contest.beginTime), [Validators.required]),
+      problems: new FormArray((problems.length ? problems : [{}]).map((problem: any) => new FormGroup({
+        problemAlias: new FormControl(problem.problemAlias ?? '', [Validators.required]),
+        ojType: new FormControl(problem.source ?? '', [Validators.required]),
+        code: new FormControl(problem.problemCode ?? '', [Validators.required]),
+        problemHashtag: new FormControl(problem.problemHashtag ?? ''),
+        problemWeight: new FormControl(problem.problemWeight ?? 1, [Validators.required, Validators.min(1)]),
       }))),
-      groupId: new FormControl(contest.groupId || 0),
-      password: new FormControl(contest.password || ''),
-      description: new FormControl(contest.description, [Validators.required]),
-    }, { validators: this.groupIdValidator });
+      groupId: new FormControl(contest.groupId ?? 0),
+      password: new FormControl(contest.password ?? ''),
+      description: new FormControl(contest.description ?? '', [Validators.required, Validators.maxLength(500)]),
+    }, { validators: groupIdValidator });
+
+    this.ready = true;
   }
 
-  handleUpdateContest() {
-    this.isLoading = true;
-    const formValue = this.updateContestForm.value;
-    const date = new Date(formValue.beginTime);
-    const epochTime = Math.floor(date.getTime() / 1000);
-    formValue.beginTime = epochTime;
-    formValue.problems.forEach((problem: any, i: number) => {
-        problem.problemHashtag = this.getLetter(i);
-    });
-    
-    this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, formValue).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        this.dialog.closeAll();
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/contest', this.Contestdata.contest.id]);
-        });
-      },
-      error: (err) => {
-        console.log(err);
-        this.validationsErrors = err.error.errors ;
-        this.isLoading = false;
-      }
-    });
+  get problems(): FormArray {
+    return this.updateContestForm.get('problems') as FormArray;
   }
 
+  get canDeleteProblem(): boolean { return this.problems.length > 1; }
 
-  groupIdValidator(control: AbstractControl): ValidationErrors | null {
-    const typeControl = control.get('type');
-    const groupIdControl = control.get('groupId');
+  get isPrivate(): boolean { return this.updateContestForm?.get('visibility')?.value === 'PRIVATE'; }
 
-    if (typeControl?.value === 'GROUP' && groupIdControl?.value === 0) {
-      return { "GroupRequired": true };
-    }
+  getFormProblems(): AbstractControl[] { return this.problems.controls; }
 
-    return null;
-  }
+  trackByIndex = (index: number): number => index;
 
-  onClassicClick() {
+  onClassicClick(): void {
     this.isGroupSelected = false;
-    this.updateContestForm.controls['type'].setValue('CLASSIC');
-    this.updateContestForm.controls['groupId'].setValue(0);
+    this.updateContestForm.patchValue({ type: 'CLASSIC', groupId: 0 });
   }
 
-  onGroupClick() {
+  onGroupClick(): void {
     this.isGroupSelected = true;
-    this.updateContestForm.controls['type'].setValue('GROUP');
-    if (this.Contestdata.inGroup) {
-      this.updateContestForm.controls['groupId'].setValue(this.Contestdata.groupId);
-    }
+    this.updateContestForm.patchValue({ type: 'GROUP' });
   }
 
-  getFormProblems() {
-    return (this.updateContestForm.get('problems') as FormArray).controls;
-  }
-
-  addNewProblemForm() {
-    const problems = this.updateContestForm.get('problems') as FormArray;
-    this.enableDeleteProblem = true;
-    problems.push(new FormGroup({
-      problemAlias: new FormControl(null, [Validators.required]),
-      ojType: new FormControl("", [Validators.required]),
-      code: new FormControl(null, [Validators.required]),
-      problemHashtag: new FormControl(null),
-      problemWeight: new FormControl(null, [Validators.required]),
+  addNewProblemForm(): void {
+    this.problems.push(new FormGroup({
+      problemAlias: new FormControl('', [Validators.required]),
+      ojType: new FormControl('', [Validators.required]),
+      code: new FormControl('', [Validators.required]),
+      problemHashtag: new FormControl(''),
+      problemWeight: new FormControl(1, [Validators.required, Validators.min(1)]),
     }));
   }
 
-  removeProblemForm(index: number) {
-    const problems = this.updateContestForm.get('problems') as FormArray;
-    if (problems.length > 1)
-      problems.removeAt(index);
-
-    if (problems.length === 1)
-      this.enableDeleteProblem = false;
+  removeProblemForm(index: number): void {
+    if (this.problems.length > 1) this.problems.removeAt(index);
   }
 
-  getLetter(index: number) {
+  getLetter(index: number): string {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';
-    while (index >= 0) {
-      result = letters.charAt(index % 26) + result;
-      index = Math.floor(index / 26) - 1;
+    let i = index;
+    while (i >= 0) {
+      result = letters.charAt(i % 26) + result;
+      i = Math.floor(i / 26) - 1;
     }
     return result;
   }
 
-  getOnlineJudges() {
-    return this._OnlineJudgeService.getOnlineJudges().subscribe({
-      next: (response) => {
-        this.onlineJudges = response;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+  handleUpdateContest(): void {
+    if (this.isLoading) return;
+    if (this.updateContestForm.invalid) {
+      this.updateContestForm.markAllAsTouched();
+      this.apiError = 'Fill in every required field before saving.';
+      return;
+    }
+
+    this.isLoading = true;
+    this.apiError = '';
+    this.validationErrors = {};
+
+    const raw = this.updateContestForm.getRawValue();
+    const beginTime = new Date(raw.beginTime).getTime();
+    if (Number.isNaN(beginTime)) {
+      this.isLoading = false;
+      this.apiError = 'Enter a valid start date and time.';
+      return;
+    }
+
+    const payload = {
+      ...raw,
+      durationSeconds: Number(raw.durationSeconds) * 60,
+      beginTime: Math.floor(beginTime / 1000),
+      problems: raw.problems.map((problem: any, i: number) => ({
+        ...problem,
+        problemHashtag: this.getLetter(i),
+        problemWeight: Number(problem.problemWeight) || 1,
+      })),
+    };
+
+    this._ContestService.updateSpecificContestById(this.Contestdata.contest.id, payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          // The opener reloads on a truthy result; no full page reload needed.
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.validationErrors = apiValidationErrors(err);
+          this.apiError = apiErrorMessage(err);
+        }
+      });
   }
+
+  private getOnlineJudges(): void {
+    this._OnlineJudgeService.getOnlineJudges()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => { this.onlineJudges = Array.isArray(response) ? response : []; },
+        error: () => { this.onlineJudges = []; }
+      });
+  }
+}
+
+function groupIdValidator(control: AbstractControl): ValidationErrors | null {
+  const type = control.get('type')?.value;
+  const groupId = control.get('groupId')?.value;
+  return type === 'GROUP' && !groupId ? { GroupRequired: true } : null;
+}
+
+/**
+ * `<input type="datetime-local">` wants a local-time string. `toISOString()`
+ * yields UTC, which shifted the displayed start time by the local offset.
+ */
+function toLocalDateTimeInput(epochSeconds: any): string {
+  const ms = Number(epochSeconds) * 1000;
+  if (!Number.isFinite(ms) || !ms) return '';
+  const date = new Date(ms - new Date(ms).getTimezoneOffset() * 60_000);
+  return date.toISOString().slice(0, 16);
 }

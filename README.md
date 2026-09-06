@@ -21,9 +21,26 @@ To install the project, follow these steps:
 1. Clone the repository: `git clone https://github.com/yousofkortam/xjudge-web.git`
 2. Navigate to the project directory: `cd xjudge-web`
 3. Install dependencies: `npm install`
-4. Run the development server: `ng serve`
+4. Start the X-Judge backend (the Spring Boot project in `../X-Judge`).
+5. Point the frontend at it: `apiUrl` in `src/app/environment/environment.ts` must
+   match the port the backend is bound to. The backend reads that port from
+   `PORT` in `X-Judge/src/main/resources/env.properties` (currently **9090**);
+   its built-in fallback in `application.properties` is 7070.
+6. Run the development server: `npm start`
 
 Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+### Configuration
+
+| Setting | Where | Notes |
+| --- | --- | --- |
+| Dev API base URL | `src/app/environment/environment.ts` | Absolute URL of the backend, e.g. `http://localhost:9090`. |
+| Prod API base URL | `src/app/environment/environment.prod.ts` | Empty by default — the production build calls the API same-origin. `ng build` swaps this file in automatically. |
+
+Endpoints are **not** prefixed (`/auth`, `/problem`, `/contest`, …), and every
+call goes through `ApiInterceptor`, which attaches the bearer token, unwraps the
+backend's `{success, message, data, error}` envelope and normalises failures.
+No component hard-codes a URL.
 
 ## Usage
 

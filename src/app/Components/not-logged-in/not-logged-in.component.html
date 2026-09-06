@@ -1,7 +1,11 @@
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <h3 class="text-center">You are not logged in!</h3>
-        </div>
-    </div>
+<div class="xj-state">
+  <i class="fa fa-lock xj-state__icon" aria-hidden="true"></i>
+  <h2 class="xj-state__title">Sign in required</h2>
+  <p class="xj-state__text">{{ message }}</p>
+  <div class="xj-row xj-notlogged__actions">
+    <a class="xj-btn xj-btn--primary"
+       [routerLink]="['/login']"
+       [queryParams]="returnUrl ? { returnUrl: returnUrl } : {}">Sign in</a>
+    <a class="xj-btn xj-btn--secondary" routerLink="/register">Create account</a>
+  </div>
 </div>

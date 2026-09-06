@@ -1,57 +1,65 @@
-<div class="container">
-    <div class="row" id="contest-rank">
-        <table id="contest-rank-table" cellspacing="1" style="width: auto;" class="table-responsive">
-            <thead>
-                <tr>
-                    <th class="rank" rowspan="2">
-                        <div>Rank</div>
-                    </th>
-                    <th class="team" rowspan="2">
-                        <div>Team</div>
-                    </th>
-                    <th class="solve" rowspan="2">
-                        <div>Score</div>
-                    </th>
-                    <th class="penalty" rowspan="2">
-                        <div>Penalty</div>
-                    </th>
-                    <th *ngFor="let problem of problemSet" class="prob undefined">
-                        <div>
-                            <a href="problem/{{problem.problemHashtag}}">{{problem.problemHashtag}}</a>
-                            <br>
-                            <span>{{problem.numberOfAccepted}}/{{problem.numberOfSubmission}}</span>
+<div class="xj-table-wrap">
+  <div *ngIf="loading" class="xj-card__body" aria-busy="true">
+    <span class="xj-sr-only">Loading standings…</span>
+    <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3,4,5]"></div>
+  </div>
 
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let userRank of contestRank; let i = index;">
+  <div *ngIf="!loading && loadError" class="xj-state" role="alert">
+    <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+    <h2 class="xj-state__title">Unable to load standings</h2>
+    <p class="xj-state__text">{{ loadError }}</p>
+    <button type="button" class="xj-btn xj-btn--secondary" (click)="loadRank()">Try again</button>
+  </div>
 
-                    <td class="rank meta" [ngClass]="{'rank meta' : i === 0}">{{i+1}}</td>
-                    <td class="team meta" [ngClass]="{'team meta' : i === 0 , 'team' : i !==0}">
-                        <div style="text-align: left;">
-                            <img class="contestant-avatar" [src]="userRank.photoUrl"
-                                src="https://vj.csgrandeur.cn/user/avatar/705205?v=1674489701" alt="avatar"
-                                class="contestant-avatar"><a href="/profile/{{userRank.handle}}"
-                                title="{{userRank.handle}}" target="_blank">{{userRank.handle}} <span
-                                    style="color: gray;">({{userRank.firstName}} {{userRank.lastName}})</span></a>
-                        </div>
-                    </td>
-                    <td class="solved meta" [ngClass]="{'solved meta' : i === 0}">{{userRank.userContestScore}}</td>
-                    <td class="penalty meta" [ngClass]="{'penalty meta' : i === 0}">
-                        {{penaltyInMinute(userRank.userContestPenalty)}}
-                    </td>
-                    <td *ngFor="let s of userRank.submissionStatus"
-                        [ngClass]="{'prob accepted' : s.isAttempt && s.isAccepted , 'prob failed' : s.isAttempt && !s.isAccepted , 'prop' : !s.isAttempt}">
-                        {{s.time}}
-                        <br>
-                        <span *ngIf="s.isAttempt && s.attempted !== 0">
-                            (-{{s.attempted}})
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div *ngIf="!loading && !loadError && contestRank.length === 0" class="xj-state">
+    <i class="fa fa-ranking-star xj-state__icon" aria-hidden="true"></i>
+    <h2 class="xj-state__title">No standings yet</h2>
+    <p class="xj-state__text">The table fills in as participants start solving.</p>
+  </div>
+
+  <div class="xj-table-scroll" *ngIf="!loading && !loadError && contestRank.length > 0">
+    <table class="xj-table xj-rank">
+      <caption class="xj-sr-only">Contest standings</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="xj-num xj-rank__rank">#</th>
+          <th scope="col" class="xj-rank__team">Team</th>
+          <th scope="col" class="xj-num">Score</th>
+          <th scope="col" class="xj-num">Penalty</th>
+          <th scope="col" class="xj-rank__prob"
+              *ngFor="let problem of problemSet; trackBy: trackByProblem">
+            <span class="xj-rank__prob-tag">{{ problem.problemHashtag }}</span>
+            <span class="xj-rank__prob-stats">
+              {{ problem.numberOfAccepted ?? 0 }}/{{ problem.numberOfSubmission ?? 0 }}
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let userRank of contestRank; let i = index; trackBy: trackByHandle">
+          <td class="xj-num xj-rank__rank">{{ i + 1 }}</td>
+          <td class="xj-rank__team">
+            <div class="xj-rank__contestant">
+              <img class="xj-avatar xj-rank__avatar"
+                   [src]="userRank.photoUrl || defaultAvatar"
+                   [alt]="'Avatar of ' + userRank.handle" />
+              <div class="xj-rank__names">
+                <a [routerLink]="['/profile', userRank.handle]" class="xj-rank__handle">{{ userRank.handle }}</a>
+                <span class="xj-rank__realname" *ngIf="userRank.firstName || userRank.lastName">
+                  {{ userRank.firstName }} {{ userRank.lastName }}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="xj-num xj-rank__score">{{ userRank.userContestScore ?? 0 }}</td>
+          <td class="xj-num xj-muted">{{ penaltyInMinute(userRank.userContestPenalty) }}</td>
+          <td *ngFor="let cell of userRank.submissionStatus; trackBy: trackByCell"
+              [ngClass]="cellClass(cell)">
+            <span class="xj-rank__time" *ngIf="cell.isAccepted">{{ cell.time }}</span>
+            <span class="xj-rank__tries" *ngIf="cell.isAttempt && cell.attempted">−{{ cell.attempted }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

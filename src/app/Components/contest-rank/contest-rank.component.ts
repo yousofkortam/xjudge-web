@@ -1,79 +1,122 @@
-import { animate } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { ContestService } from 'src/app/ApiServices/contest.service';
+import { apiErrorMessage } from 'src/app/api-error';
+
+interface ProblemCell {
+  problemHashtag: string;
+  isAttempt: number;
+  isAccepted: number;
+  attempted: number;
+  time: string;
+}
 
 @Component({
   selector: 'app-contest-rank',
   templateUrl: './contest-rank.component.html',
   styleUrls: ['./contest-rank.component.css']
 })
-export class ContestRankComponent implements OnInit {
+export class ContestRankComponent implements OnInit, OnDestroy {
 
-  @Input() problemSet: any = [];
-  @Input() contestId: any;
-  contestRank: any = [];
+  @Input() problemSet: any[] = [];
+  @Input() contestId: string | number | null = null;
 
-  constructor(private contestService: ContestService) {
-  }
+  contestRank: any[] = [];
+  loading = false;
+  loadError = '';
+
+  readonly defaultAvatar = 'assets/images/Default_Image.jpg';
+
+  private readonly destroy$ = new Subject<void>();
+
+  constructor(private contestService: ContestService) {}
 
   ngOnInit(): void {
-    this.contestService.getContstRank(this.contestId).subscribe({
-      next: (response) => {
-        this.contestRank = response;
-        for (let i = 0; i < this.contestRank.length; i++) {
-          const submissionList = this.getSubmissionsForContestant(this.contestRank[i]);
-          this.contestRank[i]["submissionStatus"] = submissionList;
+    this.loadRank();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  trackByHandle = (index: number, row: any): string => row?.handle ?? String(index);
+  trackByCell = (index: number, cell: ProblemCell): string => cell?.problemHashtag ?? String(index);
+  trackByProblem = (index: number, problem: any): string => problem?.problemHashtag ?? String(index);
+
+  loadRank(): void {
+    this.loading = true;
+    this.loadError = '';
+    this.contestService.getContstRank(this.contestId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.loading = false;
+          const rows = Array.isArray(response) ? response : [];
+          this.contestRank = rows.map(row => ({
+            ...row,
+            submissionStatus: this.getSubmissionsForContestant(row),
+          }));
+        },
+        error: (err) => {
+          this.loading = false;
+          this.contestRank = [];
+          if (err?.status !== 401) this.loadError = apiErrorMessage(err);
         }
-        console.log(response)
-      },
-      error: (err) => {
-        console.error('Error fetching contest rank:', err);
+      });
+  }
+
+  /**
+   * Builds one cell per contest problem for a contestant, in problem order.
+   *
+   * The previous merge-style walk assumed both lists were sorted and dropped
+   * every problem after the contestant's last submission; this indexes the
+   * submissions instead, so the row always spans the whole problem set.
+   */
+  getSubmissionsForContestant(contestant: any): ProblemCell[] {
+    const byProblem = new Map<string, any[]>();
+    for (const submission of contestant?.submissionList ?? []) {
+      const key = String(submission?.problemIndex ?? '');
+      const bucket = byProblem.get(key);
+      if (bucket) bucket.push(submission);
+      else byProblem.set(key, [submission]);
+    }
+
+    return this.problemSet.map(problem => {
+      const hashtag = String(problem?.problemHashtag ?? '');
+      const submissions = byProblem.get(hashtag) ?? [];
+      const cell: ProblemCell = { problemHashtag: hashtag, isAttempt: 0, isAccepted: 0, attempted: 0, time: '' };
+
+      for (const submission of submissions) {
+        cell.isAttempt = 1;
+        if (submission?.status === 'Accepted') {
+          // Penalties only count the failures before the first accepted run.
+          if (!cell.isAccepted) {
+            cell.isAccepted = 1;
+            cell.time = this.formatTime(submission.submitTime);
+          }
+        } else if (!cell.isAccepted) {
+          cell.attempted++;
+        }
       }
+      return cell;
     });
   }
 
-  getSubmissionsForContestant(contestant: any) {
-    let submissionList: { isAccepted: number; time: string; attempted: number; isAttempt: number; problemHastag: any; }[] = [];
-    let i = 0, j = 0;
-    while (i < this.problemSet.length && j < contestant.submissionList.length) {
-      let isAccepted = 0;
-      let time = '';
-      let attempted = 0;
-      let isAttempt = 0;
-      if (this.problemSet[i].problemHashtag < contestant.submissionList[j].problemIndex) {
-        submissionList.push({ isAccepted, time, attempted, isAttempt, problemHastag: this.problemSet[i].problemHashtag });
-        i++;
-      } else if (this.problemSet[i].problemHashtag === contestant.submissionList[j].problemIndex) {
-        while (j < contestant.submissionList.length && this.problemSet[i].problemHashtag === contestant.submissionList[j].problemIndex) {
-          if (!isAccepted && contestant.submissionList[j].status === 'Accepted') {
-            isAttempt = 1
-            isAccepted = 1;
-            time = this.formatTime(contestant.submissionList[j].submitTime);
-          }
-          else if (contestant.submissionList[j].status !== 'Accepted') {
-            attempted++;
-            isAttempt = 1;
-          }
-          j++;
-        }
-        submissionList.push({ isAccepted, time, attempted, isAttempt, problemHastag: this.problemSet[i].problemHashtag });
-        i++;
-      }
-      else {
-        j++;
-      }
-    }
-    return submissionList;
+  cellClass(cell: ProblemCell): string {
+    if (!cell.isAttempt) return 'xj-rank__cell';
+    return cell.isAccepted ? 'xj-rank__cell is-accepted' : 'xj-rank__cell is-failed';
   }
 
-  formatTime(time: any) {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
-    return `${hours}:${minutes}:${seconds}`;
+  formatTime(time: any): string {
+    const total = Number(time);
+    if (!Number.isFinite(total) || total < 0) return '';
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(Math.floor(total / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(Math.floor(total % 60))}`;
   }
 
-  penaltyInMinute(timeInSecond: any) {
-    return Math.floor(timeInSecond / 60);
+  penaltyInMinute(timeInSecond: any): number {
+    const seconds = Number(timeInSecond);
+    return Number.isFinite(seconds) ? Math.floor(seconds / 60) : 0;
   }
 }

@@ -1,23 +1,16 @@
-.dialog-content {
-    padding: 20px;
-    min-height: 550px;
-    width: 100%;
+.xj-dialog__title { font-size: 1.125rem !important; font-weight: 650; }
+.xj-dialog__content { padding-top: 8px !important; }
+.xj-dialog__alert { margin-bottom: 16px; }
+
+.xj-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px !important;
 }
 
-.dialog-actions {
-    padding: 20px;
-    justify-content: flex-end;
-}
+.xj-profile-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
 
-.dialog-actions .btn {
-    margin-left: 10px;
+@media (max-width: 575.98px) {
+  .xj-profile-form__row { grid-template-columns: 1fr; }
 }
-
-#code-solution {
-    border-radius: 5px;
-    padding: 20px;
-    margin-top: 20px;
-}
-.fname input.ms-xl-5 {
-        margin-left: 3.5rem !important;
-    }

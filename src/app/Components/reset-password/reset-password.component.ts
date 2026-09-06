@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/ApiServices/auth.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
 @Component({
   selector: 'app-reset-password',
@@ -17,7 +18,8 @@ export class ResetPasswordComponent implements OnInit {
 
   isLoading: boolean = false;
   apiError: string = '';
-  validationErrors: any = {}
+  validationErrors: Record<string, string> = {};
+  showPassword = false;
   token: string = '';
 
   constructor(
@@ -27,8 +29,7 @@ export class ResetPasswordComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private titleService: Title) {
     this._ActivatedRoute.queryParams.subscribe((value) => {
-      this.token = value['token'];
-      console.log(this.token);
+      this.token = value['token'] ?? '';
     })
   }
 
@@ -37,8 +38,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPasswordForm: FormGroup = new FormGroup({
-    password: new FormControl(null, [Validators.required]),
-    confirmPassword: new FormControl(null, [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20),
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*$/)]),
+    confirmPassword: new FormControl('', [Validators.required]),
   }, { validators: this.rePasswordMatch });
 
 
@@ -55,32 +57,31 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   handleResetPassword(resetPasswordForm: FormGroup) {
+    if (this.isLoading) return;
+    if (resetPasswordForm.invalid) {
+      resetPasswordForm.markAllAsTouched();
+      return;
+    }
     this.isLoading = true;
-    const requestBody = {
+    this.apiError = '';
+    this.validationErrors = {};
+    this._AuthService.resetPassword({
       token: this.token,
-      password: this.resetPasswordForm.get('password')?.value,
-      confirmPassword: this.resetPasswordForm.get('confirmPassword')?.value
-    };
-    this._AuthService.resetPassword(requestBody).subscribe({
+      password: resetPasswordForm.get('password')?.value,
+      confirmPassword: resetPasswordForm.get('confirmPassword')?.value,
+    }).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this._snackBar.open(response.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
+        this._snackBar.open(response?.message || 'Password updated. You can sign in now.', 'Close', {
+          duration: 5000, verticalPosition: 'top',
         });
-        this._Router.navigate(["/login"]).then(r => r);
+        void this._Router.navigate(['/login']);
       },
       error: (err) => {
-        console.log(err);
-        this.validationErrors = err.error.message
-        // this.apiError = err.error.message;
-        // console.log(this.apiError)
         this.isLoading = false;
-
-        // this._snackBar.open(this.apiError, 'close', {
-        //   duration: 2000,
-        //   verticalPosition: 'top',
-        // });
+        this.validationErrors = apiValidationErrors(err);
+        this.apiError = apiErrorMessage(err);
+        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
       }
     });
   }

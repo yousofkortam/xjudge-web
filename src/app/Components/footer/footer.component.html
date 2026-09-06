@@ -1,5 +1,17 @@
-<footer class="text-white text-center text-lg-start">
-  <div class="text-center p-3">
-    © 2024 Team xJudge. All rights reserved.
+<footer class="xj-footer">
+  <div class="xj-footer__inner">
+    <div class="xj-footer__brand">
+      <span class="xj-footer__mark" aria-hidden="true">X</span>
+      <span>X-Judge</span>
+    </div>
+
+    <nav class="xj-footer__links" aria-label="Footer">
+      <a routerLink="/problem">Problems</a>
+      <a routerLink="/contest">Contests</a>
+      <a routerLink="/group">Groups</a>
+      <a routerLink="/status">Status</a>
+    </nav>
+
+    <p class="xj-footer__note">© {{ year }} Team X-Judge. All rights reserved.</p>
   </div>
 </footer>

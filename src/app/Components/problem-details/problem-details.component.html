@@ -1,111 +1,154 @@
-<div class="container-fluid text-center  ">
-   <div class="row ms-5 justify-content-around"> <!-- use ngStyle to handle ms-5 to remove it in problem from contest!! -->
-        <div class="col-xl-3 col-lg-4 mt-3 justify-content-around text-center pe-5">
+<div class="xj-page">
 
-            <div id="prob-operation" class="row ">
-                <div class=" mt-5 w-100">
-                    <!-- <div class=" text-center w-100 ">
-                        <div class="col-xs-6 col-sm-12 d-flex" [class.d-none]="showButtons == false">
-                            <app-problem-selector-hashtag></app-problem-selector-hashtag>
-                        </div>
-                    </div> -->
-                    <div class="col-xs-8">
-                        <button (click)="openModal()" type="button" class="btn btn-success">
-                            <i class="fa fa-check"></i> Submit </button>
-                    </div>
-                </div>
-
-
-                <!-- contest problem -->
-                <!-- <div class=" text-center w-100 "  [class.d-none]="showButtons == false">
-                    <div class=" col-xs-6 col-sm-12" >
-                        <button type="button" class="btn btn-secondary" > <i class="fa fa-list-ul "></i>Status </button>
-                    </div>
-                    <div class="col-xs-6 col-sm-12">
-                        <button type="button" class="btn btn-secondary">My Status</button>
-                    </div>
-                </div> -->
-
-                <div class=" text-center ">
-                    <div class="w-100">
-                        <div class="col-xs-8">
-                            <button class="recrawl btn btn-secondary " (click)="recrawl()">
-                                <i class="fa fa-refresh me-1"></i>Recrawl</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="prob-properties" class="ms-0 w-100">
-                <div class="card w-100">
-                    <div class="d-flex small-text" *ngFor="let property of problemInfo.properties">
-                        <ng-container *ngIf="inContest || !property.spoiler">
-                            <dt style="text-align: left;" class="col-sm-6">{{property.title}}</dt>
-                            <dd style="text-align: left;" class="col-sm-6">{{property.content}}</dd>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-
-            <div *ngIf="problemSumbissions.length > 0" id="prob-statistics" class="text-center mt-3 ms-0 w-100">
-                <dl class="card">
-                    <div class="d-flex">
-                        <dt class="col-sm-4">Submissions</dt>
-                        <dd class="col-sm-8"><span title="Remote">{{problemInfo.submissions}}</span></dd>
-                    </div>
-                </dl>
-            </div>
-
-            <div *ngIf="problemSumbissions.length > 0" id="prob-my-sols" class=" text-center w-100">
-                <table class="table">
-                    <thead class="table-light">
-                        <tr style="background-color:#ebebeb">
-                            <th class="result">Result</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let submission of problemSumbissions; let i = index" class="my-sol">
-                            <td>
-                                <button (click)="showSubmissionResult(submission.id)"
-                                    style="background: none; border: none; cursor: pointer;"
-                                    [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
-                                    [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
-                                    {{submission.verdict}}
-                                </button>
-                            </td>
-                            <td class="my-sol-time">{{submission.submitTime * 1000 | timeAgo }}</td>
-                        </tr>
-                        <tr *ngIf="totalSubmissions > 2">
-                            <td colspan="2">
-                                <a routerLink="">More...</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="col-lg-8 text-start mb-5 me-5" >
-            <div class="d-flex mt-5 ">
-                <h2 class="text-bold"
-                    style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; line-height: 1.5; color: #333;">
-                    <ng-container *ngIf="inContest">{{problemInfo.problemHashtag}} - </ng-container> {{problemInfo.title}}
-
-                </h2>
-                <p *ngIf="!inContest" class="mt-2 ms-2"
-                    style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.5; color: #666;">
-                    <a [href]="problemInfo.problemLink" target="_blank"
-                        style="color: #007bff;">{{problemInfo.onlineJudge}} - {{problemInfo.code}}
-                        <i class="fa fa-external-link"></i>
-                    </a>
-                </p>
-            </div>
-            <div class="row" style="border-radius: 10px;">
-                <iframe #myIframe class="w-full h-full" id="prob-statement" [src]="descriptionUrl" scrolling="no"
-                    style="width: 100%; height: 5000px;"></iframe>
-            </div>
-        </div>
+  <!-- Loading -->
+  <div class="xj-card" *ngIf="loading" aria-busy="true">
+    <div class="xj-card__body">
+      <span class="xj-sr-only">Loading problem…</span>
+      <div class="xj-skeleton" style="width: 45%; height: 24px; margin-bottom: 16px;"></div>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3,4,5]"></div>
     </div>
+  </div>
+
+  <!-- Not found -->
+  <div class="xj-card" *ngIf="!loading && notFound">
+    <div class="xj-state">
+      <i class="fa fa-file-circle-question xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">Problem not found</h1>
+      <p class="xj-state__text">This problem is not available on X-Judge.</p>
+      <a class="xj-btn xj-btn--secondary" routerLink="/problem">Back to problems</a>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="xj-card" *ngIf="!loading && loadError">
+    <div class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">Unable to load this problem</h1>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="getSpecificProblem()">Try again</button>
+    </div>
+  </div>
+
+  <!-- Problem -->
+  <ng-container *ngIf="!loading && problemInfo">
+    <header class="xj-page-header">
+      <div>
+        <h1 class="xj-page-header__title">
+          <span class="xj-problem__hashtag" *ngIf="inContest && problemInfo.problemHashtag">
+            {{ problemInfo.problemHashtag }}
+          </span>
+          {{ problemInfo.title }}
+        </h1>
+        <p class="xj-page-header__subtitle" *ngIf="!inContest">
+          <span class="xj-badge xj-badge--neutral">{{ problemInfo.onlineJudge }}</span>
+          <span class="xj-mono xj-problem__code">{{ problemInfo.code }}</span>
+          <a *ngIf="problemInfo.problemLink" [href]="problemInfo.problemLink" target="_blank" rel="noopener noreferrer">
+            Open on {{ problemInfo.onlineJudge }} <i class="fa fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          </a>
+        </p>
+      </div>
+
+      <div class="xj-page-header__actions">
+        <button type="button" class="xj-btn xj-btn--secondary" (click)="recrawl()">
+          <i class="fa fa-rotate" aria-hidden="true"></i> Recrawl
+        </button>
+        <button type="button" class="xj-btn xj-btn--primary" (click)="openModal()">
+          <i class="fa fa-paper-plane" aria-hidden="true"></i> Submit
+        </button>
+      </div>
+    </header>
+
+    <div class="xj-problem__layout">
+      <!-- Statement -->
+      <section class="xj-card xj-problem__statement-card">
+        <div class="xj-card__header">
+          <h2 class="xj-card__title">Statement</h2>
+        </div>
+
+        <div class="xj-card__body" *ngIf="statementLoading" aria-busy="true">
+          <span class="xj-sr-only">Loading statement…</span>
+          <div class="xj-skeleton" style="width: 70%; margin-bottom: 10px;"></div>
+          <div class="xj-skeleton" style="width: 95%; margin-bottom: 10px;"></div>
+          <div class="xj-skeleton" style="width: 88%; margin-bottom: 10px;"></div>
+          <div class="xj-skeleton" style="width: 60%;"></div>
+        </div>
+
+        <div class="xj-problem__frame-wrap" *ngIf="!statementLoading && statementSrcDoc">
+          <!-- Scraped third-party HTML. It is injected as `srcdoc` (the backend
+               sends X-Frame-Options: DENY, so a cross-origin src would be
+               blocked) and sandboxed without allow-same-origin, so it runs in an
+               opaque origin and cannot reach this app's storage or DOM. -->
+          <iframe class="xj-problem__frame"
+                  [srcdoc]="statementSrcDoc"
+                  title="Problem statement"
+                  sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                  referrerpolicy="no-referrer"></iframe>
+        </div>
+
+        <div class="xj-state" *ngIf="!statementLoading && !statementSrcDoc">
+          <i class="fa fa-file-lines xj-state__icon" aria-hidden="true"></i>
+          <h3 class="xj-state__title">Statement not available</h3>
+          <p class="xj-state__text">
+            {{ statementError || 'The statement has not been crawled yet.' }}
+            Try Recrawl, or open the problem on {{ problemInfo.onlineJudge }}.
+          </p>
+          <button type="button" class="xj-btn xj-btn--secondary" (click)="recrawl()">Recrawl</button>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="xj-problem__side">
+        <section class="xj-card" *ngIf="visibleProperties.length">
+          <div class="xj-card__header"><h2 class="xj-card__title">Limits &amp; details</h2></div>
+          <dl class="xj-problem__props">
+            <div class="xj-problem__prop" *ngFor="let property of visibleProperties; trackBy: trackByProperty">
+              <dt>{{ property.title }}</dt>
+              <dd>{{ property.content }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="xj-card" *ngIf="problemInfo.contestName">
+          <div class="xj-card__header"><h2 class="xj-card__title">Source</h2></div>
+          <div class="xj-card__body">
+            <a *ngIf="problemInfo.contestLink; else plainSource"
+               [href]="problemInfo.contestLink" target="_blank" rel="noopener noreferrer">
+              {{ problemInfo.contestName }}
+            </a>
+            <ng-template #plainSource><span>{{ problemInfo.contestName }}</span></ng-template>
+            <p class="xj-muted xj-problem__solved" *ngIf="problemInfo.solvedCount != null">
+              {{ problemInfo.solvedCount }} solved
+            </p>
+          </div>
+        </section>
+
+        <section class="xj-card" *ngIf="isAuthenticated">
+          <div class="xj-card__header">
+            <h2 class="xj-card__title">My attempts</h2>
+            <a routerLink="/status" class="xj-card__link" *ngIf="totalSubmissions > problemSumbissions.length">All</a>
+          </div>
+
+          <div class="xj-card__body" *ngIf="submissionsLoading" aria-busy="true">
+            <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2]"></div>
+          </div>
+
+          <div class="xj-state" *ngIf="!submissionsLoading && problemSumbissions.length === 0">
+            <p class="xj-state__text">No attempts yet.</p>
+          </div>
+
+          <ul class="xj-feed" *ngIf="!submissionsLoading && problemSumbissions.length > 0">
+            <li class="xj-feed__item" *ngFor="let submission of problemSumbissions; trackBy: trackBySubmission">
+              <button type="button"
+                      class="xj-verdict xj-verdict-btn"
+                      [ngClass]="'xj-verdict--' + (submission.verdict | verdictClass)"
+                      (click)="showSubmissionResult(submission.id)">
+                {{ submission.verdict || 'Pending' }}
+              </button>
+              <span class="xj-feed__meta">{{ submission.submitTime * 1000 | timeAgo }}</span>
+            </li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </ng-container>
 </div>

@@ -1,36 +1,38 @@
-<div class="container">
-    <div class="row">
-        <mat-dialog-content>
-            <div class="dialog-container ">
-                <h2 class="dialog-title pb-3">Invite user</h2>
-                <form [formGroup]="inviteUserForm">
-                    <div class="mt-3 mb-3 d-flex ">
-                        <label for="handle" class="col-md-2 mt-2 me-3 col-4">Handle</label>
-                        <input type="text" required id="user-handle" class="form-control ms-lg-2"
-                            placeholder="User handle" formControlName="handle" />
-                        <div class="m-0 validation"
-                            *ngIf="inviteUserForm.get('handle')?.errors && inviteUserForm.get('handle')?.touched ">
-                            <span *ngIf="inviteUserForm.get('handle')?.getError('required')"
-                                style="color:red">Required</span>
-                        </div>
-                        <div *ngIf="validationsErrors['handle']" class="text-danger" role="alert">
-                            {{ validationsErrors.handle }}
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </mat-dialog-content>
+<h2 mat-dialog-title class="xj-dialog__title">Invite a user</h2>
 
-        <mat-dialog-actions class="dialog-actions">
-            <div class="dialog-actions"
-                style="display: flex; justify-content: flex-end; align-items: flex-end; width: 100%;">
-                <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
-                <button type="submit" class="btn btn-primary" (click)="handleInviteUser()">
-                    <span *ngIf="!isLoading"> Invite </span>
-                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
-                        aria-hidden="true"></span>
-                </button>
-            </div>
-        </mat-dialog-actions>
+<mat-dialog-content class="xj-dialog__content">
+  <div *ngIf="successMessage" class="xj-alert xj-alert--success xj-dialog__alert" role="status">
+    <i class="fa fa-circle-check xj-alert__icon" aria-hidden="true"></i>
+    <div class="xj-alert__body">{{ successMessage }}</div>
+  </div>
+
+  <div *ngIf="apiError" class="xj-alert xj-alert--error xj-dialog__alert" role="alert">
+    <i class="fa fa-circle-exclamation xj-alert__icon" aria-hidden="true"></i>
+    <div class="xj-alert__body">{{ apiError }}</div>
+  </div>
+
+  <form [formGroup]="inviteUserForm" (ngSubmit)="handleInviteUser()" novalidate>
+    <div class="xj-field">
+      <label class="xj-label" for="invite-handle">
+        Handle<span class="xj-label__required" aria-hidden="true">*</span>
+      </label>
+      <input id="invite-handle" class="xj-input" formControlName="handle" type="text"
+             placeholder="Their X-Judge handle" autocapitalize="none" spellcheck="false"
+             [class.is-invalid]="inviteUserForm.get('handle')?.touched && inviteUserForm.get('handle')?.invalid" />
+      <p class="xj-hint">They will find the invitation under Groups → Invitations.</p>
+      <p class="xj-field-error"
+         *ngIf="inviteUserForm.get('handle')?.touched && inviteUserForm.get('handle')?.invalid">
+        Enter the handle of the user you want to invite.
+      </p>
+      <p class="xj-field-error" *ngIf="validationErrors['receiverHandle']">{{ validationErrors['receiverHandle'] }}</p>
     </div>
-</div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="xj-dialog__actions">
+  <button type="button" class="xj-btn xj-btn--secondary" (click)="close()">Done</button>
+  <button type="button" class="xj-btn xj-btn--primary" [disabled]="isLoading" (click)="handleInviteUser()">
+    <span *ngIf="isLoading" class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+    {{ isLoading ? 'Sending…' : 'Send invitation' }}
+  </button>
+</mat-dialog-actions>

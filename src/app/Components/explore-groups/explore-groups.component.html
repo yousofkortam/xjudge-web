@@ -1,26 +1,48 @@
-<div class="input-group mt-5 ms-4">
-  <div class="form-outline" data-mdb-input-init>
-    <input 
-      type="search" 
-      id="form1" 
-      [(ngModel)]="searchName" 
-      class="form-control" 
-      placeholder="Search" 
-      style="box-shadow: none;" 
-      (keyup.enter)="onSearch()"
-    />
-  </div>
-  <button type="button" class="btn btn-primary shadow-none" (click)="onSearch()">
-    <i class="fas fa-search"></i>
+<form class="xj-explore__search" (ngSubmit)="onSearch()" role="search">
+  <label class="xj-sr-only" for="group-search">Search groups by name</label>
+  <input id="group-search"
+         name="searchName"
+         type="search"
+         class="xj-input"
+         placeholder="Search groups by name…"
+         [(ngModel)]="searchName" />
+  <button type="submit" class="xj-btn xj-btn--primary" [disabled]="loading">
+    <i class="fa fa-magnifying-glass" aria-hidden="true"></i> Search
   </button>
+</form>
+
+<div class="xj-card" *ngIf="loading" aria-busy="true">
+  <div class="xj-card__body">
+    <span class="xj-sr-only">Loading groups…</span>
+    <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3]"></div>
+  </div>
 </div>
 
-<div *ngIf="loading" class="mt-4 ms-4">Loading...</div>
-
-<div *ngIf="!loading && groups.length > 0" class="mt-4 ms-4">
-  <app-groups [groups]="groups"></app-groups>
+<div class="xj-card" *ngIf="!loading && loadError">
+  <div class="xj-state" role="alert">
+    <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+    <h2 class="xj-state__title">Unable to load groups</h2>
+    <p class="xj-state__text">{{ loadError }}</p>
+    <button type="button" class="xj-btn xj-btn--secondary" (click)="searchGroups()">Try again</button>
+  </div>
 </div>
 
-<div *ngIf="!loading && groups.length === 0" class="mt-4 ms-4">
-  <p>No groups found</p>
+<div class="xj-card" *ngIf="!loading && !loadError && groups.length === 0">
+  <div class="xj-state">
+    <i class="fa fa-magnifying-glass xj-state__icon" aria-hidden="true"></i>
+    <h2 class="xj-state__title">No groups found</h2>
+    <p class="xj-state__text">
+      {{ searchName ? 'No public group matches “' + searchName + '”.' : 'There are no public groups yet.' }}
+    </p>
+  </div>
 </div>
+
+<app-groups *ngIf="!loading && !loadError && groups.length > 0" [groups]="groups"></app-groups>
+
+<app-pagination
+  *ngIf="!loading && !loadError && totalElements > size"
+  [totalElements]="totalElements"
+  [totalPages]="totalPages"
+  [pageSize]="size"
+  [pageIndex]="pageNo"
+  (pageChange)="onPageChange($event)"></app-pagination>

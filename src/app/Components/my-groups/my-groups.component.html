@@ -1,4 +1,41 @@
-<app-groups *ngIf="isAuthenticated; else noGroups" [groups]="groups"></app-groups>
-<ng-template #noGroups>
-  <app-not-logged-in></app-not-logged-in>
-</ng-template>
+<app-not-logged-in
+  *ngIf="!isAuthenticated"
+  message="Sign in to see the groups you belong to."
+  returnUrl="/group/myGroups"></app-not-logged-in>
+
+<ng-container *ngIf="isAuthenticated">
+  <div class="xj-card" *ngIf="loading" aria-busy="true">
+    <div class="xj-card__body">
+      <span class="xj-sr-only">Loading your groups…</span>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3]"></div>
+    </div>
+  </div>
+
+  <div class="xj-card" *ngIf="!loading && loadError">
+    <div class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">Unable to load your groups</h2>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="loadGroups()">Try again</button>
+    </div>
+  </div>
+
+  <div class="xj-card" *ngIf="!loading && !loadError && groups.length === 0">
+    <div class="xj-state">
+      <i class="fa fa-users xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">You are not in any group yet</h2>
+      <p class="xj-state__text">Create a group for your team, or explore the public ones.</p>
+      <a class="xj-btn xj-btn--secondary" routerLink="/group/exploreGroups">Explore groups</a>
+    </div>
+  </div>
+
+  <app-groups *ngIf="!loading && !loadError && groups.length > 0" [groups]="groups"></app-groups>
+
+  <app-pagination
+    *ngIf="!loading && !loadError && totalElements > pageSize"
+    [totalElements]="totalElements"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    [pageIndex]="pageNo"
+    (pageChange)="onPageChange($event)"></app-pagination>
+</ng-container>

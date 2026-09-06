@@ -1,37 +1,89 @@
-<mat-dialog-content class="dialog-content">
-  <h2 class="dialog-title">Submit</h2>
-  <form [formGroup]="submitProblemForm" class="dialog-form">
-    <div class="form-group">
-      <label for="submit-open" class="form-label">Open:</label>
-      <div class="btn-group" role="group">
-        <input type="hidden" formControlName="isOpen">
-        <button type="radio" class="btn btn-outline-success" [class.active]="submitProblemForm.value.isOpen === true" (click)="submitProblemForm.controls['isOpen'].setValue(true)">Yes</button>
-        <button type="radio" class="btn btn-outline-danger" [class.active]="submitProblemForm.value.isOpen === false" (click)="submitProblemForm.controls['isOpen'].setValue(false)">No</button>
+<h2 mat-dialog-title class="xj-dialog__title">
+  Submit solution
+  <span class="xj-badge xj-badge--neutral" *ngIf="data?.source">{{ data.source }}</span>
+  <span class="xj-mono xj-dialog__code" *ngIf="data?.problemCode">{{ data.problemCode }}</span>
+</h2>
+
+<mat-dialog-content class="xj-dialog__content">
+  <div *ngIf="apiError" class="xj-alert xj-alert--error xj-dialog__alert" role="alert">
+    <i class="fa fa-circle-exclamation xj-alert__icon" aria-hidden="true"></i>
+    <div class="xj-alert__body">{{ apiError }}</div>
+  </div>
+
+  <form [formGroup]="submitProblemForm" (ngSubmit)="handleSubmitProblem()" novalidate>
+    <div class="xj-submit__row">
+      <div class="xj-field">
+        <label class="xj-label" for="submit-language">
+          Language<span class="xj-label__required" aria-hidden="true">*</span>
+        </label>
+
+        <div class="xj-row" *ngIf="compilersLoading">
+          <span class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+          <span class="xj-muted">Loading compilers…</span>
+        </div>
+
+        <select id="submit-language"
+                class="xj-select"
+                formControlName="idValue"
+                *ngIf="!compilersLoading && languages.length"
+                [class.is-invalid]="submitProblemForm.get('idValue')?.touched && submitProblemForm.get('idValue')?.invalid">
+          <option value="">Select a language…</option>
+          <option *ngFor="let language of languages; trackBy: trackByCompiler" [value]="language.idValue">
+            {{ language.name }}
+          </option>
+        </select>
+
+        <p class="xj-field-error" *ngIf="compilersError">{{ compilersError }}</p>
+        <p class="xj-field-error"
+           *ngIf="!compilersError && submitProblemForm.get('idValue')?.touched && submitProblemForm.get('idValue')?.invalid">
+          Choose a language.
+        </p>
       </div>
+
+      <fieldset class="xj-field xj-submit__visibility">
+        <legend class="xj-label">Share source</legend>
+        <div class="xj-toggle" role="group" aria-label="Share source code with other users">
+          <button type="button" class="xj-toggle__btn"
+                  [class.is-active]="submitProblemForm.value.isOpen === true"
+                  [attr.aria-pressed]="submitProblemForm.value.isOpen === true"
+                  (click)="setOpen(true)">Public</button>
+          <button type="button" class="xj-toggle__btn"
+                  [class.is-active]="submitProblemForm.value.isOpen === false"
+                  [attr.aria-pressed]="submitProblemForm.value.isOpen === false"
+                  (click)="setOpen(false)">Private</button>
+        </div>
+        <p class="xj-hint">Public submissions can be opened by anyone from the status page.</p>
+      </fieldset>
     </div>
-    <div class="form-group">
-      <label for="language" class="form-label">Language:</label>
-      <select id="form3" class="form-control" formControlName="idValue">
-        <option value="" selected>Select Language</option>
-        <option *ngFor="let language of languages" value="{{language.idValue}}">{{language.name}}</option>
-      </select>
-      <div *ngIf="submitProblemForm.get('language')?.errors && submitProblemForm.get('language')?.touched" class="error-message">
-        <span *ngIf="submitProblemForm.get('language')?.getError('required')">Language is mandatory</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="solution" class="form-label">Solution:</label>
-      <textarea id="solution" class="form-control" formControlName="solutionCode" placeholder="Solution goes here" rows="8"></textarea>
-      <div *ngIf="submitProblemForm.get('solution')?.errors && submitProblemForm.get('solution')?.touched" class="error-message">
-        <span *ngIf="submitProblemForm.get('solution')?.getError('required')">Solution is mandatory</span>
-      </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="submit-solution">
+        Source code<span class="xj-label__required" aria-hidden="true">*</span>
+        <span class="xj-hint xj-submit__lines">{{ solutionLines }} lines</span>
+      </label>
+      <textarea id="submit-solution"
+                class="xj-textarea xj-textarea--code"
+                formControlName="solutionCode"
+                spellcheck="false"
+                autocapitalize="off"
+                autocomplete="off"
+                placeholder="Paste your solution here…"
+                [class.is-invalid]="submitProblemForm.get('solutionCode')?.touched && submitProblemForm.get('solutionCode')?.invalid"></textarea>
+      <p class="xj-field-error"
+         *ngIf="submitProblemForm.get('solutionCode')?.touched && submitProblemForm.get('solutionCode')?.invalid">
+        Paste the source you want judged.
+      </p>
     </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions class="dialog-actions">
-  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Cancel</button>
-  <button type="submit" class="btn btn-primary" mat-button [disabled]="submitProblemForm.invalid" (click)="handleSubmitProblem()">
-    <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i> Submitting</span>
-    <span *ngIf="!isLoading"> Submit</span>
+
+<mat-dialog-actions class="xj-dialog__actions">
+  <button type="button" class="xj-btn xj-btn--secondary" mat-dialog-close>Cancel</button>
+  <button type="button"
+          class="xj-btn xj-btn--primary"
+          [disabled]="isLoading || compilersLoading || !languages.length"
+          (click)="handleSubmitProblem()">
+    <span *ngIf="isLoading" class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+    {{ isLoading ? 'Submitting…' : 'Submit' }}
   </button>
 </mat-dialog-actions>

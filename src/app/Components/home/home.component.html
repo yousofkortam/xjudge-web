@@ -1,131 +1,147 @@
+<!-- ===================== Signed-out: landing ===================== -->
+<section class="xj-hero" *ngIf="!isLogin">
+  <div class="xj-hero__inner">
+    <p class="xj-hero__eyebrow">Virtual judge</p>
+    <h1 class="xj-hero__title">One place to practise across every judge.</h1>
+    <p class="xj-hero__lede">
+      X-Judge mirrors problems from Codeforces, AtCoder and other online judges,
+      submits on your behalf, and brings the verdicts back into a single
+      dashboard — with contests and groups for training together.
+    </p>
+    <div class="xj-hero__actions">
+      <a class="xj-btn xj-btn--primary xj-btn--lg" routerLink="/register">
+        Create an account <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a class="xj-btn xj-btn--secondary xj-btn--lg" routerLink="/login">Sign in</a>
+    </div>
+  </div>
+</section>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="all_page " style="   background-color: #373737 ; ">
-      <!-- Section 1 -->
-      <section class="sec1">
-        <div class=" text-center hero center ">
-          <div class="row justify-content-between " >
-            <div class="col-lg-5 d-none d-lg-block image  ">
-              <img class="h-100 w-100" src="/assets/images/home1.jpg" alt="">
-            </div>
-            <div class="col-lg-6 col-md-12 text  ">
-              <h1 class="text-white mt-4">A New Way to Learn</h1>
-              <p class="text-white">X-Judge is the best platform to help you enhance your skills, expand<br>
-                <span style="padding-left: 5px;"> knowledge and prepare for technical interviews.</span>
-              </p>
-              <button *ngIf="!isLogin" class="register btn " routerLink="/register">Create Account <i
-                  class="fa fa-angle-right" aria-hidden="true"></i></button>
-              <!-- <button *ngIf="isLogin" class="btn" (click)="gotoProblemList()">All Problems <i
-                  class="fa fa-angle-right" aria-hidden="true"></i></button> -->
-            </div>
-          </div>
-        </div>
-      </section>
+<div class="xj-page">
+  <!-- ===================== Signed-in: dashboard header ===================== -->
+  <header class="xj-page-header" *ngIf="isLogin">
+    <div>
+      <h1 class="xj-page-header__title">Welcome back, {{ handle }}</h1>
+      <p class="xj-page-header__subtitle">Here is what is happening on X-Judge.</p>
+    </div>
+    <div class="xj-page-header__actions">
+      <a class="xj-btn xj-btn--secondary" routerLink="/problem">Browse problems</a>
+      <a class="xj-btn xj-btn--primary" routerLink="/contest">Contests</a>
+    </div>
+  </header>
 
-      <div class=" container-fluid separator mt-md-27"></div>
+  <div class="xj-grid xj-grid--stats xj-home__stats" *ngIf="isLogin && statistics">
+    <div class="xj-card xj-stat">
+      <p class="xj-stat__label">Problems solved</p>
+      <p class="xj-stat__value">{{ statistics.solvedProblems }}</p>
+    </div>
+    <div class="xj-card xj-stat">
+      <p class="xj-stat__label">Attempted</p>
+      <p class="xj-stat__value">{{ statistics.attemptedProblems }}</p>
+    </div>
+  </div>
 
-      <!-- Section 2 -->
-      <section class=" sec2 d-flex">
-        <div class="row justify-content-between text-center ">
-          <div class="column img col-md-4 col-sm-6 order-md-2 col-sm-push-6">
-            <div class="explore-card-base">
-              <div class="explore-card">
-                <div class="card slowfloat2s">
-                  <div class="inner"
-                    style="opacity: 0.2; background: linear-gradient(#ffd57f, #ffb601);     width: 80%; height: 59%; margin-top: 3px;">
-                    <div class="top ">
-                      <div class="sub-title">
-                        <p class="left"></p>
-                        <p></p>
-                      </div>
-                      <div class="title">
-                        <p class="left"></p>
-                        <p class="right"></p>
-                      </div>
-                    </div>
-                    <div class="play">
-                      <i class="fa fa-play" aria-hidden="true"></i>
-                    </div>
-                    <div class="end" style="    height: 70px;     margin-top: 18px; ">
-                      <p style="margin-top: 21px; height:9px"></p>
-                    </div>
+  <!-- ===================== Feature cards for visitors ===================== -->
+  <div class="xj-grid xj-grid--cards xj-home__features" *ngIf="!isLogin">
+    <article class="xj-card xj-feature">
+      <i class="fa fa-list-check xj-feature__icon" aria-hidden="true"></i>
+      <h2 class="xj-feature__title">Problems from many judges</h2>
+      <p class="xj-feature__text">
+        Filter by judge, code or title, then read the original statement without
+        leaving X-Judge.
+      </p>
+      <a routerLink="/problem" class="xj-feature__link">Browse problems <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    </article>
 
+    <article class="xj-card xj-feature">
+      <i class="fa fa-trophy xj-feature__icon" aria-hidden="true"></i>
+      <h2 class="xj-feature__title">Contests and standings</h2>
+      <p class="xj-feature__text">
+        Run classical or group contests with live standings, participants and a
+        shared submission feed.
+      </p>
+      <a routerLink="/contest" class="xj-feature__link">See contests <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    </article>
 
-                  </div>
-                </div>
-              </div>
-              <div class="explore-card">
-                <div class="card slowfloat2s">
-                  <div class="inner"
-                    style="opacity: 0.6;  background: linear-gradient(#b9f4bc, #8dc63f); width: 80%;height: 88%;  margin-top: -49px;  padding-top: 18px;">
-                    <div class="top">
-                      <div class="sub-title">
-                        <p class="left"></p>
-                        <p></p>
-                      </div>
-                      <div class="title">
-                        <p class="left"></p>
-                        <p class="right"></p>
-                      </div>
-                    </div>
-                    <div class="play">
-                      <i class="fa fa-play" aria-hidden="true"></i>
-                    </div>
-                    <div class="end" style="margin-top: 52px;">
-                      <p></p>
-                    </div>
+    <article class="xj-card xj-feature">
+      <i class="fa fa-users xj-feature__icon" aria-hidden="true"></i>
+      <h2 class="xj-feature__title">Train as a group</h2>
+      <p class="xj-feature__text">
+        Create a group, invite teammates and keep everyone's practice in one
+        place.
+      </p>
+      <a routerLink="/group" class="xj-feature__link">Explore groups <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    </article>
+  </div>
 
+  <!-- ===================== Panels ===================== -->
+  <div class="xj-home__panels">
+    <!-- Contests -->
+    <section class="xj-card" *ngIf="isLogin">
+      <div class="xj-card__header">
+        <h2 class="xj-card__title">Contests</h2>
+        <a routerLink="/contest" class="xj-card__link">View all</a>
+      </div>
 
-                  </div>
-                </div>
-              </div>
-              <div class="explore-card">
-                <div class="card slowfloat2s">
-                  <div class="inner" style="width: 80%;
-                height: 234px;">
-                    <div class="top">
-                      <div class="sub-title">
-                        <p class="left"></p>
-                        <p></p>
-                      </div>
-                      <div class="title">
-                        <p class="left"></p>
-                        <p class="right"></p>
-                      </div>
-                    </div>
-                    <div class="play">
-                      <i class="fa fa-play" aria-hidden="true"></i>
-                    </div>
-                    <div class="end">
-                      <p></p>
-                    </div>
+      <div class="xj-card__body" *ngIf="contestsState === 'loading'" aria-busy="true">
+        <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3]"></div>
+      </div>
 
+      <div class="xj-state" *ngIf="contestsState === 'error'" role="alert">
+        <p class="xj-state__text">Could not load contests right now.</p>
+      </div>
 
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="column col-md-4 order-md-1 col-sm-push-6 text  " style="width: max-content;">
-            <div class="d-flex Explor ms-md-5 " style="text-align: right; margin-left:20vw !important">
-              <h2 class="pe-2">Start Exploring</h2>
-              <i class=" fa fa-graduation-cap " style="font-size: 2em;" aria-hidden="true"></i>
-            </div>
-            <p class="Explore-text " style=" color: black !important; justify-content: center; text-align:right">
-              Explore is a well-organized tool that helps you get the most out of<br>
-              X-Judge by providing structure to guide your progress towards the next<br>
-              step in your programming career
+      <div class="xj-state" *ngIf="contestsState === 'empty'">
+        <p class="xj-state__text">No contests have been created yet.</p>
+      </div>
+
+      <ul class="xj-feed" *ngIf="contestsState === 'ready'">
+        <li class="xj-feed__item" *ngFor="let contest of contests; trackBy: trackById">
+          <div class="xj-feed__main">
+            <a [routerLink]="['/contest', contest.id]" class="xj-feed__title">{{ contest.title }}</a>
+            <p class="xj-feed__meta">
+              {{ contest.beginTime * 1000 | date:'medium' }} · {{ contest.handle }}
             </p>
-            <div style="   text-align: right;   margin-left: 12vw !important;  margin-top: 16px;">
-              <a class="get_Started  " routerLink="/problem">Get Started <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-            </div>
           </div>
-        </div>
+          <span class="xj-badge" [ngClass]="contestBadgeClass(contest)">
+            {{ contestState(contest) | titlecase }}
+          </span>
+        </li>
+      </ul>
+    </section>
 
+    <!-- Submissions -->
+    <section class="xj-card">
+      <div class="xj-card__header">
+        <h2 class="xj-card__title">Recent submissions</h2>
+        <a routerLink="/status" class="xj-card__link">View all</a>
+      </div>
 
-      </section>
+      <div class="xj-card__body" *ngIf="submissionsState === 'loading'" aria-busy="true">
+        <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3]"></div>
+      </div>
 
+      <div class="xj-state" *ngIf="submissionsState === 'error'" role="alert">
+        <p class="xj-state__text">Could not load the submission feed right now.</p>
+      </div>
 
+      <div class="xj-state" *ngIf="submissionsState === 'empty'">
+        <p class="xj-state__text">No submissions yet. Solve something to get started.</p>
+      </div>
+
+      <ul class="xj-feed" *ngIf="submissionsState === 'ready'">
+        <li class="xj-feed__item" *ngFor="let submission of submissions; trackBy: trackById">
+          <div class="xj-feed__main">
+            <span class="xj-feed__title">{{ submission.problemTitle || submission.problemCode }}</span>
+            <p class="xj-feed__meta">
+              {{ submission.userHandle }} · {{ submission.language }} · {{ submission.onlineJudge }}
+            </p>
+          </div>
+          <span class="xj-verdict" [ngClass]="'xj-verdict--' + (submission.verdict | verdictClass)">
+            {{ submission.verdict || 'Pending' }}
+          </span>
+        </li>
+      </ul>
+    </section>
   </div>
 </div>

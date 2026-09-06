@@ -1,32 +1,60 @@
-<!-- <div class="invitations-container">
-  <div *ngFor="let invitation of invitations" class="invitation-card">
-    <p>Hello <a href="profile/{{invitation.receiverHandle}}">{{ invitation.receiverHandle }}</a> ,
-         you are invited to join the group <strong>{{invitation.groupName }}</strong>  by <a href="profile/{{invitation.senderHandle}}">{{ invitation.senderHandle }}</a></p>
-    <p><strong>Status:</strong> {{ invitation.status }}</p>
-    <p><strong>Date:</strong> {{ invitation.date }}</p>
-    <div *ngIf="invitation.status === 'PENDING'" class="action-buttons">
-      <button (click)="acceptInvitation(invitation.id)">Accept</button>
-      <button (click)="declineInvitation(invitation.id)">Decline</button>
+<app-not-logged-in
+  *ngIf="!isAuthenticated"
+  message="Sign in to see your group invitations."
+  returnUrl="/group/invitations"></app-not-logged-in>
+
+<ng-container *ngIf="isAuthenticated">
+  <div class="xj-card" *ngIf="loading" aria-busy="true">
+    <div class="xj-card__body">
+      <span class="xj-sr-only">Loading invitations…</span>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2]"></div>
     </div>
   </div>
-</div> -->
-<div *ngIf="isAuthenticated; else noInvitations" class="container mt-4">
-  <div *ngFor="let invitation of invitations" class="card mb-3">
-    <div class="card-body">
-      <p class="card-text">
-        Hello <a [routerLink]="['/profile', invitation.receiverHandle]">{{ invitation.receiverHandle }}</a>,
-        you are invited to join the group <strong>{{ invitation.groupName }}</strong> by 
-        <a [routerLink]="['/profile', invitation.senderHandle]">{{ invitation.senderHandle }}</a>
-      </p>
-      <p class="card-text"><strong>Status:</strong> {{ invitation.status }}</p>
-      <p class="card-text"><strong>Date:</strong> {{ invitation.date }}</p>
-      <div *ngIf="invitation.status === 'PENDING'" class="btn-group" role="group">
-        <button class="btn btn-success" (click)="acceptInvitation(invitation.id)">Accept</button>
-        <button class="btn btn-danger" (click)="declineInvitation(invitation.id)">Decline</button>
+
+  <div class="xj-card" *ngIf="!loading && loadError">
+    <div class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">Unable to load invitations</h2>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="loadInvitations()">Try again</button>
+    </div>
+  </div>
+
+  <div class="xj-card" *ngIf="!loading && !loadError && invitations.length === 0">
+    <div class="xj-state">
+      <i class="fa fa-envelope-open xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">No invitations</h2>
+      <p class="xj-state__text">When someone invites you to a group, it shows up here.</p>
+    </div>
+  </div>
+
+  <ul class="xj-invites" *ngIf="!loading && !loadError && invitations.length > 0">
+    <li class="xj-card xj-invite" *ngFor="let invitation of invitations; trackBy: trackByInvitation">
+      <div class="xj-invite__body">
+        <p class="xj-invite__text">
+          <a [routerLink]="['/profile', invitation.senderHandle]">{{ invitation.senderHandle }}</a>
+          invited you to join <strong>{{ invitation.groupName }}</strong>
+        </p>
+        <p class="xj-invite__meta" *ngIf="invitation.date">{{ invitation.date | date:'medium' }}</p>
       </div>
-    </div>
-  </div>
-</div>
-<ng-template #noInvitations>
-  <app-not-logged-in></app-not-logged-in>
-</ng-template>
+
+      <div class="xj-invite__actions">
+        <span class="xj-badge" [ngClass]="statusClass(invitation.status)">
+          {{ invitation.status | titlecase }}
+        </span>
+
+        <ng-container *ngIf="invitation.status === 'PENDING'">
+          <button type="button" class="xj-btn xj-btn--primary xj-btn--sm"
+                  [disabled]="isPending(invitation.id)"
+                  (click)="acceptInvitation(invitation.id)">
+            <span *ngIf="isPending(invitation.id)" class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+            Accept
+          </button>
+          <button type="button" class="xj-btn xj-btn--secondary xj-btn--sm"
+                  [disabled]="isPending(invitation.id)"
+                  (click)="declineInvitation(invitation.id)">Decline</button>
+        </ng-container>
+      </div>
+    </li>
+  </ul>
+</ng-container>

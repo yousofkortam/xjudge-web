@@ -1,13 +1,11 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+.xj-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-/*
-.home{
-    font-family: "Roboto", "Helvetica Neue", sans-serif; 
-     height: 72px;  
 
-}*/
-
-   
+.xj-shell__main {
+  flex: 1 1 auto;
+  /* The skip link focuses this element; suppress the focus ring on a region. */
+  outline: none;
+}

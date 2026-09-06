@@ -1,47 +1,58 @@
+.xj-dialog__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.125rem !important;
+  font-weight: 650;
+}
+.xj-dialog__code { font-size: .8125rem; color: var(--xj-text-muted); }
 
-label:hover,
-label:active,
-label:focus,
-label
-{
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
+.xj-dialog__content { padding-top: 8px !important; }
+.xj-dialog__alert { margin-bottom: 16px; }
+
+.xj-submit__row {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 0 16px;
+  align-items: start;
 }
 
-.dialog-content {
-    padding: 20px;
-    min-height: 550px;
-  }
-  
-  .dialog-title {
-    margin-bottom: 20px;
-  }
-  
-  .dialog-form .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .dialog-form .form-label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .dialog-form .btn-group .btn {
-    margin-right: 10px;
-  }
-  
-  .dialog-form .error-message {
-    color: red;
-    font-size: 0.8em;
-    margin-top: 5px;
-  }
-  
-  .dialog-actions {
-    padding: 20px;
-    justify-content: flex-end;
-  }
-  
-  .dialog-actions .btn {
-    margin-left: 10px;
-  }
+.xj-submit__visibility { border: 0; padding: 0; margin-bottom: 16px; }
+.xj-submit__visibility .xj-label { padding: 0; }
+
+.xj-toggle {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--xj-surface-3);
+  border-radius: var(--xj-radius);
+}
+.xj-toggle__btn {
+  padding: 6px 14px;
+  font: inherit;
+  font-size: .8125rem;
+  font-weight: 550;
+  color: var(--xj-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--xj-radius-sm);
+  cursor: pointer;
+}
+.xj-toggle__btn.is-active {
+  background: var(--xj-surface);
+  color: var(--xj-text);
+  box-shadow: var(--xj-shadow-sm);
+}
+
+.xj-submit__lines { float: right; font-weight: 400; }
+
+.xj-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px !important;
+}
+
+@media (max-width: 575.98px) {
+  .xj-submit__row { grid-template-columns: 1fr; }
+}

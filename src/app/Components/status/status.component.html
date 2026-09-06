@@ -1,94 +1,121 @@
-<div class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
-    <div class="row">
-        <div class="col-md-2 mt-5 pt-2" id="left-panel">
-            <div class="list-group bg-dark" id="prob-category">
-
-                <button *ngFor="let button of buttons" (click)="button.click()" class="list-group-item left-align-text"
-                    [ngStyle]="button.style">
-                    {{button['name']}}
-                </button>
-            </div>
-        </div>
-        <div class="col-md-10 text-center" id="right-panel">
-            <div class="mt-5 d-lg-flex justify-content-between">
-                <div class="d-flex col-lg-6 col-12">
-                    <div>
-                        <button mat-button (click)="filterSubmissions()" class="btn ms-2 mb-0 border-none shadow-none"
-                            value="Create Contest" style="background-color:#ffffff; color:black">Filter</button>
-                    </div>
-                    <div>
-                        <button mat-button (click)="resetFilters()" class="btn ms-2 mb-0 border-none shadow-none"
-                            value="Create Contest" style="background-color:#ffffff; color:black">Reset</button>
-                    </div>
-                </div>
-                <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-            </div>
-            <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
-                width="100%">
-                <thead>
-                    <tr>
-                        <th class="oj">
-                            Who
-                            <input [(ngModel)]="userHandle" type="text" id="handle" name="handle" class="search_text"
-                                style="width:95%" (keyup.enter)="filterSubmissions()" />
-                        </th>
-                        <th class="prob_num">
-                            OJ
-                            <select [(ngModel)]="oj" id="OJ_s_Id" name="OJ_s_Id" class="search_text" style="width:100%"
-                                (change)="filterSubmissions()">
-                                <option value="">All</option>
-                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}
-                                </option>
-                            </select>
-                        </th>
-                        <th class="title">
-                            Prob
-                            <input [(ngModel)]="problemCode" type="text" id="prob" name="prob" class="search_text"
-                                style="width:95%" (keyup.enter)="filterSubmissions()" />
-                        </th>
-                        <th class="source hidden-md-down">
-                            Verdict
-                        </th>
-                        <th class="source hidden-md-down">
-                            Time
-                        </th>
-                        <th class="source hidden-md-down">
-                            Mem
-                        </th>
-                        <th class="source hidden-md-down">
-                            Lang
-                            <input [(ngModel)]="language" type="text" id="language" name="language" class="search_text"
-                                style="width:95%" (keyup.enter)="filterSubmissions()" />
-                        </th>
-                        <th class="source hidden-md-down">
-                            Submitted
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let submission of submissions; let i = index;">
-                        <td> <a href="profile/{{submission.userHandle}}">{{ submission.userHandle }}</a> </td>
-                        <td><a target="_blank">{{ submission.ojType }}</a></td>
-                        <td> <a href="problem/{{submission.ojType}}/{{submission.problemCode}}">{{
-                                submission.problemCode }}</a> </td>
-                        <td>
-                            <button (click)="showSubmissionResult(submission.id)"
-                                style="background: none; border: none; cursor: pointer;"
-                                [style.color]="submission.verdict === 'Accepted' ? '#5cb85c' : 'red'"
-                                [style.font-weight]="submission.verdict === 'Accepted' ? 'bold' : ''">
-                                {{submission.verdict}}
-                            </button>
-                        </td> <!-- TODO: Implement link to open submission details if the user open it -->
-                        <td> {{ submission.timeUsage }} </td>
-                        <td> {{ submission.memoryUsage }} </td>
-                        <td> {{ submission.language }} </td>
-                        <td> {{ submission.submitTime * 1000 | timeAgo }} </td>
-                    </tr>
-                </tbody>
-            </table>
-            <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
-            <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter" style="display: none" />
-        </div>
+<div class="xj-page">
+  <header class="xj-page-header">
+    <div>
+      <h1 class="xj-page-header__title">Submission status</h1>
+      <p class="xj-page-header__subtitle">Verdicts returned by each remote judge, newest first.</p>
     </div>
+  </header>
+
+  <div class="xj-tabs" role="tablist" aria-label="Submission scope">
+    <button type="button" role="tab" class="xj-tab"
+            [class.is-active]="scope === 'all'" [attr.aria-selected]="scope === 'all'"
+            (click)="showAll()">All</button>
+    <button type="button" role="tab" class="xj-tab"
+            [class.is-active]="scope === 'mine'" [attr.aria-selected]="scope === 'mine'"
+            (click)="showMine()" *ngIf="isLogin">Mine</button>
+  </div>
+
+  <form class="xj-filters" (ngSubmit)="applyFilters()">
+    <div class="xj-field">
+      <label class="xj-label" for="status-handle">Handle</label>
+      <input id="status-handle" class="xj-input" name="userHandle" type="text"
+             placeholder="Any user" [(ngModel)]="userHandle" />
+    </div>
+    <div class="xj-field" *ngIf="onlineJudges.length">
+      <label class="xj-label" for="status-oj">Judge</label>
+      <select id="status-oj" class="xj-select" name="oj" [(ngModel)]="oj">
+        <option value="">All judges</option>
+        <option *ngFor="let judge of onlineJudges" [value]="judge">{{ judge }}</option>
+      </select>
+    </div>
+    <div class="xj-field">
+      <label class="xj-label" for="status-code">Problem</label>
+      <input id="status-code" class="xj-input" name="problemCode" type="text"
+             placeholder="e.g. 1850A" [(ngModel)]="problemCode" />
+    </div>
+    <div class="xj-field">
+      <label class="xj-label" for="status-lang">Language</label>
+      <input id="status-lang" class="xj-input" name="language" type="text"
+             placeholder="e.g. C++" [(ngModel)]="language" />
+    </div>
+    <div class="xj-row">
+      <button type="submit" class="xj-btn xj-btn--primary" [disabled]="loading">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+      </button>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="resetFilters()" [disabled]="loading">Reset</button>
+    </div>
+  </form>
+
+  <div class="xj-table-wrap">
+    <div *ngIf="loading" class="xj-card__body" aria-live="polite" aria-busy="true">
+      <span class="xj-sr-only">Loading submissions…</span>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3,4,5,6,7,8]"></div>
+    </div>
+
+    <app-not-logged-in *ngIf="!loading && needsAuth"
+                       message="Sign in to browse the submission feed."
+                       returnUrl="/status"></app-not-logged-in>
+
+    <div *ngIf="!loading && !needsAuth && loadError" class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">Unable to load submissions</h2>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="filterSubmissions()">Try again</button>
+    </div>
+
+    <div *ngIf="!loading && !needsAuth && !loadError && submissions.length === 0" class="xj-state">
+      <i class="fa fa-inbox xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">No submissions found</h2>
+      <p class="xj-state__text">Nothing matches these filters yet.</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="resetFilters()">Reset filters</button>
+    </div>
+
+    <div class="xj-table-scroll" *ngIf="!loading && !needsAuth && !loadError && submissions.length > 0">
+      <table class="xj-table xj-status-table">
+        <caption class="xj-sr-only">Submissions matching the current filters</caption>
+        <thead>
+          <tr>
+            <th scope="col">Who</th>
+            <th scope="col">Judge</th>
+            <th scope="col">Problem</th>
+            <th scope="col">Verdict</th>
+            <th scope="col" class="xj-num">Time</th>
+            <th scope="col" class="xj-num">Memory</th>
+            <th scope="col">Language</th>
+            <th scope="col">Submitted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let submission of submissions; trackBy: trackBySubmission">
+            <td><a [routerLink]="['/profile', submission.userHandle]">{{ submission.userHandle }}</a></td>
+            <td><span class="xj-badge xj-badge--neutral">{{ submission.ojType }}</span></td>
+            <td class="xj-mono">
+              <a [routerLink]="['/problem', submission.ojType, submission.problemCode]">{{ submission.problemCode }}</a>
+            </td>
+            <td>
+              <button type="button"
+                      class="xj-verdict xj-verdict-btn"
+                      [ngClass]="'xj-verdict--' + (submission.verdict | verdictClass)"
+                      (click)="showSubmissionResult(submission.id)"
+                      [attr.aria-label]="'Open submission ' + submission.id + ' details'">
+                {{ submission.verdict || 'Pending' }}
+              </button>
+            </td>
+            <td class="xj-num xj-muted">{{ submission.timeUsage || '—' }}</td>
+            <td class="xj-num xj-muted">{{ submission.memoryUsage || '—' }}</td>
+            <td class="xj-muted">{{ submission.language || '—' }}</td>
+            <td class="xj-muted">{{ submission.submitTime * 1000 | timeAgo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-pagination
+    *ngIf="!loading && !needsAuth && !loadError && totalElements > 0"
+    [totalElements]="totalElements"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    [pageIndex]="pageNo"
+    (pageChange)="onPageChange($event)"></app-pagination>
 </div>

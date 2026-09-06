@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/ApiServices/auth.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
 
 @Component({
@@ -12,12 +13,13 @@ import { AuthService } from 'src/app/ApiServices/auth.service';
 })
 export class ForgetPasswordComponent implements OnInit {
 
-  apiError: string = "";
-  validationErrors: any
+  apiError: string = '';
+  successMessage: string = '';
+  validationErrors: Record<string, string> = {};
   isLoading: boolean = false;
 
   forgetPasswordForm: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required])
+    email: new FormControl('', [Validators.required, Validators.email])
   });
 
   constructor(
@@ -30,30 +32,26 @@ export class ForgetPasswordComponent implements OnInit {
   }
 
   handleForgetPassword(forgetPasswordForm: FormGroup) {
-    this.isLoading = true;
-    if (forgetPasswordForm.valid) {
-      this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({
-        next: (response) => {
-          console.log(response);
-          this._snackBar.open(response.message, 'close', {
-            duration: 5000,
-            verticalPosition: 'top',
-          });
-          localStorage.setItem("isSendCode", 'true');
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.log(err)
-          this.validationErrors = err.error.message;
-          console.log(this.validationErrors)
-          // this.apiError = err.error.message;         
-          // this._snackBar.open(this.apiError, 'close', {
-          //   duration: 2000,
-          //   verticalPosition: 'top',
-          // });
-          this.isLoading = false;
-        }
-      })
+    if (this.isLoading) return;
+    if (forgetPasswordForm.invalid) {
+      forgetPasswordForm.markAllAsTouched();
+      return;
     }
+    this.isLoading = true;
+    this.apiError = '';
+    this.validationErrors = {};
+    this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.successMessage = response?.message || 'If that address has an account, a reset link is on its way.';
+        this._snackBar.open(this.successMessage, 'Close', { duration: 8000, verticalPosition: 'top' });
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.validationErrors = apiValidationErrors(err);
+        this.apiError = apiErrorMessage(err);
+        this._snackBar.open(this.apiError, 'Close', { duration: 6000, verticalPosition: 'top' });
+      }
+    });
   }
 }

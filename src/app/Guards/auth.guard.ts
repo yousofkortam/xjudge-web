@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { AuthService } from '../ApiServices/auth.service';
 
+/**
+ * Blocks a route for signed-out visitors and remembers where they were headed.
+ *
+ * It returns a UrlTree rather than navigating imperatively so the router
+ * cancels the current navigation exactly once — the older `navigate() + false`
+ * form can interleave two navigations and leave the outlet empty.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ProtectedAuthGuard implements CanActivate {
 
-  constructor(private _Router:Router){};
+  constructor(private _AuthService: AuthService, private _Router: Router) {}
 
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-     if(localStorage.getItem('userToken') !==null)
-     {
-        return true;
-     }
-     else
-     {
-        this._Router.navigate(['/login']).then(r => r);
-        return false;
-     }
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+    if (this._AuthService.isLogin()) return true;
+    return this._Router.createUrlTree(['/login'], {
+      queryParams: { returnUrl: state.url },
+    });
   }
-
 }

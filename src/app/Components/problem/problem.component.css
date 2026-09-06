@@ -1,42 +1,18 @@
-body {
-    background-color: #ebebeb;
-}
-.btn {
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.25;
-    padding: .5rem 1rem;
-    text-align: center;
-    user-select: none;
-    vertical-align: middle;
-    white-space: nowrap;
+.xj-problem__title {
+  font-weight: 550;
+  display: inline-block;
+  max-width: 46ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
-.btn-secondary {
-    background-color: #fff;
-    border-color: #ccc;
-    color: #373a3c;
-}
+@media (max-width: 767.98px) {
+  /* The source column is the first thing to go on a narrow screen — the table
+     still scrolls, but hiding it keeps the useful columns in view. */
+  .xj-table th:nth-child(4),
+  .xj-table td:nth-child(4) { display: none; }
 
-.btn-secondary.focus,
- .btn-secondary:focus,
- .btn-secondary:hover {
-    background-color: #e6e6e6;
-    border-color: #adadad;
-    color: #373a3c;
-}
-
-a {
-    color: #0275d8;
-    text-decoration: none;
-}
-
-.table-bordered,
- .table-bordered td,
-  .table-bordered th {
-    border: 1px solid #eceeef;
+  .xj-problem__title { max-width: 24ch; }
 }

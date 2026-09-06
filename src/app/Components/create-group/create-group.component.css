@@ -1,9 +1,10 @@
+.xj-dialog__title { font-size: 1.125rem !important; font-weight: 650; }
+.xj-dialog__content { padding-top: 8px !important; }
+.xj-dialog__alert { margin-bottom: 16px; }
 
-.dialog-actions {
-    padding: 20px;
-    justify-content: flex-end;
-}
-
-.dialog-actions .btn {
-    margin-left: 10px;
+.xj-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px !important;
 }

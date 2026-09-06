@@ -1,77 +1,108 @@
-<div class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
-    <div class="row d-flex">
-        <div class="col-md-2 mt-5 pt-2 " id="left-panel">
-            <div class="list-group contest-running ">
-                <button *ngFor="let button of buttons" [ngStyle]="button.style" (click)="button.click()"
-                    class="list-group-item left-align-text">{{button.name}}</button>
-                <input type="hidden" name="category" value="" />
-            </div>
-            <div class="list-group contest-category  mt-3 " style="padding-right:0; margin: 0 0 10px 0">
-                <button *ngFor="let button of buttonsType" [ngStyle]="button.style" (click)="button.click()"
-                    class="list-group-item left-align-text">
-                    <img [src]="button.img"> {{button.name}}
-                </button>
-            </div>
-        </div>
-
-
-        <div class="col-md-10 text-center mt-2" id="right-panel">
-            <!-- pagination -->
-            <div class="mt-5 d-lg-flex justify-content-between">
-                <div class="d-flex col-lg-6 col-12">
-                    <div>
-                        <button mat-button (click)="openCreateContestDialog()"
-                            class="btn ms-2 mb-0 border-none shadow-none" value="Create Contest"
-                            style="background-color:#0275d8; color:#fff">Create Contest</button>
-                    </div>
-                    <div>
-                        <button mat-button class="btn ms-2 mb-0 border-none shadow-none" value="Create Contest"
-                            style="background-color:#ffffff; color:black" (click)="filterContests()">Filter</button>
-                    </div>
-                    <div>
-                        <button mat-button class="btn ms-2 mb-0 border-none shadow-none" value="Create Contest"
-                            style="background-color:#ffffff; color:black" (click)="reset()">Reset</button>
-                    </div>
-                </div>
-                <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-            </div>
-            <div class="contestTable text-center col-12 w-100">
-                <table id="listProblem" class="table table-striped table-responsive  table-border" cellspacing="0"
-                    width="100%">
-                    <thead>
-                        <tr class="p-4">
-                            <th class="fav" data-toggle='tooltip' title="Sort by favorite time"></th>
-                            <th class="id ">#</th>
-                            <th class="title">
-                                Title
-                                <input [(ngModel)]="title" type="text" id="title" name="title" class="search_text"
-                                    style="width:50%" (keyup.enter)="filterContests()" />
-                            </th>
-                            <th id="beginTime">Begin Time</th>
-                            <th id="Length ">Length</th>
-                            <th class="title">
-                                Owner
-                                <input [(ngModel)]="owner" type="text" id="owner" name="owner" class="search_text"
-                                    style="width:50%" (keyup.enter)="filterContests()" />
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let contest of Contests; trackBy:trackByContestId; let i = index">
-                            <td><i class="fas fa-star"></i></td>
-                            <td> {{ i + 1 }} </td>
-                            <td><a [routerLink]="contest.id">{{contest.title}}</a></td>
-                            <td> {{ contest.beginTime * 1000 | date:'medium' }} </td>
-                            <td> {{ contest.duration / 60 / 60 | hoursMinutes }} </td>
-                            <td><a [href]="'profile/' + contest.handle">{{contest.handle}}</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
-                <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter"
-                    style="display: none" />
-            </div>
-        </div>
+<div class="xj-page">
+  <header class="xj-page-header">
+    <div>
+      <h1 class="xj-page-header__title">Contests</h1>
+      <p class="xj-page-header__subtitle">Public, private and group contests hosted on X-Judge.</p>
     </div>
+    <div class="xj-page-header__actions">
+      <button type="button" class="xj-btn xj-btn--primary" (click)="openCreateContestDialog()">
+        <i class="fa fa-plus" aria-hidden="true"></i> Create contest
+      </button>
+    </div>
+  </header>
+
+  <div class="xj-tabs" role="tablist" aria-label="Contest category">
+    <button *ngFor="let cat of visibleCategories"
+            type="button"
+            role="tab"
+            class="xj-tab"
+            [class.is-active]="category === cat.key"
+            [attr.aria-selected]="category === cat.key"
+            (click)="selectCategory(cat.key)">{{ cat.label }}</button>
+  </div>
+
+  <form class="xj-filters" (ngSubmit)="applyFilters()">
+    <div class="xj-field">
+      <label class="xj-label" for="contest-title">Title</label>
+      <input id="contest-title" class="xj-input" name="title" type="search"
+             placeholder="Search contests…" [(ngModel)]="title" />
+    </div>
+    <div class="xj-field">
+      <label class="xj-label" for="contest-owner">Owner</label>
+      <input id="contest-owner" class="xj-input" name="owner" type="text"
+             placeholder="Handle" [(ngModel)]="owner" />
+    </div>
+    <div class="xj-row">
+      <button type="submit" class="xj-btn xj-btn--primary" [disabled]="loading">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+      </button>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="reset()" [disabled]="loading">Reset</button>
+    </div>
+  </form>
+
+  <div class="xj-table-wrap">
+    <div *ngIf="loading" class="xj-card__body" aria-live="polite" aria-busy="true">
+      <span class="xj-sr-only">Loading contests…</span>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let row of [1,2,3,4,5,6]"></div>
+    </div>
+
+    <app-not-logged-in *ngIf="!loading && needsAuth"
+                       message="Sign in to browse contests on X-Judge."
+                       returnUrl="/contest"></app-not-logged-in>
+
+    <div *ngIf="!loading && !needsAuth && loadError" class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">Unable to load contests</h2>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="filterContests()">Try again</button>
+    </div>
+
+    <div *ngIf="!loading && !needsAuth && !loadError && Contests.length === 0" class="xj-state">
+      <i class="fa fa-trophy xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">No contests yet</h2>
+      <p class="xj-state__text">Nothing matches this view. Try another category, or create the first contest.</p>
+      <button type="button" class="xj-btn xj-btn--primary" (click)="openCreateContestDialog()">Create contest</button>
+    </div>
+
+    <div class="xj-table-scroll" *ngIf="!loading && !needsAuth && !loadError && Contests.length > 0">
+      <table class="xj-table xj-contest-table">
+        <caption class="xj-sr-only">Contests in the selected category</caption>
+        <thead>
+          <tr>
+            <th scope="col">Status</th>
+            <th scope="col">Title</th>
+            <th scope="col">Begins</th>
+            <th scope="col">Length</th>
+            <th scope="col">Owner</th>
+            <th scope="col" class="xj-num">Participants</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contest of Contests; trackBy: trackByContestId">
+            <td>
+              <span class="xj-badge" [ngClass]="stateClass(contest)">{{ stateLabel(contest) }}</span>
+            </td>
+            <td>
+              <a [routerLink]="['/contest', contest.id]" class="xj-contest__title">{{ contest.title }}</a>
+              <span class="xj-badge xj-badge--neutral xj-contest__group" *ngIf="contest.groupName">
+                {{ contest.groupName }}
+              </span>
+            </td>
+            <td class="xj-muted">{{ contest.beginTime * 1000 | date:'medium' }}</td>
+            <td class="xj-muted">{{ contest.duration / 60 / 60 | hoursMinutes }}</td>
+            <td><a [routerLink]="['/profile', contest.handle]">{{ contest.handle }}</a></td>
+            <td class="xj-num">{{ contest.numberOfParticipants ?? 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-pagination
+    *ngIf="!loading && !needsAuth && !loadError && totalElements > 0"
+    [totalElements]="totalElements"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    [pageIndex]="pageNo"
+    (pageChange)="onPageChange($event)"></app-pagination>
 </div>

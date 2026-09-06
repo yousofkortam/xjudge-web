@@ -1,41 +1,81 @@
-<nav class="navbar navbar-expand-lg nav">
-      <div class="logo">
-        <img src="/assets/images/logo1-preview.jpg" alt="">
+<header class="xj-nav">
+  <div class="xj-nav__inner">
+    <a class="xj-nav__brand" routerLink="/home" aria-label="X-Judge home">
+      <span class="xj-nav__mark" aria-hidden="true">X</span>
+      <span class="xj-nav__wordmark">Judge</span>
+    </a>
+
+    <button
+      type="button"
+      class="xj-nav__toggle"
+      [attr.aria-expanded]="menuOpen"
+      aria-controls="xj-nav-menu"
+      aria-label="Toggle navigation menu"
+      (click)="toggleMenu()">
+      <i class="fa" [class.fa-bars]="!menuOpen" [class.fa-xmark]="menuOpen" aria-hidden="true"></i>
+    </button>
+
+    <div id="xj-nav-menu" class="xj-nav__collapse" [class.is-open]="menuOpen">
+      <nav class="xj-nav__links" aria-label="Main">
+        <a *ngFor="let link of links"
+           class="xj-nav__link"
+           [routerLink]="link.path"
+           routerLinkActive="is-active"
+           [routerLinkActiveOptions]="{ exact: false }"
+           #rla="routerLinkActive"
+           [attr.aria-current]="rla.isActive ? 'page' : null">{{ link.label }}</a>
+      </nav>
+
+      <form class="xj-nav__search" role="search" (ngSubmit)="submitSearch()">
+        <label class="xj-sr-only" for="xj-nav-search">Search problems by title</label>
+        <i class="fa fa-magnifying-glass xj-nav__search-icon" aria-hidden="true"></i>
+        <input id="xj-nav-search"
+               name="q"
+               type="search"
+               class="xj-nav__search-input"
+               placeholder="Search problems…"
+               [(ngModel)]="searchTerm" />
+      </form>
+
+      <div class="xj-nav__actions">
+        <ng-container *ngIf="!isLogin; else account">
+          <a class="xj-btn xj-btn--ghost xj-btn--sm xj-nav__action" routerLink="/login">Sign in</a>
+          <a class="xj-btn xj-btn--primary xj-btn--sm xj-nav__action" routerLink="/register">Create account</a>
+        </ng-container>
+
+        <ng-template #account>
+          <div class="xj-nav__user">
+            <button type="button"
+                    class="xj-nav__user-btn"
+                    [attr.aria-expanded]="userMenuOpen"
+                    aria-haspopup="true"
+                    (click)="toggleUserMenu()">
+              <span class="xj-nav__user-initial" aria-hidden="true">{{ (handle || '?').charAt(0).toUpperCase() }}</span>
+              <span class="xj-nav__user-handle xj-truncate">{{ handle }}</span>
+              <i class="fa fa-chevron-down xj-nav__caret" aria-hidden="true"></i>
+            </button>
+
+            <div class="xj-nav__dropdown" *ngIf="userMenuOpen" role="menu">
+              <a class="xj-nav__dropdown-item" role="menuitem" [routerLink]="['/profile', handle]">
+                <i class="fa fa-user" aria-hidden="true"></i> Profile
+              </a>
+              <a class="xj-nav__dropdown-item" role="menuitem" routerLink="/group/myGroups">
+                <i class="fa fa-users" aria-hidden="true"></i> My groups
+              </a>
+              <a class="xj-nav__dropdown-item" role="menuitem" routerLink="/group/invitations">
+                <i class="fa fa-envelope" aria-hidden="true"></i> Invitations
+              </a>
+              <a class="xj-nav__dropdown-item" role="menuitem" routerLink="/changePassword">
+                <i class="fa fa-key" aria-hidden="true"></i> Change password
+              </a>
+              <hr class="xj-nav__dropdown-sep" />
+              <button type="button" class="xj-nav__dropdown-item xj-nav__dropdown-item--danger" role="menuitem" (click)="logOut()">
+                <i class="fa fa-arrow-right-from-bracket" aria-hidden="true"></i> Sign out
+              </button>
+            </div>
+          </div>
+        </ng-template>
       </div>
-      <button style="border:none; background-color: #fff; margin-top: 4px; margin-right: 15px; " class="navbar-toggler border-none shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav_menu nav-item active ">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="home">Home </a>
-            </li>
-            <li class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="problem">Problem</a>
-            </li>
-            <li class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="status">Status</a>
-            </li>
-            <li class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="group">Group</a>
-            </li>
-            <li class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="contest">Contest</a>
-            </li>
-            <li class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="profile/{{handle}}">Profile</a>
-            </li>
-            <li *ngIf="!isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="login">Login</a>
-            </li>
-            <li *ngIf="!isLogin" class="nav_menu nav-item">
-                <a class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="register">Register</a>
-            </li>
-            <li *ngIf="isLogin" class="nav_menu nav-item">
-                <a (click)="logOut()" class="nav-link p-2" routerLinkActive="bg-white text-black" routerLink="logout">Logout</a>
-            </li>
-        </ul>
-      </div>
-  
-    </nav>
+    </div>
+  </div>
+</header>

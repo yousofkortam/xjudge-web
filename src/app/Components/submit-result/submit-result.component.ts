@@ -1,90 +1,176 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Subject, Subscription, timer, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { apiErrorMessage } from 'src/app/api-error';
+
+/** Verdicts that mean the judge is still working. */
+const PENDING_CLASSES = new Set(['pending', 'running']);
+
+const POLL_INTERVAL_MS = 3000;
+const MAX_POLLS = 40;   // ~2 minutes, matching the backend's own poll budget
 
 @Component({
   selector: 'app-submit-result',
   templateUrl: './submit-result.component.html',
   styleUrls: ['./submit-result.component.css']
 })
-export class SubmitResultComponent implements OnInit {
-  isLoading: boolean = true;
-  result: any;
-  contestId: any
-  isChecked: boolean = false;
+export class SubmitResultComponent implements OnInit, OnDestroy {
+
+  isLoading = true;
+  /** True while the judge has not returned a terminal verdict yet. */
+  isJudging = false;
+  loadError = '';
+
+  result: any = null;
+  isChecked = false;
+  visibilitySaving = false;
+
+  private pollCount = 0;
+  private pollSub?: Subscription;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<SubmitResultComponent>,
     private _snackBar: MatSnackBar,
     private submissionService: SubmissionService,
-    private authService: AuthService) { }
+    private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.result = this.data.dummy;
-    if (!this.data.submit) {
+    // The placeholder keeps the table populated while the real result arrives;
+    // it may be absent when opening an existing submission, hence the fallback.
+    this.result = this.data?.dummy ?? null;
+
+    if (this.data?.submit) {
+      this.submitProblem();
+    } else {
       this.getSubmissionById();
     }
-    else {
-      this.submitProblem();
-    }
   }
 
-  submitProblem() {
-    this.data.response.subscribe({
-      next: (response: any) => {
-        console.log(response);
+  ngOnDestroy(): void {
+    this.pollSub?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-        this.isLoading = false;
-        this.result = response;
-        this.result.solution = this.data.dummy.solution;
-        this.isChecked = this.result.isOpen;
-      },
-      error: (err: any) => {
-        this.isLoading = false;
-        if (err.error.success === false) {
-          this.dialog.closeAll();
-          this._snackBar.open(err.error.error.message, 'close', {
-            verticalPosition: 'bottom',
-          });
+  get verdict(): string {
+    return this.result?.verdict || 'In queue';
+  }
+
+  get canSeeSource(): boolean {
+    return this.isSubmissionOwner() || !!this.result?.isOpen;
+  }
+
+  isSubmissionOwner(): boolean {
+    const handle = this.authService.getUserHandle();
+    return !!handle && !!this.result?.userHandle && handle === this.result.userHandle;
+  }
+
+  private submitProblem(): void {
+    this.data.response
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.result = { ...(response ?? {}) };
+          // The judge never echoes the source back; keep what was submitted.
+          if (this.data?.dummy?.solution) this.result.solution = this.data.dummy.solution;
+          this.isChecked = !!this.result.isOpen;
+          this.startPollingIfPending();
+        },
+        error: (err: any) => {
+          this.isLoading = false;
+          this.loadError = apiErrorMessage(err);
+          this._snackBar.open(this.loadError, 'Close', { duration: 6000, verticalPosition: 'top' });
         }
-      }
-    });
+      });
   }
 
-  updateSubmissioinOpen(event: Event, submissionId: any) {
-    this.submissionService.updateSubmissionOpen(submissionId).subscribe(
-      (rsp) => {
-        const inputElement = event.target as HTMLInputElement;
-        console.log('Checkbox is checked:', inputElement.checked)
-        console.log(rsp);
-      }
-    )
+  private getSubmissionById(): void {
+    this.submissionService.getSubmissionById(this.data?.submissionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.result = response ?? null;
+          this.isChecked = !!this.result?.isOpen;
+          this.startPollingIfPending();
+        },
+        error: (err: any) => {
+          this.isLoading = false;
+          this.loadError = apiErrorMessage(err);
+        }
+      });
   }
 
-  getSubmissionById() {
-    this.submissionService.getSubmissionById(this.data.submissionId).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.result = response;
-        this.isChecked = this.result.isOpen;
-      },
-      error: (err: any) => {
-        this.isLoading = false;
-        this.dialog.closeAll();
-        this._snackBar.open(err.error.message, 'close', {
-          verticalPosition: 'bottom',
-        });
-      }
-    });
+  /**
+   * The backend judges asynchronously, so a freshly created submission comes
+   * back "In queue". Re-read it until it reaches a terminal verdict instead of
+   * making the user close and reopen the dialog.
+   */
+  private startPollingIfPending(): void {
+    const verdictClass = classify(this.result?.verdict);
+    if (!PENDING_CLASSES.has(verdictClass) || !this.result?.id) {
+      this.isJudging = false;
+      return;
+    }
+    if (this.pollCount >= MAX_POLLS) { this.isJudging = false; return; }
+
+    this.isJudging = true;
+    this.pollCount++;
+    this.pollSub?.unsubscribe();
+    this.pollSub = timer(POLL_INTERVAL_MS)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.submissionService.getSubmissionById(this.result.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (response: any) => {
+              if (!response) { this.isJudging = false; return; }
+              const solution = this.result?.solution;
+              this.result = { ...response, solution: response.solution ?? solution };
+              this.isChecked = !!this.result.isOpen;
+              this.startPollingIfPending();
+            },
+            // A transient poll failure should not wipe the verdict on screen.
+            error: () => { this.isJudging = false; }
+          });
+      });
   }
 
-  isSubmissionOwner() {
-    return this.authService.getUserHandle() === this.result.userHandle;
+  toggleVisibility(): void {
+    if (!this.result?.id || this.visibilitySaving) return;
+    this.visibilitySaving = true;
+    const next = !this.isChecked;
+    this.submissionService.updateSubmissionOpen(this.result.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.visibilitySaving = false;
+          this.isChecked = next;
+          this.result.isOpen = next;
+        },
+        error: (err) => {
+          this.visibilitySaving = false;
+          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 5000, verticalPosition: 'top' });
+        }
+      });
   }
+
+  close(): void { this.dialogRef.close(); }
 }
 
+/** Local copy of the verdict grouping used by VerdictClassPipe. */
+function classify(verdict: string | null | undefined): string {
+  if (!verdict) return 'pending';
+  const text = verdict.trim().toUpperCase().replace(/_/g, ' ');
+  if (text === 'WJ' || text === 'WQ' || text === 'PENDING' ||
+      text.includes('QUEUE') || text.startsWith('WAITING')) return 'pending';
+  if (text === 'WR' || text.startsWith('RUNNING') || text.startsWith('JUDGING') ||
+      text.startsWith('TESTING') || /^\d+\s*\/\s*\d+/.test(text)) return 'running';
+  return 'done';
+}

@@ -1,65 +1,44 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environment/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  baseUrl: string = environment.apiUrl + '/user';
+  private readonly userUrl = environment.apiUrl + '/user';
+  private readonly groupUrl = environment.apiUrl + '/group';
 
-  headers: any;
-  constructor(private _HttpClient: HttpClient) {
-    const token = localStorage.getItem('userToken');
-    if (token) {
-      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    } else {
-      this.headers = new HttpHeaders();
-    }
-  }
+  constructor(private _HttpClient: HttpClient, private _AuthService: AuthService) {}
 
   isAuthenticated(): boolean {
-    return localStorage.getItem('userToken') != null;
+    return this._AuthService.isLogin();
   }
 
-  getUserDetails(handle: string, email: string): Observable<any> {
-    return this._HttpClient.get(
-      `${this.baseUrl}/${handle}`,
-      { headers: this.headers }
-    );
+  getUserDetails(handle: string): Observable<any> {
+    return this._HttpClient.get(`${this.userUrl}/${encodeURIComponent(handle)}`);
   }
 
-  updateUser(data: any) {
-    return this._HttpClient.put(
-      `${this.baseUrl}`,
-      data,
-      { headers: this.headers }
-    );
+  updateUser(data: any): Observable<any> {
+    return this._HttpClient.put(`${this.userUrl}`, data);
+  }
+
+  updateProfilePicture(file: FormData): Observable<any> {
+    return this._HttpClient.put(`${this.userUrl}/profile-picture`, file);
   }
 
   getUserInvitations(): Observable<any> {
-    return this._HttpClient.get(
-      `http://localhost:7070/user/invitations`,
-      { headers: this.headers }
-    );
+    return this._HttpClient.get(`${this.userUrl}/invitations`);
   }
 
   acceptInvitation(invitationId: number): Observable<any> {
-    return this._HttpClient.post(
-      `http://localhost:7070/group/accept-invitation/${invitationId}`,
-      {},
-      { headers: this.headers }
-    );
+    return this._HttpClient.post(`${this.groupUrl}/accept-invitation/${invitationId}`, {});
   }
 
   declineInvitation(invitationId: number): Observable<any> {
-    return this._HttpClient.post(
-      `http://localhost:7070/group/decline-invitation/${invitationId}`,
-      {},
-      { headers: this.headers }
-    );
+    return this._HttpClient.post(`${this.groupUrl}/decline-invitation/${invitationId}`, {});
   }
-
 }

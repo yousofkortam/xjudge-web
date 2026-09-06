@@ -1,38 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/ApiServices/auth.service';
-import { SubmissionService } from 'src/app/ApiServices/submission.service';
-import { SubmitResultComponent } from '../submit-result/submit-result.component';
 import { Title } from '@angular/platform-browser';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from 'src/app/ApiServices/auth.service';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
+import { SubmissionService } from 'src/app/ApiServices/submission.service';
+import { apiErrorMessage } from 'src/app/api-error';
+import { PageChange } from '../pagination/pagination.component';
+import { SubmitResultComponent } from '../submit-result/submit-result.component';
 
 @Component({
   selector: 'app-status',
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.css']
 })
-export class StatusComponent implements OnInit {
+export class StatusComponent implements OnInit, OnDestroy {
 
+  loading = false;
+  loadError = '';
+  needsAuth = false;
   submissions: any[] = [];
-  totalPages: number = 0;
-  totalElements: number = 0;
-  pageSize: number = 25;
-  pageNo: number = 0;
 
-  onlineJudges: any = [];
+  totalPages = 0;
+  totalElements = 0;
+  pageSize = 25;
+  pageNo = 0;
 
-  // filter options
-  userHandle: string = '';
-  oj: string = '';
-  problemCode: string = '';
-  language: string = '';
+  onlineJudges: string[] = [];
 
-  buttons: any = [
-    { 'name': 'All', 'style': { 'background-color': '#0275d8', 'color': 'white' }, click: () => this.getAllSubmissions() },
-    { 'name': 'Mine', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getMineSubmissions() },
-  ];
+  userHandle = '';
+  oj = '';
+  problemCode = '';
+  language = '';
+
+  scope: 'all' | 'mine' = 'all';
+  isLogin = false;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private submissionService: SubmissionService,
@@ -40,93 +45,104 @@ export class StatusComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private titleService: Title,
-    private dialog: MatDialog,) { }
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.getOnlineJudges();
-    this.setButtonStyle('All', '#0275d8', 'white');
-    this.titleService.setTitle('Status');
+    this.titleService.setTitle('Status · X-Judge');
+    this.isLogin = this.authService.isLogin();
+    if (this.isLogin) this.getOnlineJudges();
     this.filterSubmissions();
   }
 
-
-  filterSubmissions() {
-    this.submissionService.filterSubmissions(this.userHandle, this.oj, this.problemCode, this.language, this.pageSize, this.pageNo).subscribe({
-      next: (response) => {
-        this.submissions = response.content;
-        this.totalPages = response.totalPages;
-        this.totalElements = response.totalElements;
-        this.pageNo = response.pageable.pageNumber;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  setButtonStyle(button: string, color: string, textColor: string) {
-    for (let btn of this.buttons) {
-      if (btn.name === button) {
-        btn['style']['background-color'] = color;
-        btn['style']['color'] = textColor;
-      } else {
-        btn['style']['background-color'] = 'white';
-        btn['style']['color'] = 'black';
-      }
-    }
+  trackBySubmission = (_: number, submission: any): number => submission?.id;
+
+  filterSubmissions(): void {
+    this.loading = true;
+    this.loadError = '';
+    this.needsAuth = false;
+    this.submissionService
+      .filterSubmissions(this.userHandle, this.oj, this.problemCode, this.language, this.pageSize, this.pageNo)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.loading = false;
+          this.submissions = response?.content ?? [];
+          this.totalPages = response?.totalPages ?? 0;
+          this.totalElements = response?.totalElements ?? 0;
+          // Trust the server's echo of the page it actually served.
+          this.pageNo = response?.pageable?.pageNumber ?? this.pageNo;
+        },
+        error: (err: any) => {
+          this.loading = false;
+          this.submissions = [];
+          this.totalElements = 0;
+          this.totalPages = 0;
+          if (err?.status === 401 || err?.status === 403) this.needsAuth = true;
+          else this.loadError = apiErrorMessage(err);
+        }
+      });
   }
 
-  getAllSubmissions() {
-    this.setButtonStyle('All', '#0275d8', 'white');
+  showAll(): void {
+    this.scope = 'all';
     this.userHandle = '';
+    this.pageNo = 0;
     this.filterSubmissions();
   }
 
-  getMineSubmissions() {
-    this.setButtonStyle('Mine', '#0275d8', 'white');
-    this.userHandle = this.authService.getUserHandle();
-    if (this.userHandle == null) {
-      this.snackBar.open('You are not logged in!', 'Close', { duration: 3000 });
+  showMine(): void {
+    const handle = this.authService.getUserHandle();
+    if (!handle) {
+      this.snackBar.open('Sign in to see your own submissions.', 'Close', { duration: 4000, verticalPosition: 'top' });
       return;
     }
+    this.scope = 'mine';
+    this.userHandle = handle;
+    this.pageNo = 0;
     this.filterSubmissions();
   }
 
-  onPageChange(event: PageEvent) {
+  applyFilters(): void {
+    this.pageNo = 0;
+    this.filterSubmissions();
+  }
+
+  onPageChange(event: PageChange): void {
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
     this.filterSubmissions();
   }
 
-  resetFilters() {
+  resetFilters(): void {
     this.userHandle = '';
     this.oj = '';
     this.problemCode = '';
     this.language = '';
-    this.setButtonStyle('All', '#0275d8', 'white');
+    this.scope = 'all';
+    this.pageNo = 0;
     this.filterSubmissions();
   }
 
-  showSubmissionResult(id: number) {
+  showSubmissionResult(id: number): void {
     this.dialog.open(SubmitResultComponent, {
-      data: {
-        submit: false,
-        submissionId: id
-      },
-      width: '70%',
-      height: 'auto'
+      data: { submit: false, submissionId: id },
+      width: 'min(860px, 94vw)',
+      maxHeight: '90vh',
+      autoFocus: 'first-tabbable',
     });
   }
 
-  getOnlineJudges() {
-    this.onlineJudgeService.getOnlineJudges().subscribe({
-      next: (response) => {
-        this.onlineJudges = response;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+  private getOnlineJudges(): void {
+    this.onlineJudgeService.getOnlineJudges()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => { this.onlineJudges = Array.isArray(response) ? response : []; },
+        error: () => { this.onlineJudges = []; }
+      });
   }
-
 }

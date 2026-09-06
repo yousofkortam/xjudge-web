@@ -1,28 +1,16 @@
-table{
-    font-size: 14px;
-    font-family: Verdana, Open Sans, sans-serif;
-    
-}
-table.table thead{
-    background-color: hsla(0, 0%, 100%, .5) !important;
-}
+.xj-overview__hash { width: 64px; }
 
-th{
-    border: 1px solid #eceeef;
-    text-align: center;
-    justify-content: center;
+.xj-overview__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 2px 8px;
+  background: var(--xj-primary-soft);
+  color: var(--xj-primary);
+  border-radius: var(--xj-radius);
+  font-family: var(--xj-mono);
+  font-size: .8125rem;
+  font-weight: 650;
 }
-.status{
-    width: 150px;
-}
-.hash{
-    width: 100px;
-}
-.origin{
-    width: 180px;
-}
-
-tr{
-   
-    background-color: rgba(0, 0, 0, .05);
-}
+.xj-overview__tag:hover { background: var(--xj-primary); color: #fff; text-decoration: none; }

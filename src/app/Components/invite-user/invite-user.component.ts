@@ -1,56 +1,72 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 import { GroupService } from 'src/app/ApiServices/group.service';
+import { apiErrorMessage, apiValidationErrors } from 'src/app/api-error';
 
 @Component({
   selector: 'app-invite-user',
   templateUrl: './invite-user.component.html',
   styleUrls: ['./invite-user.component.css']
 })
-export class InviteUserComponent {
+export class InviteUserComponent implements OnDestroy {
 
-  isLoading: boolean = false;
-  validationsErrors: any = {};
+  isLoading = false;
+  apiError = '';
+  successMessage = '';
+  validationErrors: Record<string, string> = {};
 
-  inviteUserForm: FormGroup = new FormGroup({
-    handle:new FormControl(null, [Validators.required]),
+  inviteUserForm = new FormGroup({
+    handle: new FormControl('', [Validators.required, Validators.maxLength(20)]),
   });
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private groupService: GroupService,
-    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<InviteUserComponent>,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: any = {}) { }
+    @Inject(MAT_DIALOG_DATA) public data: any = {}) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-  handleInviteUser() {
+  handleInviteUser(): void {
+    if (this.isLoading) return;
+    if (this.inviteUserForm.invalid) {
+      this.inviteUserForm.markAllAsTouched();
+      return;
+    }
+
     this.isLoading = true;
-    let request = {
+    this.apiError = '';
+    this.successMessage = '';
+    this.validationErrors = {};
+
+    this.groupService.inviteUser({
       receiverHandle: this.inviteUserForm.value.handle,
-      groupId: this.data.groupId
-    };
-    console.log(request);
-    this.groupService.inviteUser(request).subscribe({
+      groupId: this.data?.groupId,
+    }).pipe(takeUntil(this.destroy$)).subscribe({
       next: (response) => {
-        console.log(response);
         this.isLoading = false;
-        this.snackBar.open(response.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
+        this.successMessage = typeof response === 'string'
+          ? response
+          : (response?.message || `Invitation sent to ${this.inviteUserForm.value.handle}.`);
+        this.snackBar.open(this.successMessage, 'Close', { duration: 5000, verticalPosition: 'top' });
+        // Keep the dialog open so a leader can invite several people in a row.
+        this.inviteUserForm.reset({ handle: '' });
       },
       error: (err) => {
         this.isLoading = false;
-        this.validationsErrors = err.error;
-        this.snackBar.open(err.error.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
+        this.validationErrors = apiValidationErrors(err);
+        this.apiError = apiErrorMessage(err);
       }
     });
-    
   }
 
+  close(): void { this.dialogRef.close(); }
 }

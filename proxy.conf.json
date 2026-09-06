@@ -1,0 +1,12 @@
+{
+  "//": "Optional. Not referenced by angular.json — the app talks to the backend directly via environment.apiUrl. Wire this up (ng serve --proxy-config proxy.conf.json) only if you switch environment.apiUrl to '' and want same-origin calls in development.",
+  "/auth":        { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/problem":     { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/contest":     { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/group":       { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/user":        { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/submission":  { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/compiler":    { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/online-judge":{ "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true },
+  "/description": { "target": "http://127.0.0.1:9090", "secure": false, "changeOrigin": true }
+}

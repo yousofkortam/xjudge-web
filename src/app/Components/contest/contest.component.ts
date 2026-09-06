@@ -1,177 +1,173 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
-import { ContestService } from 'src/app/ApiServices/contest.service';
-import { CreateContestComponent } from '../create-contest/create-contest.component';
-import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
+import { Subject, takeUntil } from 'rxjs';
+import { ContestService } from 'src/app/ApiServices/contest.service';
 import { UserService } from 'src/app/ApiServices/user.service';
+import { apiErrorMessage } from 'src/app/api-error';
+import { CreateContestComponent } from '../create-contest/create-contest.component';
+import { PageChange } from '../pagination/pagination.component';
+
+type ContestState = 'running' | 'upcoming' | 'finished';
+
+interface CategoryFilter {
+  key: string;
+  label: string;
+  /** Hidden from signed-out visitors, because the endpoint needs a principal. */
+  requiresAuth?: boolean;
+}
 
 @Component({
   selector: 'app-contest',
   templateUrl: './contest.component.html',
   styleUrls: ['./contest.component.css']
 })
-export class ContestComponent implements OnInit {
-  duration: any
-  loading: boolean = false;
-  Contests: any = [];
-  totalPages: number = 0;
-  totalElements: number = 0;
-  pageSize: number = 25;
-  pageNo: number = 0;
+export class ContestComponent implements OnInit, OnDestroy {
 
-  // Filter options
-  category: string = '';
-  status: string = '';
-  title: string = '';
-  owner: string = '';
-  isAuthenticated: boolean = this.userService.isAuthenticated();
+  loading = false;
+  loadError = '';
+  needsAuth = false;
+  Contests: any[] = [];
 
-  buttons: any = [
-    { 'name': 'All', 'style': { 'background-color': '#0275d8', 'color': 'while' }, click: () => this.reset() },
-    { 'name': 'Public Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getPublicContests() },
-    { 'name': 'Private Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getPrivateContests() },
-    { 'name': 'My Contests', 'style': { 'background-color': 'white', 'color': 'black' }, click: () => this.getMineContests() },
+  totalPages = 0;
+  totalElements = 0;
+  pageSize = 25;
+  pageNo = 0;
+
+  category = '';
+  status = '';
+  title = '';
+  owner = '';
+
+  isAuthenticated = false;
+
+  readonly categories: CategoryFilter[] = [
+    { key: '',        label: 'All' },
+    { key: 'public',  label: 'Public' },
+    { key: 'private', label: 'Private' },
+    { key: 'classic', label: 'Classical' },
+    { key: 'group',   label: 'Group' },
+    { key: 'mine',    label: 'Mine', requiresAuth: true },
   ];
 
-  buttonsType: any = [
-    { 'name': 'Classical', 'style': { 'background-color': 'white', 'color': 'black' }, 'img': '/assets/images/classical.gif', click: () => this.getClassicalContests() },
-    { 'name': 'Group', 'style': { 'background-color': 'white', 'color': 'black' }, 'img': '/assets/images/group.png', click: () => this.getGroupContests() },
-  ];
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private _ContestService: ContestService,
+  constructor(
+    private _ContestService: ContestService,
     private titleService: Title,
     private _snackBar: MatSnackBar,
     private userService: UserService,
-    @Inject(DOCUMENT) private document: Document,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.titleService.setTitle('Contests');
-    this.setButtonStyle('All', '#0275d8', 'white');
+    this.titleService.setTitle('Contests · X-Judge');
+    this.isAuthenticated = this.userService.isAuthenticated();
     this.filterContests();
   }
 
-  trackByContestId(index: number, contest: any): string {
-    return contest.id; // Assuming problemCode is unique
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  setButtonStyle(button: string, color: string, textColor: string) {
-    for (let btn of this.buttons) {
-      if (btn.name === button) {
-        btn['style']['background-color'] = color;
-        btn['style']['color'] = textColor;
-      } else {
-        btn['style']['background-color'] = 'white';
-        btn['style']['color'] = 'black';
-      }
-    }
-    for (let btn of this.buttonsType) {
-      if (btn.name === button) {
-        btn['style']['background-color'] = color;
-        btn['style']['color'] = textColor;
-      } else {
-        btn['style']['background-color'] = 'white';
-        btn['style']['color'] = 'black';
-      }
-    }
+  get visibleCategories(): CategoryFilter[] {
+    return this.categories.filter(c => !c.requiresAuth || this.isAuthenticated);
   }
 
-  onPageChange(event: PageEvent) {
+  trackByContestId = (_: number, contest: any): number => contest?.id;
+
+  selectCategory(key: string): void {
+    this.category = key;
+    this.pageNo = 0;
+    this.filterContests();
+  }
+
+  onPageChange(event: PageChange): void {
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
-    this.filterContests();  
+    this.filterContests();
   }
 
-  openCreateContestDialog() {
+  applyFilters(): void {
+    this.pageNo = 0;
+    this.filterContests();
+  }
+
+  openCreateContestDialog(): void {
     if (!this.isAuthenticated) {
-      this._snackBar.open('You need to login to create a contest', 'close', {
-        duration: 2000,
-        verticalPosition: 'top',
-      });
+      this._snackBar.open('Sign in to create a contest.', 'Close', { duration: 4000, verticalPosition: 'top' });
       return;
     }
-    this.dialog.open(CreateContestComponent, {
-      data: {
-        inGroup: false,
-        groupId: 0
-      },
-      width: '65%',
-      height: 'auto',
-      disableClose: true
-    });
+    this.dialog
+      .open(CreateContestComponent, {
+        data: { inGroup: false, groupId: 0 },
+        width: 'min(720px, 94vw)',
+        maxHeight: '90vh',
+        autoFocus: 'first-tabbable',
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(created => { if (created) this.filterContests(); });
   }
 
-  filterContests(category: string = this.category, status: string = this.status, owner: string = this.owner) {
+  filterContests(): void {
     this.loading = true;
-    this._ContestService.filterContests(category, status, owner, this.title, this.pageNo, this.pageSize).subscribe({
-      next: (response: any) => {
-        this.loading = false;
-        this.Contests = response.content;
-        this.totalPages = response.totalPages;
-        this.totalElements = response.totalElements;
-      },
-      error: (error: any) => {
-        this.loading = false;
-        this.resetFilterOptions();
-        this._snackBar.open(error.error.message, 'close', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
-        console.log(error);
-      }
-    });
+    this.loadError = '';
+    this.needsAuth = false;
+    this._ContestService
+      .filterContests(this.category, this.status, this.owner, this.title, this.pageNo, this.pageSize)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response: any) => {
+          this.loading = false;
+          this.Contests = response?.content ?? [];
+          this.totalPages = response?.totalPages ?? 0;
+          this.totalElements = response?.totalElements ?? 0;
+        },
+        error: (error: any) => {
+          this.loading = false;
+          this.Contests = [];
+          this.totalElements = 0;
+          this.totalPages = 0;
+          if (error?.status === 401 || error?.status === 403) this.needsAuth = true;
+          else this.loadError = apiErrorMessage(error);
+        }
+      });
   }
 
-  resetFilterOptions() {
+  reset(): void {
     this.category = '';
     this.status = '';
     this.owner = '';
     this.title = '';
-  }
-
-  reset() {
-    this.resetFilterOptions();
-    this.setButtonStyle('All', '#0275d8', 'white');
+    this.pageNo = 0;
     this.filterContests();
   }
 
-  getPublicContests() {
-    this.resetFilterOptions();
-    this.category = 'public';
-    this.setButtonStyle('Public Contests', '#0275d8', 'white');
-    this.filterContests();
+  // --- derived contest state ------------------------------------------------
+  // ContestPageModel carries beginTime (epoch seconds) and duration (seconds)
+  // but no status, so the window is computed here rather than invented.
+
+  stateOf(contest: any): ContestState {
+    const start = Number(contest?.beginTime) * 1000;
+    const end = start + Number(contest?.duration ?? 0) * 1000;
+    const now = Date.now();
+    if (!start || Number.isNaN(start)) return 'upcoming';
+    if (now < start) return 'upcoming';
+    return now <= end ? 'running' : 'finished';
   }
 
-  getPrivateContests() {
-    this.resetFilterOptions();
-    this.category = 'private';
-    this.setButtonStyle('Private Contests', '#0275d8', 'white');
-    this.filterContests();
+  stateLabel(contest: any): string {
+    return { running: 'Running', upcoming: 'Upcoming', finished: 'Finished' }[this.stateOf(contest)];
   }
 
-  getMineContests() {
-    this.resetFilterOptions();
-    this.category = 'mine';
-    this.setButtonStyle('My Contests', '#0275d8', 'white');
-    this.filterContests();
+  stateClass(contest: any): string {
+    return {
+      running: 'xj-badge--success',
+      upcoming: 'xj-badge--info',
+      finished: 'xj-badge--neutral',
+    }[this.stateOf(contest)];
   }
-
-  getClassicalContests() {
-    this.resetFilterOptions();
-    this.category = 'classic';
-    this.setButtonStyle('Classical', '#0275d8', 'white');
-    this.filterContests();
-  }
-
-  getGroupContests() {
-    this.resetFilterOptions();
-    this.category = 'group';
-    this.setButtonStyle('Group', '#0275d8', 'white');
-    this.filterContests();
-  }
-
 }

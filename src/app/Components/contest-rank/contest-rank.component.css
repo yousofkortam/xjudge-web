@@ -1,251 +1,36 @@
-  th,
-  td {
-    padding: 8px;
-    text-align: left;
-  }
+.xj-rank th, .xj-rank td { text-align: center; }
+.xj-rank .xj-rank__team { text-align: left; }
 
-  img {
-    vertical-align: middle;
-    margin-right: 10px;
-  }
+.xj-rank__rank { width: 52px; font-variant-numeric: tabular-nums; }
+.xj-rank__team { min-width: 200px; }
 
-  #contest_rank {
-    min-height: 300px
-  }
+.xj-rank__contestant { display: flex; align-items: center; gap: 10px; }
+.xj-rank__avatar { width: 28px; height: 28px; flex: none; }
 
-  #contest-rank-table {
-    border-collapse: inherit;
-    font-size: 12px;
-    table-layout: fixed;
-    width: 100%
-  }
+.xj-rank__names { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.xj-rank__handle { font-weight: 550; font-size: .875rem; }
+.xj-rank__realname {
+  font-size: .75rem;
+  color: var(--xj-text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  #contest-rank-table tr:hover {
-    background-color: rgba(0, 0, 0, .05)
-  }
+.xj-rank__score { font-weight: 650; }
 
-  #contest-rank-table th {
-    background-color: hsla(0, 0%, 100%, .8);
-    text-align: center
-  }
+.xj-rank__prob { min-width: 68px; }
+.xj-rank__prob-tag { display: block; font-family: var(--xj-mono); font-weight: 650; color: var(--xj-text); }
+.xj-rank__prob-stats { display: block; font-size: .6875rem; font-weight: 400; text-transform: none; letter-spacing: 0; }
 
-  #contest-rank-table th,
-  #contest-rank-table th div {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap
-  }
+.xj-rank__cell {
+  min-width: 68px;
+  font-size: .75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+.xj-rank__cell.is-accepted { background: var(--xj-success-soft); color: var(--xj-success); font-weight: 600; }
+.xj-rank__cell.is-failed   { background: var(--xj-danger-soft);  color: var(--xj-danger);  font-weight: 600; }
 
-  #contest-rank-table th.rank {
-    width: 40px
-  }
-
-  #contest-rank-table th.rank div {
-    width: 38px
-  }
-
-  #contest-rank-table th.team {
-    width: 180px
-  }
-
-  #contest-rank-table th.team div {
-    width: 178px
-  }
-
-  #contest-rank-table th.team div i {
-    margin-left: 6px
-  }
-
-  #contest-rank-table th.solve {
-    width: 60px
-  }
-
-  #contest-rank-table th.solve div {
-    width: 58px
-  }
-
-  #contest-rank-table th.penalty {
-    width: 80px
-  }
-
-  #contest-rank-table th.penalty div {
-    width: 78px
-  }
-
-  #contest-rank-table th.prob {
-    width: 80px
-  }
-
-  #contest-rank-table th.prob div {
-    width: 78px
-  }
-
-  #contest-rank-table.hide-timestamp th.prob {
-    width: 43px
-  }
-
-  #contest-rank-table.hide-timestamp th.prob div {
-    width: 41px
-  }
-
-  #contest-rank-table th.accepted {
-    background-color: rgba(169, 245, 175, .4)
-  }
-
-  #contest-rank-table th.failed {
-    background-color: hsla(0, 100%, 93%, .4)
-  }
-
-  #contest-rank-table th.pending {
-    background-color: #e2e4ff
-  }
-
-  #contest-rank-table tr.heading {
-    display: none
-  }
-
-  #contest-rank-table.show-heading tr.heading {
-    display: table-row
-  }
-
-  #img_find_me {
-    bottom: 140px;
-    right: 15px
-  }
-
-  #img_find_me,
-  #img_time_chart {
-    cursor: pointer;
-    position: fixed;
-    text-align: right;
-    z-index: 999999
-  }
-
-  #img_time_chart {
-    bottom: 70px;
-    height: 60px;
-    right: 10px
-  }
-
-  #contest-rank-table a {
-    color: #000
-  }
-
-  #contest-rank-table td {
-    height: 50px;
-    margin: 0 1px 1px 0;
-    text-align: center
-  }
-
-  #contest-rank-table td.meta {
-    background-color: #cdf
-  }
-
-  #contest-rank-table.hide-timestamp td {
-    height: 20px
-  }
-
-  table.hover_penalty span.minute,
-  table:not(.hover_penalty) span.hms {
-    display: none
-  }
-
-  #contest-rank-table td.same {
-    background-color: #ffb
-  }
-
-  ntest-rank-table tr.this.myself a {
-    color: #fff
-  }
-
-  #contest-rank-table td div {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap
-  }
-
-  #contest-rank-table td:hover div {
-    overflow: visible
-  }
-
-  #contest-rank-table td.accepted {
-    background-color: #a9f5af
-  }
-
-  #contest-rank-table td.failed {
-    background-color: #fdd
-  }
-
-  #contest-rank-table td.team {
-    width: 180px
-  }
-
-  #contest-rank-table td.team div {
-    padding-left: 5px;
-    padding-right: 5px;
-    text-align: left;
-    width: 175px
-  }
-
-  #contest-rank-table td div {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap
-  }
-
-  #contest-rank-table td:hover div {
-    overflow: visible
-  }
-
-  #contest-rank-table td.prob {
-    width: 80px
-  }
-
-  #contest-rank-table.hide-timestamp td.prob {
-    width: 43px
-  }
-
-  #contest-rank-table td.prob span {
-    color: grey
-  }
-
-  #contest-rank-table td {
-    height: 50px;
-    margin: 0 1px 1px 0;
-    text-align: center
-  }
-
-  #contest-rank-table td.prob.fb span {
-    color: #e3e3e3
-  }
-
-  img.contestant-avatar {
-    border-radius: 30%;
-    height: 20px;
-    margin-right: 5px
-  }
-
-  .popup {
-    display: none; /* Hide the popup by default */
-    position: fixed; /* Position the popup relative to the viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  }
-  
-  .popup-content {
-    background-color: white;
-    width: 50%;
-    max-width: 400px;
-    margin: 100px auto; /* Center the popup vertically and horizontally */
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .close {
-    float: right;
-    cursor: pointer;
-  }
+.xj-rank__time { display: block; }
+.xj-rank__tries { display: block; font-size: .6875rem; opacity: .85; }

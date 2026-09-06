@@ -1,77 +1,122 @@
-<div class="container-fluid" id="problem_list_container" style="margin-top: 20px;">
-    <div class="row">
-        <div class="col-md-2 mt-5 pt-2" id="left-panel">
-            <div class="list-group bg-dark" id="prob-category">
-                <!-- <a href="javascript:void(0)" class="list-group-item" data-category="all">All</a> -->
-                <a href="javascript:void(0)" class="list-group-item" style="color: darkgreen;" data-category="solved">
-                    Solved
-                    <span class="tag tag-success tag-pill float-sm-right">{{statistics.solvedProblems}}</span>
-                </a>
-                <a href="javascript:void(0)" class="list-group-item" style="color: orange;" data-category="attempted">
-                    Attempted
-                    <span class="tag tag-default tag-pill float-sm-right">{{statistics.attemptedProblems}}</span>
-                </a>
-                <input type="hidden" name="category" value="" />
-            </div>
-        </div>
-        <div class="col-md-10 text-center" id="right-panel">
-            <div class="mt-5 d-lg-flex justify-content-between">
-                <div class="d-flex col-lg-6 col-12">
-                    <div>
-                        <button mat-button (click)="filterProblems()" class="btn ms-2 mb-0 border-none shadow-none"
-                            value="Create Contest" style="background-color:#ffffff; color:black">Filter</button>
-                    </div>
-                    <div>
-                        <button mat-button (click)="resetFilters()" class="btn ms-2 mb-0 border-none shadow-none"
-                            value="Create Contest" style="background-color:#ffffff; color:black">Reset</button>
-                    </div>
-                </div>
-                <app-pagination [totalElements]="totalElements" [totalPages]="totalPages" [pageSize]="pageSize"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-            </div>
-            <table id="listProblem" class="table table-striped table-responsive  table-borderless" cellspacing="0"
-                width="100%">
-                <thead>
-                    <tr>
-                        <th class="oj">
-                            OJ
-                            <select [(ngModel)]="oj" id="OJId" name="OJId" class="search_text" style="width:100%"
-                                (change)="onEnterPress()">
-                                <option value="">All</option>
-                                <option *ngFor="let onlineJudge of onlineJudges" [value]="onlineJudge">{{onlineJudge}}</option>
-                            </select>
-                        </th>
-                        <th class="prob_num">
-                            Prob
-                            <input [(ngModel)]="problemCode" type="text" id="probNum" name="probNum" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
-                        </th>
-                        <th class="title">
-                            Title
-                            <input [(ngModel)]="title" type="text" id="title" name="title" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
-                        </th>
-                        <th class="source hidden-md-down">
-                            Source
-                            <input [(ngModel)]="contestName" type="text" id="source" name="source" class="search_text"
-                                style="width:95%" (keyup.enter)="onEnterPress()" />
-                        </th>
-                        <th class="solved_users pb-4" data-toggle='tooltip' title="Sort by solved users">Solved</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let problem of Problems; trackBy:trackByProblemCode; let i = index; ">
-                        <td> {{ problem.onlineJudge }} </td>
-                        <td><a [href]="problem.problemLink" target="_blank">{{ problem.code }}</a></td>
-                        <td> <a href="problem/{{problem.onlineJudge}}/{{problem.code}}">{{ problem.title }}</a>
-                        </td>
-                        <td><a [href]="problem.contestLink ?? '/problem'">{{ problem.contestName }}</a></td>
-                        <td>{{ problem.solvedCount }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <input type="button" class="btn btn-secondary btn-md" id="reset" value="Reset" style="display: none" />
-            <input type="button" class="btn btn-secondary btn-md" id="filter" value="Filter" style="display: none" />
-        </div>
+<div class="xj-page">
+  <header class="xj-page-header">
+    <div>
+      <h1 class="xj-page-header__title">Problems</h1>
+      <p class="xj-page-header__subtitle">
+        Problems mirrored from Codeforces, AtCoder and other supported judges.
+      </p>
     </div>
+
+    <div class="xj-page-header__actions" *ngIf="isLogin">
+      <span class="xj-badge xj-badge--success">
+        <i class="fa fa-circle-check" aria-hidden="true"></i>
+        {{ statistics.solvedProblems }} solved
+      </span>
+      <span class="xj-badge xj-badge--warning">
+        <i class="fa fa-clock-rotate-left" aria-hidden="true"></i>
+        {{ statistics.attemptedProblems }} attempted
+      </span>
+    </div>
+  </header>
+
+  <form class="xj-filters" (ngSubmit)="applyFilters()">
+    <div class="xj-field" *ngIf="onlineJudges.length">
+      <label class="xj-label" for="filter-oj">Judge</label>
+      <select id="filter-oj" class="xj-select" name="oj" [(ngModel)]="oj">
+        <option value="">All judges</option>
+        <option *ngFor="let judge of onlineJudges" [value]="judge">{{ judge }}</option>
+      </select>
+    </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="filter-code">Problem code</label>
+      <input id="filter-code" class="xj-input" name="problemCode" type="text"
+             placeholder="e.g. 1850A" [(ngModel)]="problemCode" />
+    </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="filter-title">Title</label>
+      <input id="filter-title" class="xj-input" name="title" type="search"
+             placeholder="Search titles…" [(ngModel)]="title" />
+    </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="filter-source">Source contest</label>
+      <input id="filter-source" class="xj-input" name="contestName" type="text"
+             placeholder="e.g. Div. 2" [(ngModel)]="contestName" />
+    </div>
+
+    <div class="xj-row">
+      <button type="submit" class="xj-btn xj-btn--primary" [disabled]="loading">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+      </button>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="resetFilters()" [disabled]="loading">
+        Reset
+      </button>
+    </div>
+  </form>
+
+  <div class="xj-table-wrap">
+    <!-- Loading -->
+    <div *ngIf="loading" class="xj-card__body" aria-live="polite" aria-busy="true">
+      <span class="xj-sr-only">Loading problems…</span>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let row of [1,2,3,4,5,6,7,8]"></div>
+    </div>
+
+    <!-- Sign-in required -->
+    <app-not-logged-in *ngIf="!loading && needsAuth"
+                       message="X-Judge needs a signed-in account to browse the problem archive."
+                       returnUrl="/problem"></app-not-logged-in>
+
+    <!-- Error -->
+    <div *ngIf="!loading && !needsAuth && loadError" class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">Unable to load problems</h2>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="filterProblems()">Try again</button>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!loading && !needsAuth && !loadError && Problems.length === 0" class="xj-state">
+      <i class="fa fa-magnifying-glass xj-state__icon" aria-hidden="true"></i>
+      <h2 class="xj-state__title">No problems found</h2>
+      <p class="xj-state__text">No problem matches these filters. Try widening or resetting them.</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="resetFilters()">Reset filters</button>
+    </div>
+
+    <!-- Success -->
+    <div class="xj-table-scroll" *ngIf="!loading && !needsAuth && !loadError && Problems.length > 0">
+      <table class="xj-table">
+        <caption class="xj-sr-only">Problems matching the current filters</caption>
+        <thead>
+          <tr>
+            <th scope="col">Judge</th>
+            <th scope="col">Code</th>
+            <th scope="col">Title</th>
+            <th scope="col">Source</th>
+            <th scope="col" class="xj-num">Solved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let problem of Problems; trackBy: trackByProblem">
+            <td><span class="xj-badge xj-badge--neutral">{{ problem.onlineJudge }}</span></td>
+            <td class="xj-mono">{{ problem.code }}</td>
+            <td>
+              <a [routerLink]="problemLink(problem)" class="xj-problem__title">{{ problem.title }}</a>
+            </td>
+            <td class="xj-muted xj-truncate">{{ problem.contestName || '—' }}</td>
+            <td class="xj-num">{{ problem.solvedCount ?? 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-pagination
+    *ngIf="!loading && !needsAuth && !loadError && totalElements > 0"
+    [totalElements]="totalElements"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    [pageIndex]="pageNo"
+    (pageChange)="onPageChange($event)"></app-pagination>
 </div>

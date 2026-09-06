@@ -1,49 +1,85 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-lg-5 p-md-4 p-3">
-          <div class="d-md-flex align-items-center">
-            <!-- User image -->
-            <div class="profile-image mb-3 mb-md-0 me-md-4 mb-5">
-              <img [src]="user.photoUrl ?? defaultProfileImage" [alt]="user.firstName + ' ' + user.lastName"
-                [title]="user.firstName + ' ' + user.lastName" class="img-fluid rounded-circle">
-            </div>
-            <!-- User information -->
-            <div class="profile-details"> 
-               <h2 class="mb-3">{{user.firstName}} {{user.lastName}}</h2>
-              <p><strong>Handle:</strong> {{user.handle}}</p>
-              <p><strong>School:</strong> {{user.school ?? 'None'}}</p>
-              <p><strong>Email:</strong> {{user.email}} <i *ngIf="user.isVerified"
-                  class="fas fa-check text-success"></i></p>
-              <hr>
-               <div class="row">
-                <div class="col-md-4 mb-3 mb-md-0">
-                  <div class="stat-item text-center">
-                    <p class="text-muted mb-1">Overall</p>
-                    <h4>{{user.solvedCount + user.attemptedCount}}</h4>
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3 mb-md-0"> 
-                   <div class="stat-item text-center">
-                    <p class="text-muted mb-1">Solved</p>
-                    <h4>{{user.solvedCount}}</h4>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="stat-item text-center">
-                    <p class="text-muted mb-1">Attempted</p>
-                    <h4>{{user.attemptedCount}}</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="text-center mt-4">
-            <button *ngIf="isTheRightUser" class="btn btn-primary btn-lg profile-btn fw-bold"
-              (click)="openUpdateProfileDialog()">Update Profile</button>
-          </div>
-        </div>
+<div class="xj-page xj-page--narrow">
+
+  <!-- Loading -->
+  <div class="xj-card" *ngIf="loading" aria-busy="true">
+    <div class="xj-card__body">
+      <span class="xj-sr-only">Loading profile…</span>
+      <div class="xj-skeleton" style="width: 40%; height: 22px; margin-bottom: 14px;"></div>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3]"></div>
+    </div>
+  </div>
+
+  <!-- Not found -->
+  <div class="xj-card" *ngIf="!loading && notFound">
+    <div class="xj-state">
+      <i class="fa fa-user-slash xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">No such user</h1>
+      <p class="xj-state__text">There is no X-Judge account with the handle “{{ userHandle }}”.</p>
+      <a class="xj-btn xj-btn--secondary" routerLink="/home">Back to home</a>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="xj-card" *ngIf="!loading && loadError">
+    <div class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">Unable to load this profile</h1>
+      <p class="xj-state__text">{{ loadError }}</p>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="xj-card xj-profile" *ngIf="!loading && user">
+    <div class="xj-profile__head">
+      <img class="xj-avatar xj-avatar--lg"
+           [src]="user.photoUrl || defaultProfileImage"
+           [alt]="'Profile picture of ' + fullName" />
+
+      <div class="xj-profile__identity">
+        <h1 class="xj-profile__name">{{ fullName }}</h1>
+        <p class="xj-profile__handle">
+          &#64;{{ user.handle }}
+          <span class="xj-badge xj-badge--success" *ngIf="user.isVerified">
+            <i class="fa fa-circle-check" aria-hidden="true"></i> Verified
+          </span>
+        </p>
+      </div>
+
+      <button type="button"
+              class="xj-btn xj-btn--secondary"
+              *ngIf="isTheRightUser"
+              (click)="openUpdateProfileDialog()">
+        <i class="fa fa-pen" aria-hidden="true"></i> Edit profile
+      </button>
+    </div>
+
+    <dl class="xj-profile__meta">
+      <div class="xj-profile__meta-item">
+        <dt>School</dt>
+        <dd>{{ user.school || '—' }}</dd>
+      </div>
+      <div class="xj-profile__meta-item" *ngIf="isTheRightUser">
+        <dt>Email</dt>
+        <dd class="xj-truncate">{{ user.email || '—' }}</dd>
+      </div>
+      <div class="xj-profile__meta-item" *ngIf="user.registrationDate">
+        <dt>Member since</dt>
+        <dd>{{ user.registrationDate | date:'mediumDate' }}</dd>
+      </div>
+    </dl>
+
+    <div class="xj-grid xj-grid--stats xj-profile__stats">
+      <div class="xj-profile__stat">
+        <p class="xj-stat__label">Attempts</p>
+        <p class="xj-stat__value">{{ totalAttempts }}</p>
+      </div>
+      <div class="xj-profile__stat">
+        <p class="xj-stat__label">Solved</p>
+        <p class="xj-stat__value xj-profile__stat--solved">{{ user.solvedCount ?? 0 }}</p>
+      </div>
+      <div class="xj-profile__stat">
+        <p class="xj-stat__label">Attempted</p>
+        <p class="xj-stat__value">{{ user.attemptedCount ?? 0 }}</p>
       </div>
     </div>
   </div>

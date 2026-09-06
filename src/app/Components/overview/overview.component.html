@@ -1,30 +1,49 @@
-<div class="container">
-    <div class="row">
-        <table id="listProblem" class="table table-striped table-responsive table-border" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th class="status"></th>
-                    <th class="status">Stat</th>
-                    <th class="hash">#</th>
-                    <th *ngIf="shorOrigin" class="origin">Origin</th>
-                    <th class="title text-lg-start">Title</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor=" let problem of problemSet;  trackBy: trackByProblemCode;  let i = index "  class="text-center justify-content-center center">
-                    <td></td>
-                    <td>{{ problem.numberOfAccepted }} / {{ problem.numberOfSubmission }}</td>
-                    <td>
-                        <a  target="_blank">{{ problem.problemHashtag }}</a>
-                    </td>
-                    <td *ngIf="shorOrigin">
-                        <a [href]="problem.problemLink" target="_blank">{{ problem.source }} {{ problem.problemCode}}</a>
-                    </td>
-                    <td class="text-lg-start">
-                        <a target="_blank" routerLink="problem/{{problem.problemHashtag}}">{{ problem.problemAlias }}</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="xj-table-wrap">
+  <div class="xj-state" *ngIf="!problemSet.length">
+    <i class="fa fa-list-check xj-state__icon" aria-hidden="true"></i>
+    <h2 class="xj-state__title">No problems in this contest</h2>
+    <p class="xj-state__text">The organiser has not added any problems yet.</p>
+  </div>
+
+  <div class="xj-table-scroll" *ngIf="problemSet.length">
+    <table class="xj-table">
+      <caption class="xj-sr-only">Contest problems</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="xj-overview__hash">#</th>
+          <th scope="col">Title</th>
+          <th scope="col" *ngIf="shorOrigin">Origin</th>
+          <th scope="col" class="xj-num">Accepted</th>
+          <th scope="col" class="xj-num">Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let problem of problemSet; trackBy: trackByHashtag">
+          <td>
+            <a class="xj-overview__tag" [routerLink]="['/contest', contestId, 'problem', problem.problemHashtag]">
+              {{ problem.problemHashtag }}
+            </a>
+          </td>
+          <td>
+            <a [routerLink]="['/contest', contestId, 'problem', problem.problemHashtag]">
+              {{ problem.problemAlias || problem.problemCode }}
+            </a>
+          </td>
+          <td *ngIf="shorOrigin">
+            <a *ngIf="problem.problemLink; else plainOrigin"
+               [href]="problem.problemLink" target="_blank" rel="noopener noreferrer">
+              {{ problem.source }} {{ problem.problemCode }}
+            </a>
+            <ng-template #plainOrigin>
+              <span class="xj-muted">{{ problem.source }} {{ problem.problemCode }}</span>
+            </ng-template>
+          </td>
+          <td class="xj-num">
+            {{ problem.numberOfAccepted ?? 0 }} / {{ problem.numberOfSubmission ?? 0 }}
+          </td>
+          <td class="xj-num xj-muted">{{ acceptanceRate(problem) }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

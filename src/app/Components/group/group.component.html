@@ -1,37 +1,26 @@
-<div class="container pt-4">
-  <div class="card p-4">
-    <div class="row">
-      <div class="group-details">
-        <div class="all-link d-flex">
-          <div class="left col-xl-6 col-md-6 ">
-            <button class="link overview btn" (click)="showMyGroups()" [class.active]="currentTab === 'myGroups'"> My
-              Groups </button>
-            <button class="link problem btn" (click)="showExploreGroups()"
-              [class.active]="currentTab === 'exploreGroups'"> Explore </button>
-            <button class="link problem btn" (click)="showInvitations()" [class.active]="currentTab === 'invitations'">
-              Invitations </button>
-          </div>
-
-          <div class="right col-xl-6 col-md-6 btn-primary btn-sm">
-            <button type="submit" class="btn mb-0 border-none shadow-none " data-bs-toggle="modal"
-              data-bs-target="#exampleModal2" value="Create Contest" style="background-color: #0275d8; color: #fff;"
-              (click)="openCreateGroupForm()">
-              Create Group</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="groups">
-        <div *ngIf="currentTab === 'myGroups'">
-          <app-my-groups></app-my-groups>
-        </div>
-        <div *ngIf="currentTab === 'exploreGroups'">
-          <app-explore-groups></app-explore-groups>
-        </div>
-        <div *ngIf="currentTab === 'invitations'">
-          <app-invitation></app-invitation>
-        </div>
-      </div>
+<div class="xj-page">
+  <header class="xj-page-header">
+    <div>
+      <h1 class="xj-page-header__title">Groups</h1>
+      <p class="xj-page-header__subtitle">Train together, share contests, and track a team's progress.</p>
     </div>
-  </div>
+    <div class="xj-page-header__actions">
+      <button type="button" class="xj-btn xj-btn--primary" (click)="openCreateGroupForm()">
+        <i class="fa fa-plus" aria-hidden="true"></i> Create group
+      </button>
+    </div>
+  </header>
+
+  <!-- Tabs are real links so the URL and the visible tab can never disagree,
+       and the child routes render through the outlet below. -->
+  <nav class="xj-tabs" aria-label="Group sections">
+    <a *ngFor="let tab of visibleTabs"
+       class="xj-tab"
+       [routerLink]="['/group', tab.path]"
+       routerLinkActive="is-active"
+       #rla="routerLinkActive"
+       [attr.aria-current]="rla.isActive ? 'page' : null">{{ tab.label }}</a>
+  </nav>
+
+  <router-outlet></router-outlet>
 </div>

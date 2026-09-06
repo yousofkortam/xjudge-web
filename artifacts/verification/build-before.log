@@ -1,0 +1,27 @@
+
+> x-judge@0.0.0 build
+> ng build --stats-json
+
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/change-password/change-password.component.css exceeded maximum budget. Budget 2.00 kB was not met by 71 bytes with a total of 2.07 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/contest-rank/contest-rank.component.css exceeded maximum budget. Budget 2.00 kB was not met by 707 bytes with a total of 2.69 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/forget-password/forget-password.component.css exceeded maximum budget. Budget 2.00 kB was not met by 71 bytes with a total of 2.07 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/home/home.component.css exceeded maximum budget. Budget 2.00 kB was not met by 2.12 kB with a total of 4.12 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/login/login.component.css exceeded maximum budget. Budget 2.00 kB was not met by 71 bytes with a total of 2.07 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/register/register.component.css exceeded maximum budget. Budget 2.00 kB was not met by 2 bytes with a total of 2.00 kB.
+
+Warning: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/reset-password/reset-password.component.css exceeded maximum budget. Budget 2.00 kB was not met by 71 bytes with a total of 2.07 kB.
+
+
+
+Error: /media/yousofkortam/Eng. Kortam/Graduation Project/xjudge-web/src/app/Components/home/home.component.css exceeded maximum budget. Budget 4.00 kB was not met by 118 bytes with a total of 4.12 kB.
+
+

@@ -1,0 +1,228 @@
+ M .mvn/wrapper/maven-wrapper.properties
+ M pom.xml
+ M src/main/java/com/xjudge/XJudgeApplication.java
+ M src/main/java/com/xjudge/config/MvcConfig.java
+ M src/main/java/com/xjudge/config/jackson/JacksonConfig.java
+ M src/main/java/com/xjudge/config/security/ApplicationConfig.java
+ M src/main/java/com/xjudge/config/security/JwtAuthenticationFilter.java
+ M src/main/java/com/xjudge/config/security/JwtService.java
+ M src/main/java/com/xjudge/config/security/SecurityConfig.java
+ D src/main/java/com/xjudge/config/selenium/SeleniumConfig.java
+ M src/main/java/com/xjudge/config/stragegy/ScrappingStrategyConfiguration.java
+ M src/main/java/com/xjudge/config/stragegy/SubmissionStrategyConfiguration.java
+ M src/main/java/com/xjudge/config/swagger/OpenApiConfig.java
+ M src/main/java/com/xjudge/config/web/CorsConfig.java
+ M src/main/java/com/xjudge/controller/auth/AuthenticationController.java
+ M src/main/java/com/xjudge/controller/compiler/CompilerController.java
+ M src/main/java/com/xjudge/controller/contest/ContestController.java
+ M src/main/java/com/xjudge/controller/group/GroupController.java
+ M src/main/java/com/xjudge/controller/onlinejudge/OnlineJudgeController.java
+ M src/main/java/com/xjudge/controller/problem/ProblemController.java
+ M src/main/java/com/xjudge/controller/problem/ProblemDescription.java
+ M src/main/java/com/xjudge/controller/submission/SubmissionController.java
+ M src/main/java/com/xjudge/controller/user/UserController.java
+ M src/main/java/com/xjudge/entity/BaseEntity.java
+ M src/main/java/com/xjudge/entity/Compiler.java
+ M src/main/java/com/xjudge/entity/Contest.java
+ M src/main/java/com/xjudge/entity/ContestProblem.java
+ M src/main/java/com/xjudge/entity/Group.java
+ M src/main/java/com/xjudge/entity/Invitation.java
+ M src/main/java/com/xjudge/entity/JoinRequest.java
+ M src/main/java/com/xjudge/entity/Problem.java
+ M src/main/java/com/xjudge/entity/Property.java
+ M src/main/java/com/xjudge/entity/Sample.java
+ M src/main/java/com/xjudge/entity/Section.java
+ M src/main/java/com/xjudge/entity/Submission.java
+ M src/main/java/com/xjudge/entity/Token.java
+ M src/main/java/com/xjudge/entity/User.java
+ M src/main/java/com/xjudge/entity/UserContest.java
+ M src/main/java/com/xjudge/entity/UserGroup.java
+ M src/main/java/com/xjudge/entity/UserProblem.java
+ M src/main/java/com/xjudge/entity/Value.java
+ M src/main/java/com/xjudge/entity/key/ContestProblemKey.java
+ M src/main/java/com/xjudge/entity/key/UserContestKey.java
+ M src/main/java/com/xjudge/entity/key/UserGroupKey.java
+ M src/main/java/com/xjudge/entity/key/UserProblemKey.java
+ M src/main/java/com/xjudge/exception/ExceptionModel.java
+ M src/main/java/com/xjudge/exception/Handler.java
+ M src/main/java/com/xjudge/exception/XJudgeException.java
+ M src/main/java/com/xjudge/exception/XJudgeValidationException.java
+ M src/main/java/com/xjudge/exception/XJudgeValidationExceptionModel.java
+ M src/main/java/com/xjudge/exception/auth/AuthException.java
+ M src/main/java/com/xjudge/exception/auth/AuthExceptionMessage.java
+ M src/main/java/com/xjudge/mapper/ContestMapper.java
+ M src/main/java/com/xjudge/mapper/GroupMapper.java
+ M src/main/java/com/xjudge/mapper/InvitationMapper.java
+ M src/main/java/com/xjudge/mapper/ProblemMapper.java
+ M src/main/java/com/xjudge/mapper/SubmissionMapper.java
+ M src/main/java/com/xjudge/mapper/UserContestMapper.java
+ M src/main/java/com/xjudge/mapper/UserGroupMapper.java
+ M src/main/java/com/xjudge/mapper/UserMapper.java
+ M src/main/java/com/xjudge/model/auth/AuthResponse.java
+ M src/main/java/com/xjudge/model/auth/ChangePasswordRequest.java
+ M src/main/java/com/xjudge/model/auth/ForgotPasswordRequest.java
+ M src/main/java/com/xjudge/model/auth/LoginRequest.java
+ M src/main/java/com/xjudge/model/auth/LoginResponse.java
+ M src/main/java/com/xjudge/model/auth/RegisterRequest.java
+ M src/main/java/com/xjudge/model/auth/ResetPasswordRequest.java
+ M src/main/java/com/xjudge/model/contest/ContestModel.java
+ M src/main/java/com/xjudge/model/contest/ContestPageModel.java
+ M src/main/java/com/xjudge/model/contest/ContestProblemModel.java
+ M src/main/java/com/xjudge/model/contest/ContestRankModel.java
+ M src/main/java/com/xjudge/model/contest/ContestRankSubmission.java
+ M src/main/java/com/xjudge/model/contest/ContestStatusPageModel.java
+ M src/main/java/com/xjudge/model/contest/modification/ContestClientRequest.java
+ M src/main/java/com/xjudge/model/contest/modification/ContestProblemset.java
+ M src/main/java/com/xjudge/model/enums/ContestStatus.java
+ M src/main/java/com/xjudge/model/enums/ContestType.java
+ M src/main/java/com/xjudge/model/enums/ContestVisibility.java
+ M src/main/java/com/xjudge/model/enums/GroupVisibility.java
+ M src/main/java/com/xjudge/model/enums/InvitationStatus.java
+ M src/main/java/com/xjudge/model/enums/OnlineJudgeType.java
+ M src/main/java/com/xjudge/model/enums/TokenType.java
+ M src/main/java/com/xjudge/model/enums/UserGroupRole.java
+ M src/main/java/com/xjudge/model/enums/UserRole.java
+ M src/main/java/com/xjudge/model/group/GroupContestModel.java
+ M src/main/java/com/xjudge/model/group/GroupMemberModel.java
+ M src/main/java/com/xjudge/model/group/GroupModel.java
+ M src/main/java/com/xjudge/model/group/GroupRequest.java
+ M src/main/java/com/xjudge/model/invitation/InvitationModel.java
+ M src/main/java/com/xjudge/model/invitation/InvitationRequest.java
+ M src/main/java/com/xjudge/model/problem/ProblemDescription.java
+ M src/main/java/com/xjudge/model/problem/ProblemModel.java
+ M src/main/java/com/xjudge/model/problem/ProblemsPageModel.java
+ M src/main/java/com/xjudge/model/response/Response.java
+ M src/main/java/com/xjudge/model/scrap/SubmissionScrapedData.java
+ M src/main/java/com/xjudge/model/submission/OpenSubmissionModel.java
+ M src/main/java/com/xjudge/model/submission/SubmissionInfoModel.java
+ M src/main/java/com/xjudge/model/submission/SubmissionModel.java
+ M src/main/java/com/xjudge/model/submission/SubmissionPageModel.java
+ M src/main/java/com/xjudge/model/user/Statistics.java
+ M src/main/java/com/xjudge/model/user/UserContestModel.java
+ M src/main/java/com/xjudge/model/user/UserModel.java
+ M src/main/java/com/xjudge/repository/CompilerRepo.java
+ M src/main/java/com/xjudge/repository/ContestProblemRepo.java
+ M src/main/java/com/xjudge/repository/ContestRepo.java
+ M src/main/java/com/xjudge/repository/GroupRepository.java
+ M src/main/java/com/xjudge/repository/InvitationRepository.java
+ M src/main/java/com/xjudge/repository/JoinRequestRepository.java
+ M src/main/java/com/xjudge/repository/ProblemRepository.java
+ M src/main/java/com/xjudge/repository/PropertyRepository.java
+ M src/main/java/com/xjudge/repository/SectionRepository.java
+ M src/main/java/com/xjudge/repository/SubmissionRepo.java
+ M src/main/java/com/xjudge/repository/TokenRepository.java
+ M src/main/java/com/xjudge/repository/UserContestRepo.java
+ M src/main/java/com/xjudge/repository/UserGroupRepository.java
+ M src/main/java/com/xjudge/repository/UserRepo.java
+ M src/main/java/com/xjudge/repository/ValueRepository.java
+ M src/main/java/com/xjudge/service/auth/AuthService.java
+ M src/main/java/com/xjudge/service/auth/AuthServiceImp.java
+ M src/main/java/com/xjudge/service/compiler/CompilerService.java
+ M src/main/java/com/xjudge/service/compiler/CompilerServiceImpl.java
+ M src/main/java/com/xjudge/service/contest/ContestService.java
+ M src/main/java/com/xjudge/service/contest/ContestServiceImp.java
+ M src/main/java/com/xjudge/service/contest/contestproblem/ContestProblemService.java
+ M src/main/java/com/xjudge/service/contest/contestproblem/ContestProblemServiceImp.java
+ M src/main/java/com/xjudge/service/contest/contestsecurity/ContestSecurity.java
+ M src/main/java/com/xjudge/service/contest/usercontest/UserContestService.java
+ M src/main/java/com/xjudge/service/contest/usercontest/UserContestServiceImp.java
+ M src/main/java/com/xjudge/service/email/EmailService.java
+ M src/main/java/com/xjudge/service/email/EmailServiceImpl.java
+ M src/main/java/com/xjudge/service/group/GroupService.java
+ M src/main/java/com/xjudge/service/group/GroupServiceImpl.java
+ M src/main/java/com/xjudge/service/group/groupSecurity/GroupSecurity.java
+ M src/main/java/com/xjudge/service/group/joinRequest/JoinRequestService.java
+ M src/main/java/com/xjudge/service/group/joinRequest/JoinRequestServiceImpl.java
+ M src/main/java/com/xjudge/service/group/userGroupService/UserGroupService.java
+ M src/main/java/com/xjudge/service/group/userGroupService/UserGroupServiceImpl.java
+ M src/main/java/com/xjudge/service/invitiation/InvitationService.java
+ M src/main/java/com/xjudge/service/invitiation/InvitationServiceImpl.java
+ M src/main/java/com/xjudge/service/problem/ProblemService.java
+ M src/main/java/com/xjudge/service/problem/ProblemServiceImp.java
+ D src/main/java/com/xjudge/service/scraping/atcoder/AtCoderLoginService.java
+ M src/main/java/com/xjudge/service/scraping/atcoder/AtCoderScrapping.java
+ M src/main/java/com/xjudge/service/scraping/atcoder/AtCoderSplitting.java
+ M src/main/java/com/xjudge/service/scraping/atcoder/AtCoderSubmission.java
+ M src/main/java/com/xjudge/service/scraping/codeforces/CodeForcesSplitting.java
+ D src/main/java/com/xjudge/service/scraping/codeforces/CodeforcesLoginService.java
+ M src/main/java/com/xjudge/service/scraping/codeforces/CodeforcesScrapping.java
+ M src/main/java/com/xjudge/service/scraping/codeforces/CodeforcesSubmission.java
+ M src/main/java/com/xjudge/service/scraping/spoj/SpojScrapping.java
+ M src/main/java/com/xjudge/service/scraping/spoj/SpojSplitting.java
+ M src/main/java/com/xjudge/service/scraping/spoj/SpojSubmission.java
+ D src/main/java/com/xjudge/service/scraping/strategy/LoginService.java
+ M src/main/java/com/xjudge/service/scraping/strategy/ScrappingStrategy.java
+ M src/main/java/com/xjudge/service/scraping/strategy/SplitStrategy.java
+ M src/main/java/com/xjudge/service/scraping/strategy/SubmissionStrategy.java
+ M src/main/java/com/xjudge/service/submission/SubmissionService.java
+ M src/main/java/com/xjudge/service/submission/SubmissionServiceImpl.java
+ M src/main/java/com/xjudge/service/token/TokenService.java
+ M src/main/java/com/xjudge/service/token/TokenServiceImpl.java
+ M src/main/java/com/xjudge/service/user/UserService.java
+ M src/main/java/com/xjudge/service/user/UserServiceImpl.java
+ M src/main/java/com/xjudge/util/CommandLineStartupRunner.java
+ M src/main/java/com/xjudge/util/ContestantComparator.java
+ M src/main/java/com/xjudge/util/JsonDataConverter.java
+ M src/main/java/com/xjudge/util/Pagination.java
+ D src/main/java/com/xjudge/util/driverpool/AtCoderPool.java
+ D src/main/java/com/xjudge/util/driverpool/CodeforcesPool.java
+ D src/main/java/com/xjudge/util/driverpool/DriverPool.java
+ D src/main/java/com/xjudge/util/driverpool/WebDriverWrapper.java
+ M src/main/resources/application.properties
+ M src/main/resources/static/css/bootstrap-grid.css
+ M src/main/resources/static/css/bootstrap-grid.min.css
+ M src/main/resources/static/css/bootstrap-reboot.css
+ M src/main/resources/static/css/bootstrap-reboot.min.css
+ M src/main/resources/static/css/bootstrap.css
+ M src/main/resources/static/css/bootstrap.min.css
+ M src/main/resources/static/css/problem-description.css
+ M src/main/resources/static/js/bootstrap.bundle.js
+ M src/main/resources/static/js/bootstrap.bundle.min.js
+ M src/main/resources/static/js/bootstrap.js
+ M src/main/resources/static/js/bootstrap.min.js
+ M src/main/resources/templates/problem-description.html
+ M src/test/java/com/xjudge/XJudgeApplicationTests.java
+?? docs/automated-authentication-verification.md
+?? src/main/java/com/xjudge/controller/onlinejudge/JudgeSessionController.java
+?? src/main/java/com/xjudge/exception/judge/BrowserAutomationException.java
+?? src/main/java/com/xjudge/exception/judge/JudgeAuthenticationException.java
+?? src/main/java/com/xjudge/exception/judge/JudgeErrorCode.java
+?? src/main/java/com/xjudge/exception/judge/JudgeException.java
+?? src/main/java/com/xjudge/exception/judge/JudgeUnavailableException.java
+?? src/main/java/com/xjudge/exception/judge/ProblemScrapingException.java
+?? src/main/java/com/xjudge/exception/judge/SecurityChallengeRequiredException.java
+?? src/main/java/com/xjudge/exception/judge/SessionExpiredException.java
+?? src/main/java/com/xjudge/exception/judge/SubmissionException.java
+?? src/main/java/com/xjudge/model/enums/JudgeVerdict.java
+?? src/main/java/com/xjudge/service/contest/ContestStandingsService.java
+?? src/main/java/com/xjudge/service/problem/ProblemCatalog.java
+?? src/main/java/com/xjudge/service/scraping/JudgeProperties.java
+?? src/main/java/com/xjudge/service/scraping/JudgeSessions.java
+?? src/main/java/com/xjudge/service/scraping/JudgeSubmissionClient.java
+?? src/main/java/com/xjudge/service/scraping/ProblemCodes.java
+?? src/main/java/com/xjudge/service/scraping/ProblemHtml.java
+?? src/main/java/com/xjudge/service/scraping/RemoteSubmission.java
+?? src/main/java/com/xjudge/service/scraping/RemoteSubmissionParser.java
+?? src/main/java/com/xjudge/service/submission/SubmissionStatistics.java
+?? src/main/java/com/xjudge/service/submission/SubmissionStatusPoller.java
+?? src/main/java/com/xjudge/service/submission/SubmissionStatusUpdater.java
+?? src/main/java/com/xjudge/util/playwright/BrowserProperties.java
+?? src/main/java/com/xjudge/util/playwright/PlaywrightBrowser.java
+?? src/main/java/com/xjudge/util/playwright/SessionStateStore.java
+?? src/main/resources/application-dev.properties
+?? src/test/java/com/xjudge/ApplicationWorkflowTest.java
+?? src/test/java/com/xjudge/service/group/GroupSecurityTest.java
+?? src/test/java/com/xjudge/service/scraping/JudgeAuthenticationErrorTest.java
+?? src/test/java/com/xjudge/service/scraping/LiveAutomaticSubmissionCheck.java
+?? src/test/java/com/xjudge/service/scraping/LiveJudgeCheck.java
+?? src/test/java/com/xjudge/service/scraping/ProblemParsingTest.java
+?? src/test/java/com/xjudge/service/scraping/RemoteSubmissionParserTest.java
+?? src/test/java/com/xjudge/service/submission/ContestStandingsTest.java
+?? src/test/java/com/xjudge/service/user/ProfileStorageTest.java
+?? src/test/java/com/xjudge/util/playwright/BrowserWorkflowIT.java
+?? src/test/java/com/xjudge/util/playwright/PlaywrightBrowserChallengeDetectionTest.java
+?? src/test/java/com/xjudge/util/playwright/SessionStateStoreTest.java
+?? src/test/resources/application-test.properties
+?? src/test/resources/judges/atcoder.html
+?? src/test/resources/judges/codeforces.html
+?? src/test/resources/judges/spoj.html

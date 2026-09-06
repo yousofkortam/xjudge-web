@@ -1,29 +1,35 @@
 import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+
+@Component({ selector: 'app-navbar', template: '' })
+class NavbarStubComponent {}
+
+@Component({ selector: 'app-footer', template: '' })
+class FooterStubComponent {}
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [AppComponent]
+    declarations: [AppComponent, NavbarStubComponent, FooterStubComponent],
   }));
 
-  it('should create the app', () => {
+  it('bootstraps', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it(`should have as title 'X-Judge'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('X-Judge');
-  });
-
-  it('should render title', () => {
+  it('renders the shell: navbar, a routed main region, and the footer', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('X-Judge app is running!');
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('app-navbar')).toBeTruthy();
+    expect(el.querySelector('router-outlet')).toBeTruthy();
+    expect(el.querySelector('app-footer')).toBeTruthy();
+    // The skip link is the first focusable element for keyboard users.
+    expect(el.querySelector('a.xj-skip-link')?.textContent).toContain('Skip to main content');
+    expect(el.querySelector('#xj-main')).toBeTruthy();
   });
 });

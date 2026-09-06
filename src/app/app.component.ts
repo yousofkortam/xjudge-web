@@ -1,50 +1,40 @@
-import { Component, HostBinding } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subject, filter, skip, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
 
-  title: string = 'xjudge';
+  title = 'X-Judge';
 
-  @HostBinding('style.background') background?: string;
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-  
-  }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        // `skip(1)` leaves the initial page load alone: moving focus there would
+        // drop a keyboard user past the skip link and the navigation before they
+        // have pressed anything. Only in-app navigations are managed.
+        skip(1),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => {
-        this.changeBackgroundColor();
+        // A router navigation swaps the outlet's contents without moving focus
+        // or scroll, which otherwise strands the user at the previous position.
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        document.getElementById('xj-main')?.focus({ preventScroll: true });
       });
-  } 
-  
-  changeBackgroundColor(): void {
-    const currentRoute = this.activatedRoute.snapshot.firstChild?.routeConfig?.path;
-    const body = document.getElementsByTagName('body')[0];
-  
-    if (currentRoute == 'login'  ) {
-      body.style.backgroundColor = '#373737 '; 
-    }
-    else if(currentRoute == 'register'){
-      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';    
-    }
-    else if(currentRoute == 'forgetPassword'){
-      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
-    }  else if(currentRoute == 'resetPassword'){
-      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
-    }  else if(currentRoute == 'changePassword'){
-      body.style.backgroundColor = 'linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%) ';      
-    } 
-    else {
-      body.style.backgroundColor = '#ebebeb';
-    }
   }
-  
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

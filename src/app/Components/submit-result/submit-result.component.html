@@ -1,56 +1,84 @@
-<mat-dialog-content class="dialog-content">
-  <h2 class="dialog-title">Submission Result</h2>
-  <div id="info-panel">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">status</th>
-          <th scope="col">Time</th>
-          <th scope="col">Memory</th>
-          <th scope="col">Lang</th>
-          <th scope="col">Submitted</th>
-          <th *ngIf="isSubmissionOwner()" scope="col">Open</th>
-          <th scope="col">RemoteRunId</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="status" scope="row"
-            [style.color]="result.verdict === 'Accepted' ? '#5cb85c' : result.verdict === 'In Queue' ? 'black' : 'red'"
-            [style.font-weight]="result.verdict === 'Accepted' ? 'bold' : ''">
-            {{ result.verdict }}
-            <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
-          </td>
-          <td class="status">{{result.timeUsage}}</td>
-          <td class="status">{{result.memoryUsage}}</td>
-          <td class="status">{{result.language}}</td>
-          <td *ngIf="data.submit === true" class="status">{{result.submitTime * 1000 | date:'medium'}}</td>
-          <td *ngIf="data.submit === false" class="status">{{result.submitTime * 1000 | timeAgo}}</td>
-          <td class="status" *ngIf="isSubmissionOwner()">
-            <input type="checkbox" (change)="updateSubmissioinOpen($event , result.id)" [(ngModel)]="isChecked"
-              name="isChecked">
-          </td>
-          <td class="status">{{result.remoteRunId}}</td>
-        </tr>
-      </tbody>
-    </table>
+<h2 mat-dialog-title class="xj-dialog__title">Submission result</h2>
 
-    <div id="code-solution">
-      <div id="code" *ngIf="isSubmissionOwner() || result.isOpen">
-        <h3 class="code-title">Solution:</h3>
-        <pre class="code-block">
-        <code class="language-cpp">{{result.solution}}
-        </code>
-      </pre>
-      </div>
-      <div class="alert alert-danger" role="alert" *ngIf="!isSubmissionOwner() && !result.isOpen">
-        The code is not shared
-      </div>
+<mat-dialog-content class="xj-dialog__content">
+
+  <!-- Error -->
+  <div *ngIf="loadError" class="xj-alert xj-alert--error" role="alert">
+    <i class="fa fa-circle-exclamation xj-alert__icon" aria-hidden="true"></i>
+    <div class="xj-alert__body">{{ loadError }}</div>
+  </div>
+
+  <!-- Loading with nothing to show yet -->
+  <div *ngIf="isLoading && !result && !loadError" class="xj-state" aria-busy="true">
+    <span class="xj-spinner" aria-hidden="true"></span>
+    <p class="xj-state__text">Loading submission…</p>
+  </div>
+
+  <ng-container *ngIf="result">
+    <div class="xj-result__verdict">
+      <span class="xj-verdict xj-result__verdict-text"
+            [ngClass]="'xj-verdict--' + (verdict | verdictClass)"
+            aria-live="polite">
+        {{ verdict }}
+      </span>
+      <span class="xj-spinner xj-spinner--sm" *ngIf="isLoading || isJudging" aria-hidden="true"></span>
+      <span class="xj-muted" *ngIf="isJudging">Waiting for the judge…</span>
     </div>
 
-  </div>
+    <dl class="xj-result__meta">
+      <div class="xj-result__meta-item">
+        <dt>Time</dt><dd>{{ result.timeUsage || '—' }}</dd>
+      </div>
+      <div class="xj-result__meta-item">
+        <dt>Memory</dt><dd>{{ result.memoryUsage || '—' }}</dd>
+      </div>
+      <div class="xj-result__meta-item">
+        <dt>Language</dt><dd class="xj-truncate">{{ result.language || '—' }}</dd>
+      </div>
+      <div class="xj-result__meta-item">
+        <dt>Submitted</dt>
+        <dd>
+          <ng-container *ngIf="data?.submit; else relative">{{ result.submitTime * 1000 | date:'medium' }}</ng-container>
+          <ng-template #relative>{{ result.submitTime * 1000 | timeAgo }}</ng-template>
+        </dd>
+      </div>
+      <div class="xj-result__meta-item" *ngIf="result.id">
+        <dt>Submission</dt><dd class="xj-mono">#{{ result.id }}</dd>
+      </div>
+      <div class="xj-result__meta-item" *ngIf="result.remoteRunId">
+        <dt>Remote run</dt><dd class="xj-mono xj-truncate">{{ result.remoteRunId }}</dd>
+      </div>
+    </dl>
+
+    <div class="xj-result__visibility" *ngIf="isSubmissionOwner() && result.id">
+      <label class="xj-row xj-result__visibility-label">
+        <input type="checkbox"
+               [checked]="isChecked"
+               [disabled]="visibilitySaving"
+               (change)="toggleVisibility()" />
+        <span>Share this source with other users</span>
+        <span class="xj-spinner xj-spinner--sm" *ngIf="visibilitySaving" aria-hidden="true"></span>
+      </label>
+    </div>
+
+    <section class="xj-result__source">
+      <h3 class="xj-result__source-title">Source</h3>
+
+      <pre class="xj-result__code" *ngIf="canSeeSource && result.solution"><code>{{ result.solution }}</code></pre>
+
+      <div class="xj-alert xj-alert--info" *ngIf="canSeeSource && !result.solution">
+        <i class="fa fa-circle-info xj-alert__icon" aria-hidden="true"></i>
+        <div class="xj-alert__body">The source for this submission is not stored.</div>
+      </div>
+
+      <div class="xj-alert xj-alert--warning" *ngIf="!canSeeSource">
+        <i class="fa fa-lock xj-alert__icon" aria-hidden="true"></i>
+        <div class="xj-alert__body">The author has not shared this source.</div>
+      </div>
+    </section>
+  </ng-container>
 </mat-dialog-content>
 
-<mat-dialog-actions class="dialog-actions">
-  <button type="button" class="btn btn-outline-danger" mat-button mat-dialog-close>Close</button>
+<mat-dialog-actions class="xj-dialog__actions">
+  <button type="button" class="xj-btn xj-btn--secondary" (click)="close()">Close</button>
 </mat-dialog-actions>

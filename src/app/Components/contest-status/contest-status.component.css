@@ -1,0 +1,5 @@
+
+@media (max-width: 991.98px) {
+  .xj-cs-table th:nth-child(6), .xj-cs-table td:nth-child(6),
+  .xj-cs-table th:nth-child(7), .xj-cs-table td:nth-child(7) { display: none; }
+}

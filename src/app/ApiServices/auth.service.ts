@@ -1,107 +1,154 @@
-import { SubmitProblemComponent } from './../Components/submit-problem/submit-problem.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../environment/environment';
 
+export interface SessionUser {
+  /** JWT subject — the user handle. */
+  sub: string;
+  /** Expiry, seconds since epoch. */
+  exp?: number;
+  iat?: number;
+  [claim: string]: unknown;
+}
+
+const TOKEN_KEY = 'userToken';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuthService implements OnInit {
+export class AuthService {
 
   baseUrl: string = environment.apiUrl + '/auth';
 
-  userData = new BehaviorSubject(null);
-
-  headers: any;
+  /**
+   * Current session, or null when signed out. Read it with the `async` pipe or
+   * `userData.value`; it never emits a half-decoded token.
+   */
+  readonly userData = new BehaviorSubject<SessionUser | null>(null);
 
   constructor(
     private _HttpClient: HttpClient,
     private _Router: Router) {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      } else {
-        this.headers = new HttpHeaders();
-      }
-    if (this.isLogin()) {
-      this.decodeUserData();
+    // Restoring a session must never be able to abort bootstrap: a token left
+    // behind by an older build (or a failed login that stored "undefined") is
+    // discarded rather than thrown, otherwise every root-injected consumer of
+    // this service takes the exception down with it and the app renders nothing.
+    this.restoreSession();
+  }
+
+  // --- session state -------------------------------------------------------
+
+  getUserToken(): string | null {
+    const token = localStorage.getItem(TOKEN_KEY);
+    return isWellFormedJwt(token) ? token : null;
+  }
+
+  isLogin(): boolean {
+    return this.userData.value !== null;
+  }
+
+  getUserHandle(): string {
+    return this.userData.value?.sub ?? '';
+  }
+
+  /** Stores a freshly issued token and publishes the decoded session. */
+  setSession(token: unknown): boolean {
+    if (!isWellFormedJwt(token)) {
+      this.clearSession();
+      return false;
     }
-  }
-
-  getUserToken() {
-    return localStorage.getItem('userToken');
-  }
-
-  ngOnInit(): void {
-    this.userData.subscribe(() => {
-      setTimeout(() => {
-        if (this.getUserHandle()) {
-          this.logOut();
-        }
-      }, 86400000);
-    });
-  }
-
-  decodeUserData() {
-    let encodedToken = JSON.stringify(localStorage.getItem('userToken'));
-    let decodedToken: any = jwtDecode(encodedToken);
-    if (this.userData.value == null) {
-      this.userData.next(decodedToken);
+    const claims = safeDecode(token);
+    if (!claims || isExpired(claims)) {
+      this.clearSession();
+      return false;
     }
-    return decodedToken;
+    localStorage.setItem(TOKEN_KEY, token);
+    this.userData.next(claims);
+    return true;
   }
 
-  getUserHandle() {
-    if (this.isLogin()) {
-      return this.decodeUserData().sub || "";
-    }
+  /** Drops local session state without navigating. Safe to call at any time. */
+  clearSession(): void {
+    localStorage.removeItem(TOKEN_KEY);
+    if (this.userData.value !== null) this.userData.next(null);
   }
+
+  logOut(): void {
+    this.clearSession();
+    void this._Router.navigate(['/login']);
+  }
+
+  /**
+   * Re-reads the stored token. Returns the decoded session, or null when there
+   * is no usable token — expired and malformed tokens are cleared on the way out.
+   */
+  private restoreSession(): SessionUser | null {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!isWellFormedJwt(token)) {
+      // Covers null, "undefined", "null", and opaque/legacy values.
+      if (token !== null) localStorage.removeItem(TOKEN_KEY);
+      if (this.userData.value !== null) this.userData.next(null);
+      return null;
+    }
+    const claims = safeDecode(token);
+    if (!claims || isExpired(claims)) {
+      this.clearSession();
+      return null;
+    }
+    if (this.userData.value?.sub !== claims.sub) this.userData.next(claims);
+    return claims;
+  }
+
+  /** Kept for callers that want to force a re-read after writing the token. */
+  decodeUserData(): SessionUser | null {
+    return this.restoreSession();
+  }
+
+  // --- endpoints -----------------------------------------------------------
 
   register(userData: object): Observable<any> {
-    return this._HttpClient.post(
-      `${this.baseUrl}/register`,
-      userData
-    );
+    return this._HttpClient.post(`${this.baseUrl}/register`, userData);
   }
 
   login(userData: object): Observable<any> {
     return this._HttpClient.post(`${this.baseUrl}/login`, userData);
   }
 
-  forgetPassword(email: string): Observable<any> {
-    return this._HttpClient.post(
-      `${this.baseUrl}/forget-password`,
-      email
-    );
+  forgetPassword(requestBody: object): Observable<any> {
+    return this._HttpClient.post(`${this.baseUrl}/forget-password`, requestBody);
+  }
 
-  };
-
-  resetPassword(requestBody: any): Observable<any> {
-    return this._HttpClient.post(
-      `${this.baseUrl}/reset-password`,
-      requestBody
-    );
+  resetPassword(requestBody: object): Observable<any> {
+    return this._HttpClient.post(`${this.baseUrl}/reset-password`, requestBody);
   }
 
   changePassword(userData: object): Observable<any> {
-    return this._HttpClient.post(
-      `${this.baseUrl}/change-password`,
-      userData,
-      { headers: this.headers }
-    );
+    return this._HttpClient.post(`${this.baseUrl}/change-password`, userData);
   }
+}
 
-  logOut() {
-    localStorage.removeItem('userToken');
-    this.userData.next(null);
-    this._Router.navigate(['/login']).then(r => r);
+// --- token helpers ---------------------------------------------------------
+
+/** True only for a three-segment, non-empty JWT. */
+function isWellFormedJwt(token: unknown): token is string {
+  if (typeof token !== 'string') return false;
+  const parts = token.split('.');
+  return parts.length === 3 && parts.every(part => part.length > 0);
+}
+
+/** jwt-decode throws on anything it dislikes; callers here want null instead. */
+function safeDecode(token: string): SessionUser | null {
+  try {
+    const claims = jwtDecode<SessionUser>(token);
+    return claims && typeof claims === 'object' && typeof claims.sub === 'string' ? claims : null;
+  } catch {
+    return null;
   }
+}
 
-  isLogin(): boolean {
-    return localStorage.getItem('userToken') != null;
-  }
-
+function isExpired(claims: SessionUser): boolean {
+  return typeof claims.exp === 'number' && claims.exp * 1000 <= Date.now();
 }

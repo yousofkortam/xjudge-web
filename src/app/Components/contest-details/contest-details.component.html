@@ -1,126 +1,149 @@
-<div class="container p-4">
-    <div *ngIf="!showPasswordForm" class="card p-4">
-        <div class="row">
-            <div class="col-4 text-start">
-                <b>Begin: </b>
-                <span class="timestamp">{{
-                    contest.beginTime * 1000 | date : "medium"
-                    }}</span>
-            </div>
-            <div class="col-4 text-center">
-                <h3>
-                    <!-- <i id="btn-favorite" class="fa fa-star-o"></i> -->
-                    {{ contest.title }}
-                </h3>
-            </div>
-            <div class="col-4 text-end">
-                <b>End: </b>
-                <span class="timestamp">{{
-                    contest.endTime * 1000 | date : "medium"
-                    }}</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <!-- progress bar -->
-                <div *ngIf="contest.contestStatus === 'RUNNING'" class="mt-4" style="width: 100%">
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progressBarValue"
-                            aria-valuemin="0" aria-valuemax="100"></div>
-                        <!-- Countdown timer -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center mt-2">
-                        <div *ngIf="contest.contestStatus === 'SCHEDULED'" class="fs-3 text-primary">
-                            <span class="fw-bold">Start Countdown</span>
-                            <p class="countdown-time text-primary fw-bold fs-1">{{ countdownTimer }}</p>
-                        </div>
-                        <span *ngIf="contest.contestStatus === 'RUNNING'" id="info-running" class="fs-3 text-success ">
-                            <span class="fw-bold">Running</span>
-                            <p class="countdown-time text-success fw-bold fs-1">{{ countdownTimer }}</p>
-                        </span>
-                        <span *ngIf="contest.contestStatus === 'ENDED'" class="fs-3 text-danger" id="info-finished">
-                            <span class="countdown-time  fw-bold fs-1">{{contest.contestStatus}}</span>
-                        </span>
-                    </div>
-                    <div class="col-4 text-end" id="info-remaining"></div>
-                </div>
-            </div>
-        </div>
-        <div class="contest-details">
-            <div class="row">
-                <div class="all-link d-flex">
-                    <div class="left col-xl-6 col-lg-12">
-                        <button class="link overview btn" (click)="onBtnClick('overview')" routerLinkActive="active">
-                            Overview
-                        </button>
-                        <!-- <button class="link problem btn" (click)="onBtnClick('problem')">
-                            Problem
-                        </button> -->
-                        <button class="link status btn" (click)="onBtnClick('status')">
-                            Status
-                        </button>
-                        <button class="link rank btn" (click)="onBtnClick('rank')">
-                            Rank
-                        </button>
-                    </div>
-                    <div *ngIf="isLeaderOrManager" class="right col-xl-4 col-lg-12 d-flex btn-group text-xs-right">
-                        <button type="button" class="btn btn-secondary" mat-button (click)="openUpdateContestDialog()">Update</button>
-                        <button type="button" class="btn btn-secondary" (click)="handleDeleteContest()">Delete</button>
-                    </div>
-                </div>
+<div class="xj-page">
 
-                <div class="content container-fluid">
-                    <div
-                        *ngIf="selectedButton === 'overview' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-overview [problemSet]="problemSet" [contestId]="contest.id"
-                            [shorOrigin]="contest.contestStatus === 'ENDED'"></app-overview>
-                    </div>
-                    <!-- <div *ngIf="selectedButton === 'problem' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)"
-                        class="container-fluid w-100 ms-0">
-                        <app-problem-details></app-problem-details>
-                    </div> -->
-                    <div
-                        *ngIf="selectedButton === 'status' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-status [problemSet]="problemSet" [contestId]="contestId"></app-contest-status>
-                    </div>
-                    <div
-                        *ngIf="selectedButton === 'rank' && (contest.contestStatus !== 'SCHEDULED' || isLeaderOrManager)">
-                        <app-contest-rank [problemSet]="problemSet" [contestId]="contestId"></app-contest-rank>
-                    </div>
-                </div>
-            </div>
+  <!-- Loading -->
+  <div class="xj-card" *ngIf="loading" aria-busy="true">
+    <div class="xj-card__body">
+      <span class="xj-sr-only">Loading contest…</span>
+      <div class="xj-skeleton" style="width: 40%; height: 24px; margin-bottom: 16px;"></div>
+      <div class="xj-skeleton xj-skeleton--row" *ngFor="let r of [1,2,3,4]"></div>
+    </div>
+  </div>
+
+  <!-- Password gate for a private contest -->
+  <div class="xj-card xj-contest-lock" *ngIf="!loading && showPasswordForm">
+    <div class="xj-state">
+      <i class="fa fa-lock xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">This contest is private</h1>
+      <p class="xj-state__text">Enter the contest password to continue.</p>
+    </div>
+    <form class="xj-contest-lock__form" (ngSubmit)="unlockContest()">
+      <div class="xj-field">
+        <label class="xj-label" for="contest-password">Password</label>
+        <input id="contest-password" name="password" type="password"
+               class="xj-input" [class.is-invalid]="!!passwordError"
+               [(ngModel)]="password" autocomplete="off" />
+        <p class="xj-field-error" *ngIf="passwordError">{{ passwordError }}</p>
+      </div>
+      <button type="submit" class="xj-btn xj-btn--primary xj-btn--block" [disabled]="unlocking">
+        <span *ngIf="unlocking" class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+        {{ unlocking ? 'Checking…' : 'Enter contest' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Not found -->
+  <div class="xj-card" *ngIf="!loading && notFound">
+    <div class="xj-state">
+      <i class="fa fa-trophy xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">Contest not found</h1>
+      <p class="xj-state__text">This contest does not exist or has been removed.</p>
+      <a class="xj-btn xj-btn--secondary" routerLink="/contest">All contests</a>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="xj-card" *ngIf="!loading && loadError">
+    <div class="xj-state" role="alert">
+      <i class="fa fa-triangle-exclamation xj-state__icon" aria-hidden="true"></i>
+      <h1 class="xj-state__title">Unable to load this contest</h1>
+      <p class="xj-state__text">{{ loadError }}</p>
+      <button type="button" class="xj-btn xj-btn--secondary" (click)="getContestDetails()">Try again</button>
+    </div>
+  </div>
+
+  <!-- Contest -->
+  <ng-container *ngIf="!loading && contest && !showPasswordForm">
+    <header class="xj-card xj-contest-head">
+      <div class="xj-contest-head__top">
+        <div class="xj-contest-head__identity">
+          <span class="xj-badge" [ngClass]="statusBadgeClass">{{ status | titlecase }}</span>
+          <h1 class="xj-contest-head__title">{{ contest.title }}</h1>
+          <p class="xj-contest-head__by">
+            <span class="xj-badge xj-badge--neutral">{{ contest.visibility | titlecase }}</span>
+            Prepared by <a [routerLink]="['/profile', contest.ownerHandle]">{{ contest.ownerHandle }}</a>
+            <ng-container *ngIf="contest.groupName">
+              in <a [routerLink]="['/group', contest.groupId]">{{ contest.groupName }}</a>
+            </ng-container>
+          </p>
         </div>
-    </div>
-    <!-- Password form -->
-    <div *ngIf="showPasswordForm">
-        <div class="dialog-content">
-            <h2 class="dialog-title">Enter contest passowrd</h2>
-            <form id="groupForm">
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input [(ngModel)]="password" type="password" required id="password" class="form-control" name="password" />
-                    <span *ngIf="" class="error-message m-0">required.</span>
-                </div>
-                <div class="dialog-actions">
-                    <button type="submit" class="btn btn-primary" (click)="getContestDetails()">Confirm</button>
-                </div>
-            </form>
+
+        <div class="xj-contest-head__actions" *ngIf="isLeaderOrManager">
+          <button type="button" class="xj-btn xj-btn--secondary xj-btn--sm" (click)="openUpdateContestDialog()">
+            <i class="fa fa-pen" aria-hidden="true"></i> Edit
+          </button>
+          <button type="button" class="xj-btn xj-btn--danger xj-btn--sm" (click)="handleDeleteContest()">
+            <i class="fa fa-trash" aria-hidden="true"></i> Delete
+          </button>
         </div>
+      </div>
+
+      <div class="xj-contest-head__timing">
+        <div class="xj-contest-head__time">
+          <span class="xj-contest-head__time-label">Begins</span>
+          <span>{{ contest.beginTime * 1000 | date:'medium' }}</span>
+        </div>
+
+        <div class="xj-contest-head__countdown" *ngIf="countdownTimer">
+          <span class="xj-contest-head__time-label">
+            {{ status === 'SCHEDULED' ? 'Starts in' : 'Time left' }}
+          </span>
+          <span class="xj-contest-head__clock"
+                [class.is-running]="status === 'RUNNING'"
+                aria-live="off">{{ countdownTimer }}</span>
+        </div>
+
+        <div class="xj-contest-head__time">
+          <span class="xj-contest-head__time-label">Ends</span>
+          <span>{{ contest.endTime * 1000 | date:'medium' }}</span>
+        </div>
+      </div>
+
+      <div class="xj-contest-progress" *ngIf="status === 'RUNNING'"
+           role="progressbar"
+           [attr.aria-valuenow]="progressBarValue | number:'1.0-0'"
+           aria-valuemin="0" aria-valuemax="100"
+           aria-label="Contest progress">
+        <div class="xj-contest-progress__bar" [style.width.%]="progressBarValue"></div>
+      </div>
+    </header>
+
+    <!-- Scheduled and not the owner: nothing to show yet -->
+    <div class="xj-card" *ngIf="!canSeeContent">
+      <div class="xj-state">
+        <i class="fa fa-hourglass-half xj-state__icon" aria-hidden="true"></i>
+        <h2 class="xj-state__title">The contest has not started</h2>
+        <p class="xj-state__text">Problems, standings and submissions open when the contest begins.</p>
+      </div>
     </div>
-    <!-- End Password form -->
-    <div *ngIf="!showPasswordForm" align="end">
-        <p>
-            <span [ngStyle]="{'color': contest.visibility === 'PUBLIC'? 'blue' : 'red'}">
-                {{contest.visibility}}
-            </span>.
-            Prepared by
-            <a href="/profile/{{contest.ownerHandle}}">{{contest.ownerHandle}}</a>
-            <span *ngIf="contest.groupName != null && contest.groupName != ''">
-                @
-                <a href="/group/{{contest.groupId}}">{{contest.groupName}}</a>
-            </span>
-        </p>
-    </div>
+
+    <ng-container *ngIf="canSeeContent">
+      <nav class="xj-tabs" role="tablist" aria-label="Contest sections">
+        <button type="button" role="tab" class="xj-tab"
+                [class.is-active]="selectedButton === 'overview'"
+                [attr.aria-selected]="selectedButton === 'overview'"
+                (click)="onBtnClick('overview')">Problems</button>
+        <button type="button" role="tab" class="xj-tab"
+                [class.is-active]="selectedButton === 'status'"
+                [attr.aria-selected]="selectedButton === 'status'"
+                (click)="onBtnClick('status')">Submissions</button>
+        <button type="button" role="tab" class="xj-tab"
+                [class.is-active]="selectedButton === 'rank'"
+                [attr.aria-selected]="selectedButton === 'rank'"
+                (click)="onBtnClick('rank')">Standings</button>
+      </nav>
+
+      <app-overview *ngIf="selectedButton === 'overview'"
+                    [problemSet]="problemSet"
+                    [contestId]="contest.id"
+                    [shorOrigin]="status === 'ENDED'"></app-overview>
+
+      <app-contest-status *ngIf="selectedButton === 'status'"
+                          [problemSet]="problemSet"
+                          [contestId]="contestId"></app-contest-status>
+
+      <app-contest-rank *ngIf="selectedButton === 'rank'"
+                        [problemSet]="problemSet"
+                        [contestId]="contestId"></app-contest-rank>
+    </ng-container>
+  </ng-container>
 </div>

@@ -1,9 +1,21 @@
-.my-pagination ::ng-deep .ngx-pagination .current {
-    background: red;
-  }
+.xj-pagination__gap {
+  padding: 0 4px;
+  color: var(--xj-text-subtle);
+  user-select: none;
+}
 
+.xj-pagination__size {
+  height: 34px;
+  padding: 0 8px;
+  font-size: .8125rem;
+  color: var(--xj-text);
+  background: var(--xj-surface);
+  border: 1px solid var(--xj-border-strong);
+  border-radius: var(--xj-radius);
+  margin-left: 6px;
+  cursor: pointer;
+}
 
-  .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
-
-    background-color: #ebebeb !important;
-  }
+@media (max-width: 575.98px) {
+  .xj-pagination__info { width: 100%; text-align: center; margin: 0 0 6px; }
+}

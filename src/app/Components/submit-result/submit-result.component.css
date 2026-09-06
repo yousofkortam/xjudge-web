@@ -1,55 +1,57 @@
-.dialog-content {
-  padding: 20px;
-  min-height: 550px;
+.xj-dialog__title { font-size: 1.125rem !important; font-weight: 650; }
+.xj-dialog__content { padding-top: 8px !important; }
+
+.xj-result__verdict {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
 }
+.xj-result__verdict-text { font-size: 1.125rem; }
 
-#code-solution {
-    margin-top: 20px;
-  }
-  
-  .code-title {
-    margin-bottom: 10px;
-  }
-  
-  .code-block {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    padding: 10px;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: -o-pre-wrap;
-    word-wrap: break-word;
-  }
+.xj-result__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  background: var(--xj-surface-2);
+  border: 1px solid var(--xj-border);
+  border-radius: var(--xj-radius);
+}
+.xj-result__meta-item { min-width: 0; }
+.xj-result__meta dt {
+  font-size: .6875rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--xj-text-muted);
+}
+.xj-result__meta dd { margin: 2px 0 0; font-size: .875rem; font-weight: 550; }
 
-  .dialog-actions {
-    padding: 20px;
-    justify-content: flex-end;
-  }
-  
-  .dialog-actions .btn {
-    margin-left: 10px;
-  }
+.xj-result__visibility { margin-bottom: 16px; }
+.xj-result__visibility-label { font-size: .875rem; cursor: pointer; }
+.xj-result__visibility-label input { width: 15px; height: 15px; cursor: pointer; }
 
-  #code-solution {
-    border-radius: 5px;
-    padding: 20px;
-    margin-top: 20px;
-  }
-  
-  .code-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .code-block {
-    background-color: #e8e8e8;
-    border-radius: 5px;
-    padding: 10px;
-    font-family: 'Courier New', monospace;
-    overflow-x: auto;
-  }
-  
-  .language-cpp {
-    color: #000080;
-  }
+.xj-result__source-title { margin: 0 0 8px; font-size: .875rem; }
+
+.xj-result__code {
+  margin: 0;
+  padding: 14px 16px;
+  max-height: 46vh;
+  overflow: auto;
+  background: #1c1f26;
+  color: #e6e9ef;
+  border-radius: var(--xj-radius);
+  font-family: var(--xj-mono);
+  font-size: .8125rem;
+  line-height: 1.55;
+  tab-size: 4;
+}
+.xj-result__code code { font: inherit; color: inherit; }
+
+.xj-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 24px 20px !important;
+}

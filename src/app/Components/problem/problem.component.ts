@@ -1,123 +1,151 @@
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { OnlineJudgeService } from 'src/app/ApiServices/online-judge.service';
 import { ProblemService } from 'src/app/ApiServices/problem.service';
-import { UserService } from 'src/app/ApiServices/user.service';
+import { AuthService } from 'src/app/ApiServices/auth.service';
+import { apiErrorMessage } from 'src/app/api-error';
 
 @Component({
   selector: 'app-problem',
   templateUrl: './problem.component.html',
   styleUrls: ['./problem.component.css']
 })
-export class ProblemComponent implements OnInit {
+export class ProblemComponent implements OnInit, OnDestroy {
 
-  loading: boolean = false;
-  Problems: any = [];
-  totalPages: number = 0;
-  totalElements: number = 0;
-  pageSize: number = 25;
-  pageNo: number = 0;
+  loading = false;
+  loadError = '';
+  /** True when the backend refused the request for lack of a session. */
+  needsAuth = false;
+  Problems: any[] = [];
 
-  onlineJudges: any = [];
+  totalPages = 0;
+  totalElements = 0;
+  pageSize = 25;
+  pageNo = 0;
 
-  statistics: any = {
-    solvedProblems: 0,
-    attemptedProblems: 0
-  };
+  onlineJudges: string[] = [];
+  isLogin = false;
 
-  oj: string = '';
-  problemCode: string = '';
-  title: string = '';
-  contestName: string = '';
+  statistics = { solvedProblems: 0, attemptedProblems: 0 };
+
+  oj = '';
+  problemCode = '';
+  title = '';
+  contestName = '';
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private _problemService: ProblemService,
     private onlineJudgeService: OnlineJudgeService,
-    private userService: UserService,
+    private _AuthService: AuthService,
+    private _route: ActivatedRoute,
     private _Router: Router,
-    private titleService: Title) { }
+    private titleService: Title) {}
 
   ngOnInit(): void {
-    this.getOnlineJudges();
-    this.titleService.setTitle('Problems');
-    this.filterProblems();
-    if (this.userService.isAuthenticated()) {
-      this.getUserStatistics()
+    this.titleService.setTitle('Problems · X-Judge');
+    this.isLogin = this._AuthService.isLogin();
+
+    if (this.isLogin) {
+      this.getOnlineJudges();
+      this.getUserStatistics();
     }
-    
+
+    // The navbar search drops the user here with ?title=…; react to later
+    // changes too so a second search from this page still refreshes the list.
+    this._route.queryParamMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.title = params.get('title') ?? '';
+        this.oj = params.get('oj') ?? '';
+        this.pageNo = Number(params.get('page') ?? 0) || 0;
+        this.filterProblems();
+      });
   }
 
-  trackByProblemCode(index: number, problem: any): string {
-    return problem.problemCode; // Assuming problemCode is unique
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  onPageChange(event: PageEvent) {
+  trackByProblem = (_: number, problem: any): string =>
+    `${problem?.onlineJudge}-${problem?.code}`;
+
+  onPageChange(event: { pageIndex: number; pageSize: number }): void {
     this.pageSize = event.pageSize;
     this.pageNo = event.pageIndex;
     this.filterProblems();
   }
 
-  onEnterPress() {
+  applyFilters(): void {
     this.pageNo = 0;
     this.filterProblems();
   }
 
-  filterProblems() {
+  filterProblems(): void {
     this.loading = true;
-    this._problemService.filterProblem(this.oj, this.problemCode, this.title, this.contestName, this.pageSize, this.pageNo).subscribe({
-      next: (response) => {
-        this.loading = false;
-        this.Problems = response.content;        
-        this.totalPages = response.totalPages;
-        this.totalElements = response.totalElements;
-      },
-      error: (error) => {
-        this.loading = false;
-        if (error.error.success === false) {
-          this._Router.navigate(['/notFound']);
-
+    this.loadError = '';
+    this.needsAuth = false;
+    this._problemService
+      .filterProblem(this.oj, this.problemCode, this.title, this.contestName, this.pageSize, this.pageNo)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.loading = false;
+          this.Problems = response?.content ?? [];
+          this.totalPages = response?.totalPages ?? 0;
+          this.totalElements = response?.totalElements ?? 0;
+        },
+        error: (error) => {
+          this.loading = false;
+          this.Problems = [];
+          this.totalElements = 0;
+          this.totalPages = 0;
+          // The problems endpoint requires a session. A signed-out visitor gets
+          // an explanation and a sign-in link rather than a bare error.
+          if (error?.status === 401 || error?.status === 403) this.needsAuth = true;
+          else this.loadError = apiErrorMessage(error);
         }
-      }
-    });
+      });
   }
 
-  resetFilters() {
+  resetFilters(): void {
     this.oj = '';
     this.problemCode = '';
     this.title = '';
     this.contestName = '';
-    this.filterProblems();
+    this.pageNo = 0;
+    void this._Router.navigate([], { relativeTo: this._route, queryParams: {} });
   }
 
-  getSolvedAttemptedProblemsCount() {
-    return {
-      solved: this.Problems.filter((problem: any) => problem.solved === true).length,
-      attempted: this.Problems.filter((problem: any) => problem.solved === false).length
-    }
+  problemLink(problem: any): string[] {
+    return ['/problem', problem?.onlineJudge, problem?.code];
   }
 
-  getOnlineJudges() {
-    this.onlineJudgeService.getOnlineJudges().subscribe({
-      next: (response) => {
-        this.onlineJudges = response;        
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+  private getOnlineJudges(): void {
+    this.onlineJudgeService.getOnlineJudges()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => { this.onlineJudges = Array.isArray(response) ? response : []; },
+        // A missing judge list only costs the filter dropdown; the page still works.
+        error: () => { this.onlineJudges = []; }
+      });
   }
 
-  getUserStatistics() {
-    this._problemService.getUserStatistics().subscribe({
-      next: (response) => {
-        this.statistics = response;
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+  private getUserStatistics(): void {
+    this._problemService.getUserStatistics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.statistics = {
+            solvedProblems: response?.solvedProblems ?? 0,
+            attemptedProblems: response?.attemptedProblems ?? 0,
+          };
+        },
+        error: () => { /* statistics are supplementary */ }
+      });
   }
-
 }

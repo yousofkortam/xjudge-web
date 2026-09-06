@@ -1,7 +1,8 @@
-import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../environment/environment';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,54 +11,45 @@ export class GroupService {
 
   baseUrl: string = environment.apiUrl + '/group';
 
-  headers: any;
-
-  constructor(private _HttpClient: HttpClient) {
-    const token = localStorage.getItem('userToken');
-    if (token) {
-      this.headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    } else {
-      this.headers = new HttpHeaders();
-    }
-  }
+  constructor(private _HttpClient: HttpClient, private _AuthService: AuthService) {}
 
   isAuthenticated() {
-    return localStorage.getItem('userToken') ? true : false;
+    return this._AuthService.isLogin();
   }
 
   getSpecificGroup(GroupId: number): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/${GroupId}`, { headers: this.headers }
+    return this._HttpClient.get(`${this.baseUrl}/${GroupId}`
     );
   };
 
   deleteSpecificGroup(GroupId: number): Observable<any> {
-    return this._HttpClient.delete(`${this.baseUrl}/${GroupId}`, { headers: this.headers }
+    return this._HttpClient.delete(`${this.baseUrl}/${GroupId}`
     );
   };
 
   createGroup(groupData: any): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}`, groupData, { headers: this.headers });
+    return this._HttpClient.post(`${this.baseUrl}`, groupData);
   }
 
   updateGroup(groupId: number, groupData: any): Observable<any> {
-    return this._HttpClient.put(`${this.baseUrl}/${groupId}`, groupData, { headers: this.headers });
+    return this._HttpClient.put(`${this.baseUrl}/${groupId}`, groupData);
   }
 
   getGroupsByUserHandle(pageNo: number, size: number): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/userHandle?pageNo=${pageNo}&size=${size}`, { headers: this.headers });
+    return this._HttpClient.get(`${this.baseUrl}/userHandle?pageNo=${pageNo}&size=${size}`);
   }
 
   getAllGroups(pageNo: number, size: number): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/public?pageNo=${pageNo}&size=${size}`, { headers: this.headers });
+    return this._HttpClient.get(`${this.baseUrl}/public?pageNo=${pageNo}&size=${size}`);
   }
 
   getGroupsAwnedByUser(): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/owned`, { headers: this.headers }
+    return this._HttpClient.get(`${this.baseUrl}/owned`
     );
   }
 
   getGroupMembers(groupId: number, pageNo: number, size: number): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/${groupId}/members?pageNo=${pageNo}&size=${size}`, { headers: this.headers }).pipe(
+    return this._HttpClient.get(`${this.baseUrl}/${groupId}/members?pageNo=${pageNo}&size=${size}`).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
@@ -65,7 +57,7 @@ export class GroupService {
   }
 
   getGroupContests(groupId: number): Observable<any> {
-    return this._HttpClient.get(`${this.baseUrl}/${groupId}/contests`, { headers: this.headers }).pipe(
+    return this._HttpClient.get(`${this.baseUrl}/${groupId}/contests`).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
@@ -73,7 +65,7 @@ export class GroupService {
   }
 
   joinGroup(groupId: number): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}/${groupId}/join`, null, { headers: this.headers }).pipe(
+    return this._HttpClient.post(`${this.baseUrl}/${groupId}/join`, null).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
@@ -81,14 +73,14 @@ export class GroupService {
   }
 
   leaveGroup(groupId: number): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}/${groupId}/leave`, null, { headers: this.headers }).pipe(
+    return this._HttpClient.post(`${this.baseUrl}/${groupId}/leave`, null).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
     );
   }
   inviteUser(request: any): Observable<any> {
-    return this._HttpClient.post(`${this.baseUrl}/invite`, request, { headers: this.headers }).pipe(
+    return this._HttpClient.post(`${this.baseUrl}/invite`, request).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })
@@ -101,7 +93,7 @@ export class GroupService {
       pageNo: pageNo.toString(),
       size: size.toString()
     };
-    return this._HttpClient.get(`${this.baseUrl}/search`, { headers: this.headers, params }).pipe(
+    return this._HttpClient.get(`${this.baseUrl}/search`, { params }).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
       })

@@ -1,27 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewComponent implements OnInit {
-  [x: string]: any;
-  @Input() problemSet: any = [];
-  @Input() shorOrigin: boolean = false;
+export class OverviewComponent {
+  @Input() problemSet: any[] = [];
+  /** Reveal the originating judge once the contest is over. */
+  @Input() shorOrigin = false;
   @Input() contestId: any;
 
-  constructor(
-    private titleService: Title,
-  ) {}
+  trackByHashtag = (index: number, problem: any): string =>
+    problem?.problemHashtag ?? String(index);
 
-  trackByProblemCode(index: number, problem: any): string {
-    return problem.problemCode;
+  acceptanceRate(problem: any): number {
+    const submitted = Number(problem?.numberOfSubmission ?? 0);
+    if (!submitted) return 0;
+    return Math.round((Number(problem?.numberOfAccepted ?? 0) / submitted) * 100);
   }
-
-  ngOnInit(): void {
-    this.titleService.setTitle('Contest Overview');
-  }
-
 }

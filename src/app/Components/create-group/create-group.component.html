@@ -1,48 +1,54 @@
-<mat-dialog-content>
-    <h2 class="dialog-title">
-        <ng-container *ngIf="data; else CreateGroupTitle">
-            Update Group
-        </ng-container>
-        <ng-template #CreateGroupTitle>
-            Create Group
-        </ng-template>
-    </h2>
-    <form [formGroup]="createGroupForm">
-        <div class="mt-3 mb-3 d-flex">
-            <label for="name" class="col-md-2 mt-2 me-3">Name :</label>
-            <input type="text" required id="name" class="form-control" formControlName="name" />
-            <div *ngIf="createGroupForm.get('name')?.errors && createGroupForm.get('name')?.touched">
-                <span *ngIf="createGroupForm.get('name')?.getError('required')" class="m-0" style="color:red">required.</span>
-            </div>
-            <i></i>
-        </div>
-        <div class="mt-3 mb-3 d-flex">
-            <label for="description" class="col-md-2 mt-3 me-3">Description : </label>
-            <input type="text" required id="description" class="form-control" formControlName="description" />
-            <div *ngIf="createGroupForm.get('description')?.errors && createGroupForm.get('description')?.touched">
-                <span *ngIf="createGroupForm.get('description')?.getError('required')" class="m-0"
-                    style="color:red">required.</span>
-            </div>
-            <i></i>
-        </div>
-        <div class="mt-3 mb-3 d-flex">
-            <label for="visibility" class="col-md-2 mt-2 me-3">Visibility</label>
-            <select class="form-select" formControlName="visibility">
-                <option value="PUBLIC">Public</option>
-                <option value="PRIVATE">Private</option>
-            </select>
-        </div>
-    </form>
+<h2 mat-dialog-title class="xj-dialog__title">{{ isEdit ? 'Edit group' : 'Create a group' }}</h2>
+
+<mat-dialog-content class="xj-dialog__content">
+  <div *ngIf="apiError" class="xj-alert xj-alert--error xj-dialog__alert" role="alert">
+    <i class="fa fa-circle-exclamation xj-alert__icon" aria-hidden="true"></i>
+    <div class="xj-alert__body">{{ apiError }}</div>
+  </div>
+
+  <form [formGroup]="createGroupForm" (ngSubmit)="handleSubmitGroup()" novalidate>
+    <div class="xj-field">
+      <label class="xj-label" for="group-name">
+        Name<span class="xj-label__required" aria-hidden="true">*</span>
+      </label>
+      <input id="group-name" class="xj-input" formControlName="name" type="text"
+             placeholder="e.g. ICPC Training"
+             [class.is-invalid]="createGroupForm.get('name')?.touched && createGroupForm.get('name')?.invalid" />
+      <p class="xj-field-error"
+         *ngIf="createGroupForm.get('name')?.touched && createGroupForm.get('name')?.invalid">
+        A name of at most 60 characters is required.
+      </p>
+      <p class="xj-field-error" *ngIf="validationErrors['name']">{{ validationErrors['name'] }}</p>
+    </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="group-description">
+        Description<span class="xj-label__required" aria-hidden="true">*</span>
+      </label>
+      <textarea id="group-description" class="xj-textarea" formControlName="description"
+                rows="3" placeholder="What is this group for?"
+                [class.is-invalid]="createGroupForm.get('description')?.touched && createGroupForm.get('description')?.invalid"></textarea>
+      <p class="xj-field-error"
+         *ngIf="createGroupForm.get('description')?.touched && createGroupForm.get('description')?.invalid">
+        A description of at most 500 characters is required.
+      </p>
+      <p class="xj-field-error" *ngIf="validationErrors['description']">{{ validationErrors['description'] }}</p>
+    </div>
+
+    <div class="xj-field">
+      <label class="xj-label" for="group-visibility">Visibility</label>
+      <select id="group-visibility" class="xj-select" formControlName="visibility">
+        <option value="PUBLIC">Public — anyone can find and join</option>
+        <option value="PRIVATE">Private — members join by invitation</option>
+      </select>
+    </div>
+  </form>
 </mat-dialog-content>
 
-<mat-dialog-actions  class="dialog-actions" align="end">
-    <button type="button" class="btn btn-outline-danger" mat-dialog-close>Cancel</button>
-    <button type="submit" class="btn btn-primary" [disabled]="createGroupForm.invalid" (click)="handleSubmitGroup()">
-        <ng-container *ngIf="data; else CreateGroupCancel">
-            Update
-        </ng-container>
-        <ng-template #CreateGroupCancel>
-            Create
-        </ng-template>
-    </button>
+<mat-dialog-actions class="xj-dialog__actions">
+  <button type="button" class="xj-btn xj-btn--secondary" mat-dialog-close>Cancel</button>
+  <button type="button" class="xj-btn xj-btn--primary" [disabled]="isLoading" (click)="handleSubmitGroup()">
+    <span *ngIf="isLoading" class="xj-spinner xj-spinner--sm" aria-hidden="true"></span>
+    {{ isLoading ? 'Saving…' : (isEdit ? 'Save changes' : 'Create group') }}
+  </button>
 </mat-dialog-actions>

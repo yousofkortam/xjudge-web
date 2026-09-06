@@ -1,21 +1,23 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="all d-flex col-xl-4 col-md-6  col-sm-12" *ngFor="let group of groups">
-      <div class="card" style="height: fit-content;">
-        <div class="card-header bg-custom d-flex "style="padding-left: unset !important;">
-          <a href="/group/{{group.id}}" class="name col-xl-8 col-sm-8 ps-3 pt-1 justify-content-center"  >{{ group.name }}</a>
-          <p [ngClass]="{'user-role-leader': group.userGroupRole === 'LEADER', 'user-role-manager': group.userGroupRole === 'MANAGER', 'user-role-member': group.userGroupRole === 'MEMBER'}" class="tag text-center col-xl-4 col-sm-4 "> {{ group.userGroupRole }} </p>
-        </div>
-        <div class="card-body" style="padding: unset !important;">
-          <h5 class="card-title ps-3" style="padding-top: 2vh; ">{{ group.description }}</h5>
-          <div class=" card-text d-flex left-align-text ps-3" style="padding-top: 2vh; ">
-            <i class="fa fa-users "></i>
-            <i class="fa fa-times ms-2"></i>
-            <p class="ms-2 "> {{ group.members }}</p>
-          </div> 
-       </div>
-      
-      </div>
+<div class="xj-grid xj-grid--cards">
+  <article class="xj-card xj-card--interactive xj-group-card"
+           *ngFor="let group of groups; trackBy: trackByGroup">
+    <div class="xj-group-card__head">
+      <h3 class="xj-group-card__title">
+        <a [routerLink]="['/group', group.id]">{{ group.name }}</a>
+      </h3>
+      <span class="xj-badge" [ngClass]="roleClass(group.userGroupRole)" *ngIf="group.userGroupRole">
+        {{ group.userGroupRole | titlecase }}
+      </span>
     </div>
-  </div>
+
+    <p class="xj-group-card__desc">{{ group.description || 'No description.' }}</p>
+
+    <div class="xj-group-card__foot">
+      <span class="xj-muted">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        {{ group.members ?? 0 }} {{ group.members === 1 ? 'member' : 'members' }}
+      </span>
+      <span class="xj-badge xj-badge--neutral" *ngIf="group.visibility">{{ group.visibility | titlecase }}</span>
+    </div>
+  </article>
 </div>

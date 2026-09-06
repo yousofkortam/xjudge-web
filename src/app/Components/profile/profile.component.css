@@ -1,49 +1,70 @@
-.profile-image img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #ffffff;
-        transition: transform 0.3s ease;
-        margin-bottom: 85px;
+.xj-profile { overflow: hidden; }
+
+.xj-profile__head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 26px;
+  border-bottom: 1px solid var(--xj-border);
 }
 
-.profile-image img:hover {
-        transform: scale(1.1);
+.xj-profile__identity { flex: 1; min-width: 0; }
+.xj-profile__name { margin: 0 0 2px; font-size: 1.375rem; }
+.xj-profile__handle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--xj-mono);
+  font-size: .8125rem;
+  color: var(--xj-text-muted);
 }
 
-.profile-details {
-        flex-grow: 1;
-        
+.xj-profile__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 20px 26px;
+  border-bottom: 1px solid var(--xj-border);
 }
-
-.stat-item {
-        flex: 1;
+.xj-profile__meta-item { min-width: 0; }
+.xj-profile__meta dt {
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--xj-text-muted);
 }
+.xj-profile__meta dd { margin: 2px 0 0; font-size: .875rem; }
 
-.profile-btn {
-        padding: 12px 30px;
-        font-size: 16px;
-        border-radius: 30px;
-        transition: background-color 0.3s ease, transform 0.3s ease;
+.xj-profile__stats { padding: 20px 26px; }
+
+.xj-profile__stat {
+  padding: 14px 16px;
+  background: var(--xj-surface-2);
+  border: 1px solid var(--xj-border);
+  border-radius: var(--xj-radius);
+  text-align: center;
 }
-
-.profile-btn:hover {
-        background-color: #0056b3;
-        transform: scale(1.05);
+.xj-profile__stat .xj-stat__label {
+  margin: 0 0 4px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--xj-text-muted);
 }
-
-h2 {
-        font-size: 2.5rem;
-        color: #333333;
-        font-weight: bold;
+.xj-profile__stat .xj-stat__value {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
+.xj-profile__stat--solved { color: var(--xj-success); }
 
-p {
-        font-size: 1.25rem;
-        color: #555555;
-}
-
-.text-muted {
-        color: #888888;
+@media (max-width: 575.98px) {
+  .xj-profile__head { flex-direction: column; text-align: center; padding: 22px 18px; }
+  .xj-profile__handle { justify-content: center; }
+  .xj-profile__meta, .xj-profile__stats { padding: 18px; }
 }

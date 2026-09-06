@@ -1,17 +1,21 @@
-.container {
-  max-width: 600px;
-}
+.xj-invites { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 
-.card {
-  border-radius: 0.5rem;
-}
-
-.btn-group {
+.xj-invite {
   display: flex;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
 }
 
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+.xj-invite__body { min-width: 0; flex: 1; }
+.xj-invite__text { margin: 0; font-size: .875rem; }
+.xj-invite__meta { margin: 3px 0 0; font-size: .75rem; color: var(--xj-text-subtle); }
+
+.xj-invite__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+@media (max-width: 575.98px) {
+  .xj-invite { flex-direction: column; align-items: stretch; }
+  .xj-invite__actions { justify-content: flex-start; }
 }

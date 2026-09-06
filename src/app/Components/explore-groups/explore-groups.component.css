@@ -1,5 +1,11 @@
-.search-container {
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 20px;
+.xj-explore__search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  max-width: 520px;
+}
+.xj-explore__search .xj-input { flex: 1; }
+
+@media (max-width: 575.98px) {
+  .xj-explore__search { max-width: none; }
 }

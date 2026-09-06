@@ -1,180 +1,218 @@
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { interval } from 'rxjs';
+import { Subject, interval, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/ApiServices/auth.service';
 import { ContestService } from 'src/app/ApiServices/contest.service';
-import { ProblemService } from 'src/app/ApiServices/problem.service';
-import { UpdateContestComponent } from '../update-contest/update-contest.component';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/ApiServices/user.service';
+import { apiErrorMessage } from 'src/app/api-error';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateContestComponent } from '../update-contest/update-contest.component';
+
+type ContestTab = 'overview' | 'status' | 'rank';
 
 @Component({
   selector: 'app-contest-details',
   templateUrl: './contest-details.component.html',
   styleUrls: ['./contest-details.component.css']
 })
-export class ContestDetailsComponent implements OnInit {
-  loading: boolean = false;
-  problemSet: any = [];   
-  contestId: any;
-  contest: any;
-  selectedButton: string = 'overview';
-  problemInfo: any = {};
-  problemHashtag: any;
+export class ContestDetailsComponent implements OnInit, OnDestroy {
 
-  progressBarValue: number = 0;
-  countdownTimer: string = '';
-  isLeaderOrManager: boolean = false;
-  showPasswordForm: boolean = false;
+  loading = true;
+  loadError = '';
+  notFound = false;
 
-  password: string = '';
+  contestId: string | null = null;
+  contest: any = null;
+  problemSet: any[] = [];
+
+  selectedButton: ContestTab = 'overview';
+  isLeaderOrManager = false;
+
+  showPasswordForm = false;
+  password = '';
+  passwordError = '';
+  unlocking = false;
+
+  progressBarValue = 0;
+  countdownTimer = '';
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private titleService: Title, 
-    private _ActivatedRoute: ActivatedRoute, 
+    private titleService: Title,
+    private _ActivatedRoute: ActivatedRoute,
     private contestService: ContestService,
-    private _ProblemService: ProblemService,
-    private authService: AuthService, 
+    private authService: AuthService,
     private userService: UserService,
     private router: Router,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this._ActivatedRoute.paramMap.subscribe((param) => {
-      this.contestId = param.get('contestId');
-    });
-    this.getContestDetails();
-    interval(1000).subscribe(() => {
-      this.updateProgressBar();
-      this.updateCountdownTimer();
-      if (this.contest.contestStatus === 'RUNNING') {
-        // this.checkActiveTabAndPrintUrl();
-      }
-    });
+    this._ActivatedRoute.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(param => {
+        this.contestId = param.get('contestId');
+        this.getContestDetails();
+      });
+
+    // The ticker is scoped to this component's lifetime; the previous version
+    // left it running (and dereferencing a null contest) after navigation.
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (!this.contest) return;
+        this.updateProgressBar();
+        this.updateCountdownTimer();
+      });
   }
 
   ngOnDestroy(): void {
-    this.titleService.setTitle('Contest Details');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  getContestDetails() {
-    this.contestService.getSpecificContestById(this.contestId, this.password).subscribe({
-      next: (response) => {
-        this.showPasswordForm = false;
-        this.contest = response;
-        this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
-        this.titleService.setTitle(this.contest.title);
-        this.problemSet = response.problemSet;
-        this.problemSet.sort((a: any, b: any) => a.problemHashtag.localeCompare(b.problemHashtag));
-        this.updateProgressBar();
-        this.updateCountdownTimer();
-      },
-      error: (err) => {
-        if (err.error.statusCode === 403) {
-          this.showPasswordForm = true;
-        }
-        if (err.error.statusCode == 404) {
-          this.router.navigate(['/notFound']);
-        }
-        if (err.error.statusCode == 400 && !this.userService.isAuthenticated()) {
-          this.router.navigate(['/login']);
-        }
-      }
-    });
+  get status(): string {
+    return this.contest?.contestStatus ?? 'SCHEDULED';
   }
 
-  getProblemDetailsWithHashtag(problemHashtag: string) {
-    this._ProblemService.getSpecificProblemDetailsByHashtag(this.contestId, problemHashtag).subscribe({
-      next: (response) => {
-        this.problemInfo = response;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+  get statusBadgeClass(): string {
+    return {
+      RUNNING:   'xj-badge--success',
+      SCHEDULED: 'xj-badge--info',
+      ENDED:     'xj-badge--neutral',
+    }[this.status] ?? 'xj-badge--neutral';
   }
 
-  onBtnClick(button: string) {
+  get canSeeContent(): boolean {
+    return this.status !== 'SCHEDULED' || this.isLeaderOrManager;
+  }
+
+  trackByProblem = (_: number, problem: any): string => problem?.problemHashtag;
+
+  onBtnClick(button: ContestTab): void {
     this.selectedButton = button;
-    if (button === 'problem' && this.problemSet.length > 0) {
-      this.getProblemDetailsWithHashtag(this.problemSet[0].problemHashtag);
-    }
   }
 
-  updateProgressBar() {
-    if (this.contest) {
-      const currentTime = new Date().getTime();
-      const beginTime = this.contest.beginTime * 1000;
-      const endTime = this.contest.endTime * 1000;
-      const elapsedTime = currentTime - beginTime;
-      const totalTime = endTime - beginTime;
-      this.progressBarValue = (elapsedTime / totalTime) * 100;
-    }
-  }
+  getContestDetails(): void {
+    this.loading = true;
+    this.loadError = '';
+    this.notFound = false;
+    this.passwordError = '';
 
-  updateCountdownTimer() {
-    if (this.contest) {
-      const currentTime = new Date().getTime();
-      const beginTime = this.contest.beginTime * 1000;
-      const endTime = this.contest.endTime * 1000;
-      let remainingTime;
+    this.contestService.getSpecificContestById(this.contestId, this.password)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.loading = false;
+          this.unlocking = false;
+          this.showPasswordForm = false;
+          this.contest = response ?? null;
+          if (!this.contest) { this.notFound = true; return; }
 
-      if (currentTime < beginTime) {
-        this.contest.contestStatus = 'SCHEDULED';
-        remainingTime = beginTime - currentTime;
-      } else if (currentTime < endTime) {
-        this.contest.contestStatus = 'RUNNING';
-        remainingTime = endTime - currentTime;
-      } else {
-        this.contest.contestStatus = 'ENDED';
-        return;
-      }
+          this.isLeaderOrManager = this.authService.getUserHandle() === this.contest.ownerHandle;
+          this.titleService.setTitle(`${this.contest.title} · X-Judge`);
 
-      const seconds = Math.floor(remainingTime / 1000) % 60;
-      const minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
-      const hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
-      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+          this.problemSet = [...(response.problemSet ?? [])].sort(
+            (a: any, b: any) => String(a?.problemHashtag ?? '').localeCompare(String(b?.problemHashtag ?? '')));
 
-      if (days > 0) {
-        this.countdownTimer = `${days.toString().padStart(2, '0')} : ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-      } else if (hours > 0) {
-        this.countdownTimer = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-      } else {
-        this.countdownTimer = `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
-      }
-    }
-  }
-
-  openUpdateContestDialog() {
-    this.dialog.open(UpdateContestComponent, {
-      data: {
-        contest: this.contest,
-        problemSet: this.problemSet
-       
-      },
-      width: '65%',
-      height: 'auto',
-      disableClose: true
-    }); 
-  }
-  
-  handleDeleteContest() {
-    if (confirm('Are you sure you want to delete this contest?')) {
-      // this.isLoading = true;
-      this.contestService.deleteSpecificContestById(this.contest.id).subscribe({
-        next: (res) => {
-          // this.isLoading = false;
-          this.dialog.closeAll();
-          this.router.navigate(['/contest']); 
+          this.updateProgressBar();
+          this.updateCountdownTimer();
         },
         error: (err) => {
-          console.log(err);
-          // this.isLoading = false;
+          this.loading = false;
+          this.unlocking = false;
+          const status = err?.status;
+
+          if (status === 403) {
+            // A private contest: ask for the password instead of erroring out.
+            if (this.password) this.passwordError = 'That password was not accepted.';
+            this.showPasswordForm = true;
+            return;
+          }
+          if (status === 404) { this.notFound = true; return; }
+          if (status === 401) {
+            void this.router.navigate(['/login'], { queryParams: { returnUrl: `/contest/${this.contestId}` } });
+            return;
+          }
+          this.loadError = apiErrorMessage(err);
         }
       });
+  }
+
+  unlockContest(): void {
+    if (this.unlocking) return;
+    this.unlocking = true;
+    this.getContestDetails();
+  }
+
+  updateProgressBar(): void {
+    const begin = Number(this.contest?.beginTime) * 1000;
+    const end = Number(this.contest?.endTime) * 1000;
+    if (!begin || !end || end <= begin) { this.progressBarValue = 0; return; }
+    const elapsed = Date.now() - begin;
+    this.progressBarValue = Math.min(100, Math.max(0, (elapsed / (end - begin)) * 100));
+  }
+
+  updateCountdownTimer(): void {
+    const begin = Number(this.contest?.beginTime) * 1000;
+    const end = Number(this.contest?.endTime) * 1000;
+    if (!begin || !end) return;
+
+    const now = Date.now();
+    let remaining: number;
+
+    if (now < begin) {
+      this.contest.contestStatus = 'SCHEDULED';
+      remaining = begin - now;
+    } else if (now < end) {
+      this.contest.contestStatus = 'RUNNING';
+      remaining = end - now;
+    } else {
+      this.contest.contestStatus = 'ENDED';
+      this.countdownTimer = '';
+      return;
     }
+
+    const seconds = Math.floor(remaining / 1000) % 60;
+    const minutes = Math.floor(remaining / 60_000) % 60;
+    const hours = Math.floor(remaining / 3_600_000) % 24;
+    const days = Math.floor(remaining / 86_400_000);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    this.countdownTimer = days > 0
+      ? `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+      : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  openUpdateContestDialog(): void {
+    this.dialog
+      .open(UpdateContestComponent, {
+        data: { contest: this.contest, problemSet: this.problemSet },
+        width: 'min(720px, 94vw)',
+        maxHeight: '90vh',
+        autoFocus: 'first-tabbable',
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(updated => { if (updated) this.getContestDetails(); });
+  }
+
+  handleDeleteContest(): void {
+    if (!confirm(`Delete “${this.contest?.title}”? This cannot be undone.`)) return;
+    this.contestService.deleteSpecificContestById(this.contest.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this._snackBar.open('Contest deleted.', 'Close', { duration: 4000, verticalPosition: 'top' });
+          void this.router.navigate(['/contest']);
+        },
+        error: (err) => {
+          this._snackBar.open(apiErrorMessage(err), 'Close', { duration: 6000, verticalPosition: 'top' });
+        }
+      });
   }
 }

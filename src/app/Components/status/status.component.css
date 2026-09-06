@@ -1,3 +1,9 @@
-.left-align-text {
-    text-align: left;
+@media (max-width: 991.98px) {
+  /* Memory and language are the first columns to drop; the table still scrolls. */
+  .xj-status-table th:nth-child(6), .xj-status-table td:nth-child(6),
+  .xj-status-table th:nth-child(7), .xj-status-table td:nth-child(7) { display: none; }
+}
+
+@media (max-width: 575.98px) {
+  .xj-status-table th:nth-child(5), .xj-status-table td:nth-child(5) { display: none; }
 }
